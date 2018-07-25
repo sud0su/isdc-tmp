@@ -1,4 +1,4 @@
-##Install Geonode 2.8 on OSX (python 2.7.10)
+## Install Geonode 2.8 on OSX (python 2.7.10)
 
 - virtualenv geonode2.8
 - cd geonode2.8 && source bin/activate
