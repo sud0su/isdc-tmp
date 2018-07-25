@@ -8,7 +8,7 @@ class NewSingupForm(forms.Form):
         ('Mr', 'Mr'),
         ('Mrs', 'Mrs'),
         ('Ms', 'Ms'),
-        ('Dr', 'DR'),
+        ('Dr', 'Dr'),
         ('Prof', 'Prof')
     )
     title = forms.ChoiceField(
