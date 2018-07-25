@@ -35,3 +35,12 @@ $paver sync (sync db)
 $paver start (start django and geoserver)
 $paver stop (stop django and geoserver)
 ```
+
+### install node
+
+```terminal
+$brew install node
+$node -v
+$npm -v
+$npm install
+```
