@@ -336,9 +336,6 @@
     {% include 'autocomplete_light/static.html' %}
     <script type="text/javascript" src="{% url "javascript-catalog" %}"></script>
 
-    <script src="{{ STATIC_URL }}isdc/js/app.bundle.js" async></script>
-    <!-- materialize js -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script> -->
     {% block extra_script %}{% endblock extra_script %}
     <script type="text/javascript">
         var autocomplete = $('#search_input').yourlabsAutocomplete({
@@ -432,5 +429,7 @@
       </script>
       {% include 'immap-panel-module/panel.html' %}
     {% endif %}
+
+    <script src="{{ STATIC_URL }}isdc/js/app.bundle.js" async></script>
   </body>
 </html>
