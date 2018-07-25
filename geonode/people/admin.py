@@ -56,7 +56,7 @@ class ProfileAdmin(admin.ModelAdmin):
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
-        (_('Extended profile'), {'fields': ('organization', 'profile',
+        (_('Extended profile'), {'fields': ('organization', 'org_acronym', 'org_type', 'org_name_status', 'profile',
                                             'position', 'voice', 'fax',
                                             'delivery', 'city', 'area',
                                             'zipcode', 'country',
@@ -71,7 +71,8 @@ class ProfileAdmin(admin.ModelAdmin):
     form = ProfileChangeForm
     add_form = ProfileCreationForm
     change_password_form = AdminPasswordChangeForm
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
+    # list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'organization', 'org_acronym', 'is_staff', 'is_active')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('username', 'first_name', 'last_name', 'email')
     ordering = ('username',)
