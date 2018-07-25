@@ -422,14 +422,7 @@
         </div>
       </div>
     </div>
-    {% if 'immap-panel-module' in INSTALLED_APPS %}
-      <script language="javascript">
-          var STATIC_URL = "{{ STATIC_URL }}";
-          var JS_PACKAGE = "{{IMMAP_PACKAGE}}";
-      </script>
-      {% include 'immap-panel-module/panel.html' %}
-    {% endif %}
-
+    
     <script src="{{ STATIC_URL }}isdc/js/app.bundle.js" async></script>
   </body>
 </html>
