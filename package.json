@@ -35,9 +35,10 @@
   },
   "dependencies": {
     "@material/button": "^0.37.1",
-    "@material/ripple": "^0.37.1",
     "@material/form-field": "^0.37.1",
     "@material/radio": "^0.37.1",
+    "@material/ripple": "^0.37.1",
+    "@material/select": "^0.37.1",
     "@material/textfield": "^0.37.1"
   }
 }

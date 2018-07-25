@@ -25,80 +25,142 @@
         <form id="signup_form" method="post" action="{%url "account_signup" %}" autocapitalize="off" {% if form.is_multipart %}
             enctype="multipart/form-data" {% endif %}>
 
-
-<div class="col-lg-12" style="margin-bottom: 100px;">
-    <div class="mdc-text-field mdc-text-field--box username">
-        <input type="text" class="mdc-text-field__input" id="username-input" name="username" required>
-        <label class="mdc-floating-label" for="username-input">Username</label>
-        <div class="mdc-line-ripple"></div>
-    </div>
-    <div class="mdc-text-field mdc-text-field--box password">
-        <input type="password" class="mdc-text-field__input" id="password-input" name="password" required minlength="8">
-        <label class="mdc-floating-label" for="password-input">Password</label>
-        <div class="mdc-line-ripple"></div>
-    </div>
-    <div class="button-container">
-        <button type="button" class="mdc-button cancel">
-            Cancel
-        </button>
-        <button class="mdc-button mdc-button--raised next">
-            Next
-        </button>
-    </div>
-</div>
-            
-
             <div class="col-md-6">
                 {% csrf_token %}
-                <!-- {--{ form|as_bootstrap }--} -->
                 <div class="col-md-12">
-                    {{ form.title }}
-                    <label>Title</label>
+                    <div class="isdc-field">
+                        <div class="isdc-select mdc-select">
+                            {{ form.title }}
+                            <label class="isdc-select__label mdc-floating-label" for="isdc-state-input">
+                                Title
+                            </label>
+                            <div class="mdc-line-ripple"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-12">
-                    <label>First Name</label>
-                    {{ form.first_name }}
+                    <div class="isdc-field">
+                        <div class="isdc-text-field mdc-text-field mdc-text-field--upgraded">                            
+                            {{ form.first_name }}
+                            <label class="isdc-floating-label mdc-floating-label" for="isdc-name-input">
+                                First Name
+                            </label>
+                            <div class="mdc-line-ripple"></div>
+                        </div>
+                        <p class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" id="pw-validation-msg">Helper Text</p>
+                    </div>
                 </div>
                 <div class="col-md-12">
-                    <label>Last Name</label>
-                    {{ form.last_name }}
+                    <div class="isdc-field">
+                        <div class="isdc-text-field mdc-text-field mdc-text-field--upgraded">                            
+                            {{ form.last_name }}
+                            <label class="isdc-floating-label mdc-floating-label" for="isdc-name-input">
+                                Last Name
+                            </label>
+                            <div class="mdc-line-ripple"></div>
+                        </div>
+                        <p class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" id="pw-validation-msg">Helper Text</p>
+                    </div>
                 </div>
                 <div class="col-md-12">
-                    <label>Organization</label>
-                    {{ form.organization }}
+                        <div class="isdc-field">
+                            <div class="isdc-text-field mdc-text-field mdc-text-field--upgraded">                                
+                                {{ form.organization }}
+                                <label class="isdc-floating-label mdc-floating-label" for="isdc-name-input">
+                                    Organization
+                                </label>
+                                <div class="mdc-line-ripple"></div>
+                            </div>
+                            <p class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" id="pw-validation-msg">Helper Text</p>
+                        </div>
                 </div>
                 <div class="col-md-12">
-                    <label>Organisation acronym</label>
-                    {{ form.org_acronym }}
+                        <div class="isdc-field">
+                            <div class="isdc-text-field mdc-text-field mdc-text-field--upgraded">                                
+                                {{ form.org_acronym }}
+                                <label class="isdc-floating-label mdc-floating-label" for="isdc-name-input">
+                                        Organisation acronym
+                                </label>
+                                <div class="mdc-line-ripple"></div>
+                            </div>
+                            <p class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" id="pw-validation-msg">Helper Text</p>
+                        </div>
                 </div>
                 <div class="col-md-12">
-                    <label>Position</label>
-                    {{ form.position }}
+                        <div class="isdc-field">
+                            <div class="isdc-text-field mdc-text-field mdc-text-field--upgraded">                                
+                                {{ form.position }}
+                                <label class="isdc-floating-label mdc-floating-label" for="isdc-name-input">
+                                        Position
+                                </label>
+                                <div class="mdc-line-ripple"></div>
+                            </div>
+                            <p class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" id="pw-validation-msg">Helper Text</p>
+                        </div>
                 </div>
             
             </div>
             <div class="col-md-6">
                 <div class="col-md-12">
-                    <label for="exampleInputEmail1">Email address</label>
-                    {{ form.email }}
+                        <div class="isdc-field">
+                            <div class="isdc-text-field mdc-text-field mdc-text-field--upgraded">                                
+                                {{ form.email }}
+                                <label class="isdc-floating-label mdc-floating-label" for="isdc-name-input">
+                                        Email address
+                                </label>
+                                <div class="mdc-line-ripple"></div>
+                            </div>
+                            <p class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" id="pw-validation-msg">Helper Text</p>
+                        </div>
                 </div>
     
                 <div class="col-md-12">
-                    <label>Username</label>
-                    {{ form.username }}
+                        <div class="isdc-field">
+                            <div class="isdc-text-field mdc-text-field mdc-text-field--upgraded">                                
+                                {{ form.username }}
+                                <label class="isdc-floating-label mdc-floating-label" for="isdc-name-input">
+                                        Username
+                                </label>
+                                <div class="mdc-line-ripple"></div>
+                            </div>
+                            <p class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" id="pw-validation-msg">Helper Text</p>
+                        </div>
                 </div>
     
                 <div class="col-md-12">
-                    <label>Password</label>
-                    {{ form.password1 }} 
-                    <div style="margin-bottom: 5px"></div>
-                    {{ form.password2 }}
+                        <div class="isdc-field">
+                            <div class="isdc-text-field mdc-text-field mdc-text-field--upgraded">                                
+                                {{ form.password1 }}
+                                <label class="isdc-floating-label mdc-floating-label" for="isdc-name-input">
+                                        Password
+                                </label>
+                                <div class="mdc-line-ripple"></div>
+                            </div>
+                            <p class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" id="pw-validation-msg">Helper Text</p>
+                        </div>
+                </div>
+
+    
+                <div class="col-md-12">
+                        <div class="isdc-field">
+                            <div class="isdc-text-field mdc-text-field mdc-text-field--upgraded">                                
+                                {{ form.password2 }}
+                                <label class="isdc-floating-label mdc-floating-label" for="isdc-name-input">
+                                        Password (again)
+                                </label>
+                                <div class="mdc-line-ripple"></div>
+                            </div>
+                            <p class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" id="pw-validation-msg">Helper Text</p>
+                        </div>
                 </div>
             </div>
             {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" /> {% endif %}
             <div class="form-actions pull-right">
-                <button type="submit" class="btn btn-primary">{% trans "Sign up" %}</button>
+                <button type="submit" class="isdc-singup mdc-button mdc-button--raised">
+                    <i class="material-icons mdc-button__icon" aria-hidden="true">face</i>
+                    {% trans "Sign up" %}
+                    </button>
             </div>
         </form>
     </div>
@@ -108,7 +170,9 @@
     {{ block.super }}
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#id_username').focus();
+            $('#id_password1').addClass('isdc-text-field__input mdc-text-field__input').removeAttr('placeholder');
+            $('#id_password2').addClass('isdc-text-field__input mdc-text-field__input').removeAttr('placeholder');
+            $("option[value='']").attr("disabled", "selected");
         });
         
     </script>

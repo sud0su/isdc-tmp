@@ -135,3 +135,5 @@ celerybeat-schedule.*
 geonode\.tests\.bdd\.e2e\.test_login/
 
 *.log
+geonode/static/isdc/css/
+geonode/static/isdc/js/

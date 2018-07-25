@@ -31,8 +31,8 @@ function materialImporter(url, prev) {
 
 module.exports = {
     entry: [
-        './geonode/static/node_modules/style.scss',
-        './geonode/static/node_modules/script.js'
+        './geonode/static/node_modules/_style.scss',
+        './geonode/static/node_modules/_script.js'
     ],
     output: {
         path: JS_PATH,
