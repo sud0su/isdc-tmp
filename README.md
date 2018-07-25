@@ -11,7 +11,7 @@ $rm -Rf geoserver
 $rm -Rf downloaded/*.*
 ```
 
->- rename local_settings.py.geoserver.sample to local_settings.py
+>- rename `local_settings.py.geoserver.sample` to `local_settings.py`
 >- edit database name, user, and password
   
 ```terminal
