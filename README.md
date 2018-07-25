@@ -16,7 +16,7 @@ $rm -Rf downloaded/*.*
   
 ```terminal
 $pip install GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}’)
-- paver setup
+$paver setup
 ```
 
 > Fix = raise GEOSException('Could not parse version info string "%s"' % ver)
