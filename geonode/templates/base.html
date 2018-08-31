@@ -26,14 +26,12 @@
 
         <link href="{{ STATIC_URL }}geonode/css/ext-compatibility.css?v={{ VERSION }}" rel="stylesheet" />
         <link href="{{ STATIC_URL }}geonode/css/ux-all.css?v={{ VERSION }}" rel="stylesheet" />
+        
+
         <link href="{{ STATIC_URL }}geonode/css/base.css?v={{ VERSION }}" rel="stylesheet" />
-        <!-- materialize css -->
-        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css"> -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         
         <style type="text/css">[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}</style>
-        <!-- added by razinal -->
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      <link rel="stylesheet" href="{{ STATIC_URL }}isdc/css/app.bundle.css">
       {% block extra_head %}
       {% endblock %}
     {% endblock %}
@@ -422,7 +420,13 @@
         </div>
       </div>
     </div>
-    
-    <script src="{{ STATIC_URL }}isdc/js/app.bundle.js" async></script>
+
+    {% if 'isdc_panel' in INSTALLED_APPS %}
+      <script language="javascript">
+          var STATIC_URL = "{{ STATIC_URL }}";
+          var PACKAGE = "{{IMMAP_PACKAGE}}";
+      </script>
+      {% include 'isdc_panel/panel.html' %}
+    {% endif %}
   </body>
 </html>

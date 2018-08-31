@@ -18,13 +18,3 @@
 	{{ block.super }}
 {% endblock %}
 {% block footer %}{% endblock %}
-
-{% block extra_script %}
-    {% if 'immap-panel-module' in INSTALLED_APPS %}
-      <script language="javascript">
-          var STATIC_URL = "{{ STATIC_URL }}";
-          var JS_PACKAGE = "{{IMMAP_PACKAGE}}";
-      </script>
-      {% include 'immap-panel-module/panel.html' %}
-    {% endif %}
-{% endblock extra_script %}

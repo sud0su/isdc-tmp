@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 class NewSingupForm(forms.Form):
     TITLE_CHOICES = (
-        ('', ''),
+        ('', 'Title'),
         ('Mr', 'Mr'),
         ('Mrs', 'Mrs'),
         ('Ms', 'Ms'),
@@ -42,14 +42,17 @@ class NewSingupForm(forms.Form):
         super(NewSingupForm, self).__init__(*args, **kwargs)
         for myField in self.fields:
             self.fields['username'].widget.attrs.pop("autofocus", None)
-
+            # print myField
             if myField == 'title':
                 self.fields[myField].widget.attrs['class'] = 'isdc-select__native-control mdc-select__native-control'
                 self.fields[myField].widget.attrs['placeholder'] = ''
+                self.fields[myField].widget.attrs['required'] = ''
+                self.fields[myField].widget.attrs['aria-required'] = 'true'
             else:
-                self.fields[myField].widget.attrs['class'] = 'isdc-text-field__input mdc-text-field__input'
+                self.fields[myField].widget.attrs['class'] = 'validate'
                 self.fields[myField].widget.attrs['id'] = 'id__'+myField
-                self.fields[myField].widget.attrs['placeholder'] = ''
+                self.fields[myField].widget.attrs['required'] = ''
+                self.fields[myField].widget.attrs['aria-required'] = 'true'
                 
             
     class Meta:
