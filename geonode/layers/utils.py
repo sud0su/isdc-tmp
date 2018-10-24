@@ -518,21 +518,22 @@ def file_upload(filename,
             else:
                 defaults[key] = value
 
-    regions_resolved, regions_unresolved = resolve_regions(regions)
-    keywords.extend(regions_unresolved)
+    # removed in DRR
+    # regions_resolved, regions_unresolved = resolve_regions(regions)
+    # keywords.extend(regions_unresolved)
 
-    if getattr(settings, 'NLP_ENABLED', False):
-        try:
-            from geonode.contrib.nlp.utils import nlp_extract_metadata_dict
-            nlp_metadata = nlp_extract_metadata_dict({
-                'title': defaults.get('title', None),
-                'abstract': defaults.get('abstract', None),
-                'purpose': defaults.get('purpose', None)})
-            if nlp_metadata:
-                regions_resolved.extend(nlp_metadata.get('regions', []))
-                keywords.extend(nlp_metadata.get('keywords', []))
-        except BaseException:
-            logger.error("NLP extraction failed.")
+    # if getattr(settings, 'NLP_ENABLED', False):
+    #     try:
+    #         from geonode.contrib.nlp.utils import nlp_extract_metadata_dict
+    #         nlp_metadata = nlp_extract_metadata_dict({
+    #             'title': defaults.get('title', None),
+    #             'abstract': defaults.get('abstract', None),
+    #             'purpose': defaults.get('purpose', None)})
+    #         if nlp_metadata:
+    #             regions_resolved.extend(nlp_metadata.get('regions', []))
+    #             keywords.extend(nlp_metadata.get('keywords', []))
+    #     except BaseException:
+    #         logger.error("NLP extraction failed.")
 
     # If it is a vector file, create the layer in postgis.
     if is_vector(filename):
@@ -620,15 +621,16 @@ def file_upload(filename,
             else:
                 layer.keywords.add(*keywords)
 
-    # Assign the regions (needs to be done after saving)
-    regions_resolved = list(set(regions_resolved))
-    if regions_resolved:
-        if len(regions_resolved) > 0:
-            if not layer.regions:
-                layer.regions = regions_resolved
-            else:
-                layer.regions.clear()
-                layer.regions.add(*regions_resolved)
+    # removed in DRR
+    # # Assign the regions (needs to be done after saving)
+    # regions_resolved = list(set(regions_resolved))
+    # if regions_resolved:
+    #     if len(regions_resolved) > 0:
+    #         if not layer.regions:
+    #             layer.regions = regions_resolved
+    #         else:
+    #             layer.regions.clear()
+    #             layer.regions.add(*regions_resolved)
 
     # Assign and save the charset using the Layer class' object (layer)
     if charset != 'UTF-8':
@@ -684,7 +686,7 @@ def upload(incoming, user=None, overwrite=False,
 
        This function also verifies that each layer is in GeoServer.
 
-       Supported extensions are: .shp, .tif, .tar, .tar.gz, and .zip (of a shapefile).
+       Supported extensions are: .shp, .tif, and .zip (of a shapefile).
        It catches GeoNodeExceptions and gives a report per file
     """
     if verbosity > 1:
@@ -699,10 +701,11 @@ def upload(incoming, user=None, overwrite=False,
         basename, extension = os.path.splitext(short_filename)
         filename = incoming
 
-        if extension in ['.tif', '.shp', '.tar', '.zip']:
+        if extension in ['.tif', '.shp', '.zip']:
             potential_files.append((basename, filename))
-        elif short_filename.endswith('.tar.gz'):
-            potential_files.append((basename, filename))
+        # removed in DRR
+        # elif short_filename.endswith('.tar.gz'):
+        #     potential_files.append((basename, filename))
 
     elif not os.path.isdir(incoming):
         msg = ('Please pass a filename or a directory name as the "incoming" '
@@ -715,10 +718,11 @@ def upload(incoming, user=None, overwrite=False,
             for short_filename in files:
                 basename, extension = os.path.splitext(short_filename)
                 filename = os.path.join(root, short_filename)
-                if extension in ['.tif', '.shp', '.tar', '.zip']:
+                if extension in ['.tif', '.shp', '.zip']:
                     potential_files.append((basename, filename))
-                elif short_filename.endswith('.tar.gz'):
-                    potential_files.append((basename, filename))
+                # removed in DRR
+                # elif short_filename.endswith('.tar.gz'):
+                #     potential_files.append((basename, filename))
 
     # After gathering the list of potential files,
     # let's process them one by one.
@@ -773,7 +777,7 @@ def upload(incoming, user=None, overwrite=False,
                     license=license,
                     category=category,
                     keywords=keywords,
-                    regions=regions,
+                    # regions=regions, # removed in DRR
                     metadata_uploaded_preserve=metadata_uploaded_preserve,
                     charset=charset)
                 if not existed:
@@ -795,14 +799,15 @@ def upload(incoming, user=None, overwrite=False,
                         "groups": {}}
                     layer.set_permissions(perm_spec)
 
-                if getattr(settings, 'SLACK_ENABLED', False):
-                    try:
-                        from geonode.contrib.slack.utils import build_slack_message_layer, send_slack_messages
-                        send_slack_messages(
-                            build_slack_message_layer(
-                                ("layer_new" if status == "created" else "layer_edit"), layer))
-                    except BaseException:
-                        logger.error("Could not send slack message.")
+                # removed in DRR
+                # if getattr(settings, 'SLACK_ENABLED', False):
+                #     try:
+                #         from geonode.contrib.slack.utils import build_slack_message_layer, send_slack_messages
+                #         send_slack_messages(
+                #             build_slack_message_layer(
+                #                 ("layer_new" if status == "created" else "layer_edit"), layer))
+                #     except BaseException:
+                #         logger.error("Could not send slack message.")
 
             except Exception as e:
                 if ignore_errors:

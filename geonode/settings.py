@@ -125,7 +125,7 @@ MANAGERS = ADMINS = os.getenv('ADMINS', [])
 # although not all choices may be available on all operating systems.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = os.getenv('TIME_ZONE', "America/Chicago")
+TIME_ZONE = os.getenv('TIME_ZONE', "UTC")
 
 SITE_ID = int(os.getenv('SITE_ID', '1'))
 
@@ -139,40 +139,53 @@ LANGUAGE_CODE = os.getenv('LANGUAGE_CODE', "en")
 
 _DEFAULT_LANGUAGES = (
     ('en', 'English'),
-    ('es', 'Español'),
-    ('it', 'Italiano'),
-    ('fr', 'Français'),
-    ('de', 'Deutsch'),
-    ('el', 'Ελληνικά'),
-    ('id', 'Bahasa Indonesia'),
-    ('zh-cn', '中文'),
-    ('ja', '日本語'),
-    ('fa', 'Persian'),
-    ('ar', 'Arabic'),
-    ('bn', 'Bengali'),
-    ('ne', 'Nepali'),
-    ('sq', 'Albanian'),
-    ('af', 'Afrikaans'),
-    ('sw', 'Swahili'),
-    ('pt', 'Portuguese'),
-    ('pt-br', 'Portuguese (Brazil)'),
-    ('ru', 'Russian'),
-    ('vi', 'Vietnamese'),
-    ('ko', '한국어'),
-    ('am', 'Amharic'),
-    ('km', 'Khmer'),
-    ('pl', 'Polish'),
-    ('sv', 'Swedish'),
-    ('th', 'ไทย'),
-    ('uk', 'Ukranian'),
-    ('si', 'Sinhala'),
-    ('ta', 'Tamil'),
-    ('tl', 'Tagalog'),
+    # ('es', 'Español'),
+    # ('it', 'Italiano'),
+    # ('fr', 'Français'),
+    # ('de', 'Deutsch'),
+    # ('el', 'Ελληνικά'),
+    # ('id', 'Bahasa Indonesia'),
+    # ('zh-cn', '中文'),
+    # ('ja', '日本語'),
+    # ('fa', 'Persian'),
+    # ('ar', 'Arabic'),
+    # ('bn', 'Bengali'),
+    # ('ne', 'Nepali'),
+    # ('sq', 'Albanian'),
+    # ('af', 'Afrikaans'),
+    # ('sw', 'Swahili'),
+    # ('pt', 'Portuguese'),
+    # ('ru', 'Russian'),
+    # ('vi', 'Vietnamese'),
+    # ('ko', '한국어'),
+    # ('am', 'Amharic'),
+    # ('km', 'Khmer'),
+    # ('pl', 'Polish'),
+    # ('sv', 'Swedish'),
+    # ('th', 'Thai'),
+    # ('uk', 'Ukranian'),
+    # ('si', 'Sinhala'),
+    # ('ta', 'Tamil'),
+    # ('tl', 'Tagalog'),
+    ('prs', 'Dari'),
+    ('ps', 'Pashto'),
 )
 
 LANGUAGES = os.getenv('LANGUAGES', _DEFAULT_LANGUAGES)
 
 EXTRA_LANG_INFO = {
+    'ps': {
+        'bidi': True,
+        'code': 'ps',
+        'name': 'Pashto',
+        'name_local': 'Pashto',
+        },
+    'prs': {
+        'bidi': True,
+        'code': 'ps',
+        'name': 'Dari',
+        'name_local': 'Dari',
+        },
     'am': {
         'bidi': False,
         'code': 'am',
@@ -201,6 +214,15 @@ EXTRA_LANG_INFO = {
 
 
 AUTH_USER_MODEL = os.getenv('AUTH_USER_MODEL', 'people.Profile')
+
+# Add custom languages not provided by Django
+import django.conf.locale
+from django.conf import global_settings
+LANG_INFO = dict(django.conf.locale.LANG_INFO.items() + EXTRA_LANG_INFO.items())
+django.conf.locale.LANG_INFO = LANG_INFO
+
+# Languages using BiDi (right-to-left) layout
+LANGUAGES_BIDI = global_settings.LANGUAGES_BIDI + ("prs","ps",)
 
 MODELTRANSLATION_LANGUAGES = ['en', ]
 
@@ -381,7 +403,7 @@ INSTALLED_APPS = (
     'announcements',
     'actstream',
     'user_messages',
-    # 'tastypie',
+    'tastypie',
     'polymorphic',
     'guardian',
     'oauth2_provider',
@@ -392,6 +414,24 @@ INSTALLED_APPS = (
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
+    # ISDC requirements
+    'mathfilters',
+    'graphos',
+
+    # isdc
+    # 'uploadpdf',
+    # 'matrix',
+    'dashboard',
+    'geodb',
+    'securitydb',
+    'flood',
+    'avalanche',
+    'accessibility',
+    'earthquake',
+    'landslide',
+    'securityincident',
+
 ) + GEONODE_APPS
 
 MONITORING_ENABLED = False
@@ -683,10 +723,10 @@ OGC_SERVER = {
         'PRINT_NG_ENABLED': True,
         'GEONODE_SECURITY_ENABLED': True,
         'GEOFENCE_SECURITY_ENABLED': GEOFENCE_SECURITY_ENABLED,
-        'GEOGIG_ENABLED': False,
+        'GEOGIG_ENABLED': True,
         'WMST_ENABLED': False,
         'BACKEND_WRITE_ENABLED': True,
-        'WPS_ENABLED': False,
+        'WPS_ENABLED': True,
         'LOG_FILE': '%s/geoserver/data/logs/geoserver.log'
         % os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir)),
         # Set to name of database in DATABASES dictionary to enable
@@ -705,7 +745,7 @@ UPLOADER = {
     'OPTIONS': {
         'TIME_ENABLED': False,
         'MOSAIC_ENABLED': False,
-        'GEOGIG_ENABLED': False,
+        'GEOGIG_ENABLED': True,
     },
     'SUPPORTED_CRS': [
         'EPSG:4326',
@@ -823,6 +863,10 @@ DEFAULT_MAP_CENTER = (0, 0)
 # 0 = entire world;
 # maximum zoom is between 12 and 15 (for Google Maps, coverage varies by area)
 DEFAULT_MAP_ZOOM = 0
+GOOGLE_API_KEY = 'AIzaSyDhozz5auHwrVAKsV1WLVqbaha6m1ha5Ww'
+# GOOGLE_API_KEY2 = 'AIzaSyDm8c01D9uB6YLO0Bx7N0wWsVFJ8NuVc2s'
+# GOOGLE_API_KEY3 = 'AIzaSyA8EHWLeCQ2Xi0YzY80dM4xvoFPEwA_Dh0'
+# GOOGLE_API_KEY4 = 'AIzaSyAXRuF0rV2c5xm6Sh4rrT5sLb77tcnlp_M'
 
 ALT_OSM_BASEMAPS = os.environ.get('ALT_OSM_BASEMAPS', False)
 CARTODB_BASEMAPS = os.environ.get('CARTODB_BASEMAPS', False)
@@ -863,6 +907,75 @@ MAP_BASELAYERS = [{
     "visibility": True,
     "fixed": True,
     "group": "background"
+# }, {
+#     "source": {"ptype": "gxp_mapquestsource"},
+#     "name": "osm",
+#     "group": "background",
+#     "visibility": True
+# }, {
+#     "source": {"ptype": "gxp_mapquestsource"},
+#     "name": "naip",
+#     "group": "background",
+#     "visibility": False
+# }, {
+#     "source": {"ptype": "gxp_bingsource"},
+#     "name": "AerialWithLabels",
+#     "fixed": True,
+#     "visibility": False,
+#     "group": "background"
+},{
+    "source": {
+        "ptype": "gxp_googlesource",
+        "apiKey": GOOGLE_API_KEY
+    },
+    "group":"background",
+    "name":"SATELLITE",
+    "visibility": True,
+    "fixed": True
+},{
+    "source": {
+        "ptype": "gxp_googlesource",
+        "apiKey": GOOGLE_API_KEY
+    },
+    "group":"background",
+    "name":"ROADMAP",
+    "visibility": False,
+    "fixed": True
+},{
+    "source": {
+        "ptype": "gxp_googlesource",
+        "apiKey": GOOGLE_API_KEY
+    },
+    "group":"background",
+    "name":"HYBRID",
+    "visibility": False,
+    "fixed": True
+},{
+    "source": {
+        "ptype": "gxp_googlesource",
+        "apiKey": GOOGLE_API_KEY
+    },
+    "group":"background",
+    "name":"TERRAIN",
+    "visibility": False,
+    "fixed": True
+}, {
+    "source": {"ptype": "gxp_mapboxsource"},
+},{
+    "source": {"ptype": "gxp_olsource"},
+    "type":"OpenLayers.Layer.XYZ",
+    "args":[
+        "ESRI World Imagery", 
+        ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}"], 
+        {
+            "transitionEffect": "resize",
+            "attribution": "osm_attribution",
+            "blankTile":"true"
+        }
+    ],
+    "visibility": False,
+    "fixed": True,
+    "group":"background"
 }]
 
 DISPLAY_SOCIAL = strtobool(os.getenv('DISPLAY_SOCIAL', 'True'))
@@ -925,11 +1038,29 @@ SRID = {
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 # Require users to authenticate before using Geonode
-LOCKDOWN_GEONODE = strtobool(os.getenv('LOCKDOWN_GEONODE', 'False'))
+LOCKDOWN_GEONODE = strtobool(os.getenv('LOCKDOWN_GEONODE', 'True'))
 
 # Add additional paths (as regular expressions) that don't require
 # authentication.
-AUTH_EXEMPT_URLS = ()
+# AUTH_EXEMPT_URLS = ()
+AUTH_EXEMPT_URLS = (
+    r'^/?$',
+    '/about',
+    '/account/signup',
+    '/api',
+    '/dashboard/classmarker_insert',
+    '/dashboard/print',
+    '/developer',
+    '/disclaimer',
+    '/documents/api'
+    '/geoapi',
+    '/getOverviewMaps',
+    '/partners',
+    '/training',
+    '/uploaded/logos',
+    '/v2/dashboard/print',
+    '/video',
+    )
 
 # A tuple of hosts the proxy can send requests to.
 PROXY_ALLOWED_HOSTS = ()
@@ -1036,6 +1167,11 @@ LEAFLET_CONFIG = {
         'leaflet-fullscreen': {
             'css': 'lib/css/leaflet.fullscreen.css',
             'js': 'lib/js/Leaflet.fullscreen.min.js',
+            'auto-include': True,
+        },
+        'leaflet-markercluster': {
+            'css': 'lib/css/MarkerCluster.css',
+            'js': 'lib/js/leaflet.markercluster-src.js',
             'auto-include': True,
         },
         'leaflet-opacity': {
@@ -1179,6 +1315,11 @@ CELERY_QUEUES = [
     Queue('update', routing_key='update'),
     Queue('email', routing_key='email'),
 ]
+
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+
+import djcelery
+djcelery.setup_loader()
 
 # AWS S3 Settings
 
@@ -1336,3 +1477,57 @@ ACCOUNT_SIGNUP_FORM_CLASS = 'customallauth.forms.NewSingupForm'
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
 # ACCOUNT_ADAPTER = 'customallauth'
+
+# ISDC Settings Start
+
+# modules with stand-alone page in dashboard
+DASHBOARD_PAGE_MODULES = [
+    'flood',
+    'avalanche',
+    'accessibility',
+    'earthquake',
+    'landslide',
+    'securityincident',
+    'naturaldisaster',
+    'weather',
+    'drought',
+    ]
+
+# modules with components for geodb.geoapi.getRiskExecuteExternal() 
+GETRISKEXECUTEEXTERNAL_MODULES = [
+    'flood',
+    'avalanche',
+    ]
+
+# modules with components for geodb.geo_calc.getQuickOverview() 
+QUICKOVERVIEW_MODULES = [
+    'flood',
+    'avalanche',
+    'accessibility',
+    'earthquake',
+    'landslide',
+    'securityincident',
+    # 'drought',
+    ]
+
+DATABASE_ROUTERS = [
+    'geonode.dbrouter.defaultdbrouter',
+    ]
+
+DEFAULTDB = 'default'
+
+# for every app in INSTALLED_APPS use DEFAULTDB database, then update with MAP_APPS_TO_DB_CUSTOM
+MAP_APPS_TO_DB = {app.split('.')[-1]: DEFAULTDB for app in INSTALLED_APPS}
+
+# add here for app using non-default database
+MAP_APPS_TO_DB_CUSTOM = {
+    'geodb': 'geodb',
+    'flood': 'geodb',
+    'avalanche': 'geodb',
+    'earthquake': 'geodb',
+    'securityincident': 'geodb',
+    'securitydb': 'securitydb',
+    }
+MAP_APPS_TO_DB.update(MAP_APPS_TO_DB_CUSTOM)
+
+# ISDC Settings End

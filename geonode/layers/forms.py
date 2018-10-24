@@ -20,6 +20,7 @@
 
 import os
 import tempfile
+import autocomplete_light
 import zipfile
 from autocomplete_light.registry import autodiscover
 

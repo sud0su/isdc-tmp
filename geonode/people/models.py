@@ -27,7 +27,7 @@ from django.conf import settings
 
 from taggit.managers import TaggableManager
 
-from geonode.base.enumerations import COUNTRIES
+from geonode.base.enumerations import COUNTRIES, ORG_ACCRONYM, ORG_NAME_STATUS
 from geonode.groups.models import GroupProfile
 from geonode.notifications_helper import send_notification
 # from account.models import EmailAddress

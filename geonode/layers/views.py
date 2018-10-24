@@ -67,6 +67,9 @@ from geonode.base.enumerations import CHARSETS
 from geonode.base.models import TopicCategory
 from geonode.groups.models import GroupProfile
 
+# addded by boedy
+from matrix.models import matrix
+
 from geonode.utils import (resolve_object,
                            default_map_config,
                            check_ogc_backend,
@@ -504,10 +507,13 @@ def layer_detail(request, layername, template='layers/layer_detail.html'):
     if 'show_popup' in request.GET and request.GET["show_popup"]:
         show_popup = True
 
+    orglogos = [l.filename for l in layer.orglogo_set.all()]
+
     context_dict = {
+        "orglogos": orglogos,
         'resource': layer,
         'group': group,
-        'perms_list': get_perms(request.user, layer.get_self_resource()),
+        # 'perms_list': get_perms(request.user, layer.get_self_resource()),
         "permissions_json": _perms_info_json(layer),
         "documents": get_related_documents(layer),
         "metadata": metadata,
@@ -578,6 +584,9 @@ def layer_detail(request, layername, template='layers/layer_detail.html'):
             links = layer.link_set.download().filter(
                 name__in=settings.DOWNLOAD_FORMATS_RASTER)
         context_dict["links_download"] = links_download
+        #added by razinal
+        queryset = matrix(user=request.user,resourceid=layer,action='Download Layer')
+        queryset.save()
 
     if settings.SOCIAL_ORIGINS:
         context_dict["social_links"] = build_social_links(request, layer)
@@ -800,6 +809,10 @@ def layer_metadata(
         Layer.objects.filter(
             id=layer.id).update(popular_count=F('popular_count') + 1)
 
+        # copied from asdc
+        queryset = matrix(user=request.user,resourceid=layer,action='View')
+        queryset.save()
+
     # center/zoom don't matter; the viewer will center on the layer bounds
     map_obj = GXPMap(
         projection=getattr(
@@ -891,14 +904,6 @@ def layer_metadata(
                     instance=poc)
             else:
                 poc_form = ProfileForm(request.POST, prefix="poc")
-            if poc_form.is_valid():
-                if len(poc_form.cleaned_data['profile']) == 0:
-                    # FIXME use form.add_error in django > 1.7
-                    errors = poc_form._errors.setdefault(
-                        'profile', ErrorList())
-                    errors.append(
-                        _('You must set a point of contact for this resource'))
-                    poc = None
             if poc_form.has_changed and poc_form.is_valid():
                 new_poc = poc_form.save()
 
@@ -908,14 +913,6 @@ def layer_metadata(
                                           instance=metadata_author)
             else:
                 author_form = ProfileForm(request.POST, prefix="author")
-            if author_form.is_valid():
-                if len(author_form.cleaned_data['profile']) == 0:
-                    # FIXME use form.add_error in django > 1.7
-                    errors = author_form._errors.setdefault(
-                        'profile', ErrorList())
-                    errors.append(
-                        _('You must set an author for this resource'))
-                    metadata_author = None
             if author_form.has_changed and author_form.is_valid():
                 new_author = author_form.save()
 
@@ -930,7 +927,7 @@ def layer_metadata(
             la.display_order = form["display_order"]
             la.save()
 
-        if new_poc is not None or new_author is not None:
+        if new_poc is not None and new_author is not None:
             if new_poc is not None:
                 layer.poc = new_poc
             if new_author is not None:

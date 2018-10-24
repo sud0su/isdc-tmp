@@ -31,4 +31,6 @@ urlpatterns = [  # 'geonode.people.views',
     url(r"^profile/(?P<username>[^/]*)/$",
         views.profile_detail, name="profile_detail"),
     url(r'^forgotname', views.forgot_username, name='forgot_username'),
+	##added by razinal
+	url(r'^members', views.member_count, name='members'),
 ]

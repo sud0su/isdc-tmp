@@ -636,6 +636,14 @@ def post_delete_layer_file(instance, sender, **kwargs):
     """
     instance.file.delete(save=False)
 
+class Orglogo(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255, blank=True)
+    filename = models.CharField(max_length=255, blank=True)
+    layer = models.ManyToManyField(Layer)
+
+    def __str__(self):
+        return self.filename
 
 signals.pre_save.connect(pre_save_layer, sender=Layer)
 signals.post_save.connect(resourcebase_post_save, sender=Layer)

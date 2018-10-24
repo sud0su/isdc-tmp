@@ -172,6 +172,11 @@ def resource_urls(request):
             settings,
             "IMMAP_PACKAGE",
             False
-        )
+        ),
+        QUICKOVERVIEW_MODULES=getattr(
+            settings,
+            "QUICKOVERVIEW_MODULES",
+            []
+        ),
     )
     return defaults

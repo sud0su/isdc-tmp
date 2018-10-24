@@ -41,6 +41,8 @@ from geonode.utils import check_ogc_backend
 
 from autocomplete_light.registry import autodiscover
 
+# from flood.urls import api as api_flood
+
 # Setup Django Admin
 autodiscover()
 
@@ -56,7 +58,40 @@ sitemaps = {
     "map": MapSitemap
 }
 
+urlpatterns_isdc = [
+
+    # url(r'', include('uploadpdf.urls'))
+
+    # Static pages
+    url(r'^/?$', TemplateView.as_view(template_name='index.html'), name='home'),
+    url(r'^help/$', TemplateView.as_view(template_name='help.html'), name='help'),
+    url(r'^developer/$', TemplateView.as_view(template_name='developer.html'), name='developer'),
+    url(r'^about/$', TemplateView.as_view(template_name='about.html'), name='about'),
+    url(r'^disclaimer/$', TemplateView.as_view(template_name='disclaimer.html'), name='disclaimer'),
+    url(r'^partners/$', TemplateView.as_view(template_name='partners.html'), name='partners'),
+    url(r'^video/$', TemplateView.as_view(template_name='video.html'), name='video'),
+    url(r'^training/$', TemplateView.as_view(template_name='training.html'), name='training'),
+    url(r'^documentation/$', TemplateView.as_view(template_name='documentation.html'), name='documentation'),
+    
+    url(r'^dashboard/', include('dashboard.urls')),
+
+    # optional module api and getOverviewMaps urls
+    url(r'', include('geodb.urls')),
+    url(r'', include('flood.urls')),
+    url(r'', include('avalanche.urls')),
+    url(r'', include('accessibility.urls')),
+    url(r'', include('earthquake.urls')),
+    url(r'', include('landslide.urls')),
+    url(r'', include('securityincident.urls')),
+    url(r'', include('weather.urls')),
+    url(r'', include('climate.urls')),
+    url(r'', include('drought.urls')),
+    
+    ]
+
 urlpatterns = [  # '',
+    url(r'^', include(urlpatterns_isdc, namespace=None)),
+
     # Static pages
     url(r'^$',
         TemplateView.as_view(template_name='index.html'),

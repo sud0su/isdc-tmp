@@ -34,13 +34,18 @@ from geonode.people.forms import ProfileForm
 from geonode.people.forms import ForgotUsernameForm
 from geonode.tasks.tasks import send_email
 
+import re
+
+# added by razinal
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Count, Q
+
 
 @login_required
 def profile_edit(request, username=None):
     if username is None:
         try:
-            profile = request.user
-            username = profile.username
+            profile = request.user.profile
         except Profile.DoesNotExist:
             return redirect("profile_browse")
     else:
@@ -110,3 +115,48 @@ def forgot_username(request):
                                   'message': message,
                                   'form': username_form
                               })
+
+# addey by razinal
+def member_count(request):
+    queryset = Profile.objects.values('org_acronym','organization').exclude(org_acronym__isnull=True).exclude(org_acronym__exact='').annotate(total_members=Count('id', distinct=True))
+    exclude_list = ['AnonymousUser']
+    tot_users = Profile.objects.filter(is_active=True).exclude(username__in=exclude_list)
+    
+    query =  request.GET.get('q')
+    if query:
+        queryset = queryset.filter(
+            Q(organization__icontains=query)|
+            Q(org_acronym__icontains=query)
+            ).distinct()
+        tot_users = tot_users.filter(
+            Q(organization__icontains=query)|
+            Q(org_acronym__icontains=query)
+            ).distinct()
+
+    queryorder = request.GET.get('order_by')
+    if queryorder == 'most_users':
+        queryset = queryset.order_by('-total_members')
+    elif queryorder == 'lowest_users':
+        queryset = queryset.order_by('total_members')
+    elif queryorder == 'z-a':
+        queryset = queryset.order_by('-organization')
+    elif queryorder == 'a-z':
+        queryset = queryset.order_by('organization')
+    
+    page_request_var = 'page'
+    page = request.GET.get(page_request_var)
+    paginator = Paginator(queryset, 20)
+    try:
+        members = paginator.page(page)
+    except PageNotAnInteger:
+        members = paginator.page(1)
+    except EmptyPage:
+        members = paginator.page(paginator.num_pages)
+
+    context = {
+        "members" : members,
+        "tot_user" : tot_users,
+        "page_request_var" : page_request_var
+    }
+
+    return render(request, 'v2/_group_member_count.html', context)

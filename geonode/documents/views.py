@@ -44,7 +44,7 @@ from geonode.utils import resolve_object
 from geonode.security.views import _perms_info_json
 from geonode.people.forms import ProfileForm
 from geonode.base.forms import CategoryForm
-from geonode.base.models import TopicCategory
+from geonode.base.models import TopicCategory, Region
 from geonode.documents.models import Document, get_related_resources
 from geonode.documents.forms import DocumentForm, DocumentCreateForm, DocumentReplaceForm
 from geonode.documents.models import IMGTYPES
@@ -52,6 +52,11 @@ from geonode.documents.renderers import generate_thumbnail_content, MissingPILEr
 from geonode.utils import build_social_links
 from geonode.groups.models import GroupProfile
 from geonode.base.views import batch_modify
+
+# addded by boedy
+from matrix.models import matrix
+
+from django.utils.text import get_valid_filename, slugify
 
 logger = logging.getLogger("geonode.documents.views")
 
@@ -114,9 +119,12 @@ def document_detail(request, docid):
             Document.objects.filter(
                 id=document.id).update(
                 popular_count=F('popular_count') + 1)
+            queryset = matrix(user=request.user,resourceid=document,action='View')
+            queryset.save()
 
         metadata = document.link_set.metadata().filter(
             name__in=settings.DOWNLOAD_FORMATS_METADATA)
+        preview_url = document.thumbnail_url.replace("-thumb", "-preview")
 
         group = None
         if document.group:
@@ -133,7 +141,8 @@ def document_detail(request, docid):
             'group': group,
             'metadata': metadata,
             'imgtypes': IMGTYPES,
-            'related': related}
+            'related': related,
+            'preview_url':preview_url}
 
         if settings.SOCIAL_ORIGINS:
             context_dict["social_links"] = build_social_links(
@@ -156,6 +165,10 @@ def document_detail(request, docid):
 
 def document_download(request, docid):
     document = get_object_or_404(Document, pk=docid)
+
+    if request.user != document.owner and not request.user.is_superuser:
+        queryset = matrix(user=request.user,resourceid=document,action='Download')
+        queryset.save()
 
     if settings.MONITORING_ENABLED and document:
         if hasattr(document, 'alternate'):
@@ -394,7 +407,7 @@ def document_metadata(
                 id=category_form.cleaned_data['category_choice_field'])
 
             if new_poc is None:
-                if poc is None:
+                if poc.user is None:
                     poc_form = ProfileForm(
                         request.POST,
                         prefix="poc",
@@ -429,8 +442,35 @@ def document_metadata(
                 if author_form.has_changed and author_form.is_valid():
                     new_author = author_form.save()
 
+            # rename document file if any title fields changed
+            # TODO: in Geonode 2.8 there is separate 'version' field which in DRR used 'edition' field
+            title_fields = ['category', 'regions', 'datasource', 'title', 'subtitle', 'papersize', 'date', 'version']
+            title_fields_changed = [i for e in title_fields for i in document_form.changed_data if e == i]
+            if title_fields_changed:
+                doc_file_path = os.path.dirname(document.doc_file.name)
+                new_filename = '%s.%s' % (
+                    get_valid_filename('_'.join([
+                        'afg',
+                        new_category.identifier,
+                        '-'.join([r.code for r in Region.objects.all().filter(pk__in=document_form.cleaned_data['regions'])]),
+                        document_form.cleaned_data['datasource'],
+                        slugify(document_form.cleaned_data['title'], allow_unicode=True),
+                        slugify(document_form.cleaned_data['subtitle'], allow_unicode=True),
+                        document_form.cleaned_data['papersize'],
+                        document_form.cleaned_data['date'].strftime('%Y-%m-%d'),
+                        document_form.cleaned_data['version']])),
+                    document.extension
+                    )
+                new_doc_file = os.path.join(doc_file_path, new_filename)
+                old_path = os.path.join(settings.MEDIA_ROOT, document.doc_file.name)
+                new_path = os.path.join(settings.MEDIA_ROOT, new_doc_file)
+                os.rename(old_path, new_path)
+                document.doc_file.name = new_doc_file
+                document.save()
+
             the_document = document_form.instance
             if new_poc is not None and new_author is not None:
+                the_document = document_form.save()
                 the_document.poc = new_poc
                 the_document.metadata_author = new_author
             if new_keywords:
@@ -469,15 +509,28 @@ def document_metadata(
         # - POST Request Ends here -
 
         # Request.GET
-        if poc is not None:
-            document_form.fields['poc'].initial = poc.id
-            poc_form = ProfileForm(prefix="poc")
-            poc_form.hidden = True
+        if poc is None:
+            poc_form = ProfileForm(request.POST, prefix="poc")
+        else:
+            if poc is None:
+                poc_form = ProfileForm(instance=poc, prefix="poc")
+            else:
+                document_form.fields['poc'].initial = poc.id
+                poc_form = ProfileForm(prefix="poc")
+                poc_form.hidden = True
 
-        if metadata_author is not None:
-            document_form.fields['metadata_author'].initial = metadata_author.id
-            author_form = ProfileForm(prefix="author")
-            author_form.hidden = True
+        if metadata_author is None:
+            author_form = ProfileForm(request.POST, prefix="author")
+        else:
+            if metadata_author is None:
+                author_form = ProfileForm(
+                    instance=metadata_author,
+                    prefix="author")
+            else:
+                document_form.fields[
+                    'metadata_author'].initial = metadata_author.id
+                author_form = ProfileForm(prefix="author")
+                author_form.hidden = True
 
         metadata_author_groups = []
         if request.user.is_superuser or request.user.is_staff:

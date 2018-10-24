@@ -53,10 +53,16 @@ class Document(ResourceBase):
     doc_file = models.FileField(upload_to='documents',
                                 null=True,
                                 blank=True,
-                                max_length=255,
+                                max_length=500,
                                 verbose_name=_('File'))
 
     extension = models.CharField(max_length=128, blank=True, null=True)
+
+    # add custom field
+    version    = models.CharField(max_length=50, blank=True, null=True)
+    papersize  = models.CharField(max_length=2, blank=True, null=True)
+    datasource = models.CharField(max_length=128, blank=True, null=True)
+    subtitle = models.CharField(max_length=128, blank=True, null=True)
 
     doc_type = models.CharField(max_length=128, blank=True, null=True)
 
@@ -144,8 +150,8 @@ def pre_save_document(instance, sender, **kwargs):
         instance.doc_type = doc_type
 
     elif instance.doc_url:
-        if '.' in urlparse(instance.doc_url).path:
-            instance.extension = urlparse(instance.doc_url).path.rsplit('.')[-1]
+        if len(instance.doc_url) > 4 and instance.doc_url[-4] == '.':
+            instance.extension = instance.doc_url[-3:]
 
     if not instance.uuid:
         instance.uuid = str(uuid.uuid1())
@@ -165,10 +171,14 @@ def pre_save_document(instance, sender, **kwargs):
         instance.bbox_y0 = min([r.bbox_y0 for r in resources])
         instance.bbox_y1 = max([r.bbox_y1 for r in resources])
     else:
-        instance.bbox_x0 = -180
-        instance.bbox_x1 = 180
-        instance.bbox_y0 = -90
-        instance.bbox_y1 = 90
+        # instance.bbox_x0 = -180
+        # instance.bbox_x1 = 180
+        # instance.bbox_y0 = -90
+        # instance.bbox_y1 = 90
+        instance.bbox_x0 = 60
+        instance.bbox_x1 = 74
+        instance.bbox_y0 = 30
+        instance.bbox_y1 = 38
 
 
 def post_save_document(instance, *args, **kwargs):

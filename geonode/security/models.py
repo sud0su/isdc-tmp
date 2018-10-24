@@ -100,16 +100,25 @@ class PermissionLevelMixin(object):
                     attach_perms=True)}
 
             for user in info_layer['users']:
+                permissions = []
                 if user in info['users']:
-                    info['users'][user] = info['users'][user] + info_layer['users'][user]
+                    permissions = info['users'][user]
                 else:
-                    info['users'][user] = info_layer['users'][user]
+                    info['users'][user] = []
+
+                for perm in info_layer['users'][user]:
+                    if perm not in permissions:
+                        permissions.append(perm)
 
             for group in info_layer['groups']:
+                permissions = []
                 if group in info['groups']:
-                    info['groups'][group] = info['groups'][group] + info_layer['groups'][group]
+                    permissions = info['groups'][group]
                 else:
-                    info['groups'][group] = info_layer['groups'][group]
+                    info['groups'][group] = []
+                for perm in info_layer['groups'][group]:
+                    if perm not in permissions:
+                        permissions.append(perm)
 
         return info
 
@@ -128,8 +137,9 @@ class PermissionLevelMixin(object):
         # default permissions for anonymous users
         anonymous_group, created = Group.objects.get_or_create(name='anonymous')
 
-        if not anonymous_group:
-            raise Exception("Could not acquire 'anonymous' Group.")
+		# removed in DRR
+        # if not anonymous_group:
+        #     raise Exception("Could not acquire 'anonymous' Group.")
 
         # default permissions for resource owner
         set_owner_permissions(self)

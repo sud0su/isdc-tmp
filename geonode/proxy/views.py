@@ -33,6 +33,7 @@ from django.middleware.csrf import get_token
 from distutils.version import StrictVersion
 from geonode.utils import check_ogc_backend
 from geonode import geoserver, qgis_server  # noqa
+import base64
 
 TIMEOUT = 30
 
@@ -141,6 +142,9 @@ def proxy(request, url=None, response_callback=None,
 
     if request.method in ("POST", "PUT") and "CONTENT_TYPE" in request.META:
         headers["Content-Type"] = request.META["CONTENT_TYPE"]
+
+    if url.hostname == getattr(settings, 'DGB_USOURCE'):
+        headers["Authorization"] = 'Basic %s' % base64.b64encode(getattr(settings, 'DGB_UNAME')+':'+getattr(settings, 'DGB_UPASS'))
 
     access_token = None
     if 'access_token' in request.session:

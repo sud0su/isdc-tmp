@@ -25,7 +25,8 @@ from .api import TagResource, TopicCategoryResource, ProfileResource, \
     GroupResource, RegionResource, OwnersResource, ThesaurusKeywordResource, \
     GroupCategoryResource
 from .resourcebase_api import LayerResource, MapResource, DocumentResource, \
-    ResourceBaseResource, FeaturedResourceBaseResource
+    ResourceBaseResource, FeaturedResourceBaseResource, \
+    LatestDocumentResource, LatestDocumentHazardResource
 
 api = Api(api_name='api')
 
@@ -43,3 +44,7 @@ api.register(OwnersResource())
 api.register(ThesaurusKeywordResource())
 api.register(GroupCategoryResource())
 api.register(StyleResource())
+
+# added
+api.register(LatestDocumentResource())
+api.register(LatestDocumentHazardResource())

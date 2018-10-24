@@ -73,6 +73,10 @@ from geonode.base.views import batch_modify
 
 from requests.compat import urljoin
 
+# addded by boedy
+from matrix.models import matrix
+from avatar.templatetags.avatar_tags import avatar_print_url
+
 if check_ogc_backend(geoserver.BACKEND_PACKAGE):
     # FIXME: The post service providing the map_status object
     # should be moved to geonode.geoserver.
@@ -133,6 +137,9 @@ def map_detail(request, mapid, snapshot=None, template='maps/map_detail.html'):
             id=map_obj.id).update(
             popular_count=F('popular_count') + 1)
 
+        queryset = matrix(user=request.user,resourceid=map_obj,action='View')
+        queryset.save()
+
     if 'access_token' in request.session:
         access_token = request.session['access_token']
     else:
@@ -153,12 +160,18 @@ def map_detail(request, mapid, snapshot=None, template='maps/map_detail.html'):
             group = GroupProfile.objects.get(slug=map_obj.group.name)
         except GroupProfile.DoesNotExist:
             group = None
+
+    layernames = [l.name for l in layers]
+    qs_orglogos = Layer.objects.filter(typename__in=layernames, orglogo__filename__isnull=False).values('orglogo__filename').distinct()
+    orglogos = [l['orglogo__filename'] for l in qs_orglogos]
+
     context_dict = {
+        "orglogos": orglogos,
         'config': config,
         'resource': map_obj,
         'group': group,
         'layers': layers,
-        'perms_list': get_perms(request.user, map_obj.get_self_resource()),
+        # 'perms_list': get_perms(request.user, map_obj.get_self_resource()), # removed in DRR
         'permissions_json': _perms_info_json(map_obj),
         "documents": get_related_documents(map_obj),
         'links': links,
@@ -538,6 +551,12 @@ def map_view(request, mapid, snapshot=None, layer_name=None,
         'base.view_resourcebase',
         _PERMISSION_MSG_VIEW)
 
+	# added from DRR
+    if request.user != map_obj.owner and not request.user.is_superuser:
+        Map.objects.filter(id=map_obj.id).update(popular_count=F('popular_count') + 1)
+        queryset = matrix(user=request.user,resourceid=map_obj,action='View Geoexplorer')
+        queryset.save()
+
     if 'access_token' in request.session:
         access_token = request.session['access_token']
     else:
@@ -551,6 +570,37 @@ def map_view(request, mapid, snapshot=None, layer_name=None,
     if layer_name:
         config = add_layers_to_map_config(
             request, map_obj, (layer_name, ), False)
+
+    # translation for map legend
+    # (map title, map abstract, layer title, layer abstract)
+    if config['about']['title']:
+        config['about']['title'] = _(config['about']['title'])
+    if config['about']['abstract']:
+        config['about']['abstract'] = _(config['about']['abstract'])
+    for layer in config['map']['layers']:
+        if 'title' in layer:
+            if layer['title']:
+                layer['title'] = _(layer['title'])
+                if 'args' in layer:
+                    for idx, val in enumerate(layer['args']):
+                        if isinstance(val, list) == False and isinstance(val, dict) == False:
+                            layer['args'][idx] = _(val)
+        if 'capability' in layer:
+            if 'abstract' in layer['capability']:
+                if layer['capability']['abstract']:
+                    layer['capability']['abstract'] = _(layer['capability']['abstract'])
+
+        qs_orglogos = Layer.objects.filter(typename=layer['name'], orglogo__filename__isnull=False).values('orglogo__filename', 'orglogo__name')
+        if qs_orglogos.count()>0:
+            layer['attribution']='<img src="/static/v2/images/layer_logo/'+qs_orglogos[0]['orglogo__filename']+'" title="'+qs_orglogos[0]['orglogo__name']+'" alt="'+qs_orglogos[0]['orglogo__name']+'" height=50>'
+        else:
+            layer['attribution']=' '   
+    # avatar_print_url_params = avatar_print_url(request.user, 200)
+    # config['about']['print_org_logo'] = avatar_print_url_params['onpdf']
+    # config['about']['org_logo'] = avatar_print_url_params['logo_url']
+    # layernames = [l['name'] for l in config['map']['layers']]
+    # qs_orglogos = Layer.objects.filter(typename__in=layernames, orglogo__filename__isnull=False).values('orglogo__filename').distinct()
+    # orglogos = [l['orglogo__filename'] for l in qs_orglogos]
 
     return render(request, template, context={
         'config': json.dumps(config),
@@ -801,8 +851,9 @@ def new_map_config(request):
             return HttpResponse(status=405)
 
         if 'layer' in params:
-            map_obj = Map(projection=getattr(settings, 'DEFAULT_MAP_CRS',
-                                             'EPSG:900913'))
+            # map_obj = Map(projection=getattr(settings, 'DEFAULT_MAP_CRS',
+            #                                  'EPSG:900913')) # modified in DRR
+            map_obj = Map(projection='EPSG:900913')
             config = add_layers_to_map_config(
                 request, map_obj, params.getlist('layer'))
         else:

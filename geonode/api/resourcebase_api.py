@@ -983,3 +983,29 @@ class DocumentResource(CommonModelApi):
         queryset = Document.objects.distinct().order_by('-date')
         resource_name = 'documents'
         authentication = MultiAuthentication(SessionAuthentication(), GeonodeApiKeyAuthentication())
+
+# added by boedy1996@gmail.com
+class LatestDocumentResource(CommonModelApi):
+
+    """Only the lastest documents resourcebases"""
+
+    class Meta(CommonMetaApi):
+        max_limit = CommonMetaApi.max_limit
+        max_limit=4
+        queryset = Document.objects.distinct().order_by('-date')
+        if settings.RESOURCE_PUBLISHING:
+            queryset = queryset.filter(is_published=True)
+        resource_name = 'lastestdocument'
+
+class LatestDocumentHazardResource(CommonModelApi):
+
+    """Only the lastest documents resourcebases"""
+
+    class Meta(CommonMetaApi):
+        max_limit = CommonMetaApi.max_limit
+        max_limit=6
+        queryset = Document.objects.distinct().order_by('-date')
+        if settings.RESOURCE_PUBLISHING:
+            queryset = queryset.filter(is_published=True)
+        resource_name = 'lastestflood'
+

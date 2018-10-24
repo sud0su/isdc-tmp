@@ -66,6 +66,12 @@ try:
 except ImportError:
     from django.utils import simplejson as json
 
+# isdc
+from django.db.models.expressions import RawSQL
+from django.db.models.query import QuerySet
+from itertools import izip
+from graphos.renderers.base import BaseChart
+
 DEFAULT_TITLE = ""
 DEFAULT_ABSTRACT = ""
 
@@ -575,15 +581,18 @@ class GXPLayer(GXPLayerBase):
 
 
 def default_map_config(request):
-    if getattr(settings, 'DEFAULT_MAP_CRS', 'EPSG:900913') == "EPSG:4326":
-        _DEFAULT_MAP_CENTER = inverse_mercator(settings.DEFAULT_MAP_CENTER)
-    else:
-        _DEFAULT_MAP_CENTER = forward_mercator(settings.DEFAULT_MAP_CENTER)
+    # modified in DRR
+    # if getattr(settings, 'DEFAULT_MAP_CRS', 'EPSG:900913') == "EPSG:4326":
+    #     _DEFAULT_MAP_CENTER = inverse_mercator(settings.DEFAULT_MAP_CENTER)
+    # else:
+    #     _DEFAULT_MAP_CENTER = forward_mercator(settings.DEFAULT_MAP_CENTER)
+    _DEFAULT_MAP_CENTER = forward_mercator(settings.DEFAULT_MAP_CENTER)
 
     _default_map = GXPMap(
         title=DEFAULT_TITLE,
         abstract=DEFAULT_ABSTRACT,
-        projection=getattr(settings, 'DEFAULT_MAP_CRS', 'EPSG:900913'),
+        # projection=getattr(settings, 'DEFAULT_MAP_CRS', 'EPSG:900913'),
+        projection="EPSG:900913",
         center_x=_DEFAULT_MAP_CENTER[0],
         center_y=_DEFAULT_MAP_CENTER[1],
         zoom=settings.DEFAULT_MAP_ZOOM
@@ -868,8 +877,9 @@ def build_social_links(request, resourcebase):
     # Don't use datetime strftime() because it requires year >= 1900
     # see
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
-    date = '{0.month:02d}/{0.day:02d}/{0.year:4d}'.format(
-        resourcebase.date) if resourcebase.date else None
+    # date = '{0.month:02d}/{0.day:02d}/{0.year:4d}'.format(
+    #     resourcebase.date) if resourcebase.date else None
+    date = datetime.datetime.strftime(resourcebase.date, "%m/%d/%Y") if resourcebase.date else None
     abstract = build_abstract(resourcebase, url=social_url, includeURL=True)
     caveats = build_caveats(resourcebase)
     hashtags = ",".join(getattr(settings, 'TWITTER_HASHTAGS', []))
@@ -1302,3 +1312,158 @@ def chmod_tree(dst, permissions=0o777):
         for dirname in dirnames:
             path = os.path.join(dirpath, dirname)
             os.chmod(path, permissions)
+
+class RawSQL_nogroupby(RawSQL):
+    '''Perform RawSQL without include them to group by'''
+    contains_aggregate = True
+    def get_group_by_cols(self):
+        # print 'RawSQL_nogroupby:get_group_by_cols'
+        return []
+
+def include_section(section, includes, excludes):
+    """
+    check whether section is included or not
+    defaults to include all
+    empty string is valid section name, duplicate section name is valid
+    ex: includes=[], excludes=[] == include all
+    ex: includes=[], excludes=['section1'] == include all except 'section1'
+    ex: includes=['section1'], excludes=[] == exclude all except 'section1'
+    """
+    if isinstance(section, list):
+        return any([include_section(s, includes, excludes) for s in section])
+    else:
+        return (not includes and not excludes) or \
+        (includes and (section in includes)) or \
+        (excludes and (section not in excludes))
+
+def none_to_zero(data, zero=0.0):
+    '''
+    recursively convert data from None to zero
+    accept queryset, list, dict, and basic data types
+    caution for queryset: will traverse all related table (valuesqueryset is fine)
+    '''
+    if data is None:
+        # return float('NaN')
+        return zero
+    elif (isinstance(data, models.Model)):
+        return {item.name: none_to_zero(getattr(data, item.name)) for item in data._meta.fields}
+        # TODO: for string data type return empty string
+    elif (isinstance(data, list)) or (isinstance(data, QuerySet)):
+        return [none_to_zero(item) for item in data]
+    elif isinstance(data, dict):
+        d = {key: none_to_zero(item) for key, item in data.items()}
+        try:
+            d = dict_ext(d) if type(data) == dict_ext else d
+        except Exception as e:
+            pass
+        return d
+    else:
+        return data
+
+def query_to_dicts(cursor, query_string, *query_args):
+    """Run a simple query and produce a generator
+    that returns the results as a bunch of dictionaries
+    with keys for the column values selected.
+    """
+    cursor.execute(query_string, query_args)
+    col_names = [desc[0] for desc in cursor.description]
+    while True:
+        row = cursor.fetchone()
+        if row is None:
+            break
+        row_dict = dict(izip(col_names, row))
+        yield row_dict
+    return
+
+class ComboChart(BaseChart):
+    def get_template(self):
+        return "graphos/gchart/combo_chart.html"
+
+def multi_to_single_dict(response):
+    '''
+    Conver dictionary tree to single dimension dictionary
+    All dictionary keys in the tree needs to be unique otherwise overwritten
+    '''
+    if isinstance(response, dict):
+        for key, val in response.items():
+            if isinstance(val, dict):
+                del response[key]
+                response.update(multi_to_single_dict(val))
+
+    return response
+
+def merge_dict(dict_a, dict_b):
+    '''
+    merge multi level dictionary dict_b to dict_a
+    '''
+    for key in dict_b:
+        if isinstance(dict_a.get(key), dict) and isinstance(dict_b.get(key), dict):
+            dict_a[key] = merge_dict(dict_a.get(key), dict_b.get(key))
+        else:
+            dict_a[key] = dict_b[key]
+    return dict_a
+
+class dict_wrapper(dict):
+    '''
+    dummy class based on dict builtin types
+    created to simplify accessing deep dict child, eg:
+        a = dict_wrapper()
+        a.update({1:{2:{3:{}}}})
+        with a[1][2][3] as b:
+    '''
+    def __enter__(self):
+        pass
+    def __exit__(self, exc_type, exc_value, traceback):
+        pass
+
+def div_by_zero_is_zero(a, b):
+    try:
+        return a/b
+    except ZeroDivisionError:
+        return 0
+    
+class dict_ext(dict):
+
+    '''
+    get or set multi level sub dictionary
+    '''
+    def path(self, *args):
+        d = self
+        for arg in args:
+            d[arg] = d.setdefault(arg, dict_ext())
+            d[arg] = dict_ext(d[arg]) if type(d[arg]) == dict else d[arg]
+            d = d[arg]
+        return d
+
+    '''
+    get multi level sub dictionary
+    '''
+    def pathget(self, *args):
+        d = self
+        for arg in args:
+            d = d.get(arg, dict_ext({}))
+        return d
+    
+class list_ext(list):
+
+    '''
+    like get method in dictionary
+    '''
+    def get(self, idx, defaultval=None):
+        return self[idx] if idx < len(self) else defaultval
+
+def set_query_parameter(url, param_name, param_value):
+    """Given a URL, set or replace a query parameter and return the
+    modified URL.
+
+    >>> set_query_parameter('http://example.com?foo=bar&biz=baz', 'foo', 'stuff')
+    'http://example.com?foo=stuff&biz=baz'
+
+    """
+    scheme, netloc, path, query_string, fragment = urlsplit(url)
+    query_params = parse_qs(query_string)
+
+    query_params[param_name] = [param_value]
+    new_query_string = urllib.urlencode(query_params, doseq=True)
+
+    return urlunsplit.urlunsplit((scheme, netloc, path, new_query_string, fragment))
