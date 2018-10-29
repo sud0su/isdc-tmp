@@ -20,10 +20,6 @@
 # -- Project information -----------------------------------------------------
 from recommonmark.parser import CommonMarkParser
 import sys, os
-source_parsers = {
-    '.md': CommonMarkParser,
-}
-
 
 project = u'ISDC'
 copyright = u'2018, iMMAP'
@@ -53,6 +49,10 @@ templates_path = ['ntemplates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
+source_parsers = {
+    '.md': CommonMarkParser,
+}
+
 source_suffix = ['.rst', '.md']
 # source_suffix = '.rst'
 
