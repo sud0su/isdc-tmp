@@ -182,7 +182,7 @@ in `local_settings.py` add this code below in `DATABASES` array:
         # 'ENGINE': '', # Empty ENGINE name disables
         'NAME': 'geodb',
         'USER': 'postgres',
-        'PASSWORD': 'rencong',
+        'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '5432',
         'CONN_TOUT': 900,
@@ -192,7 +192,7 @@ in `local_settings.py` add this code below in `DATABASES` array:
         #'ENGINE': '', # Empty ENGINE name disables
         'NAME': 'security_data',
         'USER' : 'postgres',
-        'PASSWORD' : 'rencong',
+        'PASSWORD' : 'password',
         # 'USER' : 'postgres', # db superuser account needed to install db extension on django-admin migrate
         # 'PASSWORD' : '12345',
         'HOST' : 'localhost',
