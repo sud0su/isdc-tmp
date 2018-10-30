@@ -107,8 +107,8 @@ Postgis
 
 from root project install new requiruments.txt `pip install -r requirements.txt`
 
-for OSX 
-=======
+### for OSX 
+
 #### install package manual:
 ```
 pip install git+git://github.com/usgs/neicio.git
@@ -122,8 +122,8 @@ pip install git+git://github.com/OpenGeoscience/dataqs.git
 pip install git+git://github.com/OpenGeoscience/dataqs.git --no-deps
 ```
 
-for Ubuntu
-==========
+### for Ubuntu
+
 #### Binaries:
 ```
 sudo apt-get install gdal-bin
