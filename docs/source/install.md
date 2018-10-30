@@ -271,6 +271,9 @@ if 'isdc_panel' in INSTALLED_APPS:
         
 IMMAP_PACKAGE = [{'panel_setting': ISDC_PANEL_BUTTON},{'official_package': IMMAP_LIST_PACKAGE}]
 ```
+
+### Settings.py
+
 Add installed optional modules to INSTALLED_APPS, DASHBOARD_PAGE_MODULES, QUICKOVERVIEW_MODULES, MAP_APPS_TO_DB_CUSTOM as necessary. 
 See code comments for descriptions.
 
