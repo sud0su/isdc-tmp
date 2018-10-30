@@ -275,7 +275,7 @@ Add installed optional modules to INSTALLED_APPS, DASHBOARD_PAGE_MODULES, QUICKO
 
 Example:
 
-'''
+```
 # ISDC Settings Start
 
 # modules with stand-alone page in dashboard
@@ -332,7 +332,7 @@ MAP_APPS_TO_DB.update(MAP_APPS_TO_DB_CUSTOM)
 MATRIX_DEFAULT_MAP_CODE = '5'
 
 # ISDC Settings End
-'''
+```
 
 then migrate model of isdc module into database : 
 
