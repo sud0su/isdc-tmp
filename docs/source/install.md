@@ -252,6 +252,8 @@ then migrate model of isdc module into database :
 `./manage.py makemigrations`<br/>
 `./manage.py migrate`
 
+if 'people_people' table already in database:
+
 > fixing `... relation "people_profile" already exists` :
 > `./manage.py showmigrations` to checking the people migrate version
 > `./manage.py migrate people {migrate_version} --fake`
