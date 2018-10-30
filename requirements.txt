@@ -37,7 +37,6 @@ dicttoxml==1.7.4
 diff-match-patch==20121119
 dj-database-url==0.4.2
 dj-pagination==2.3.2
-Django==1.8.19
 django-activity-stream==0.6.5
 django-allauth==0.34.0
 django-appconf==1.0.2
@@ -207,7 +206,7 @@ python-mimeparse==1.6.0
 python-openid==2.2.5
 pytz==2018.3
 PyYAML==3.12
-rasterio==0.31.0
+#rasterio==0.31.0
 redis==2.10.5
 regex==2016.7.21
 requests==2.18.4
