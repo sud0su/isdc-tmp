@@ -56,11 +56,11 @@ ${VIRTUAL_ENV}/lib/isdc-modules/isdc_weather/:\
 ${VIRTUAL_ENV}/lib/isdc-modules/isdc_drought/
 ```
 
-> create folder `isdc-module` in `{environment}\lib` folder and download a isdc module package [Download Package](https://www.dropbox.com/s/48m8q3j52eowokq/isdc_modules.tar.gz?dl=0) then extract inside the isdc-module folder.
+> create folder `isdc-modules` in `{environment}\lib` folder and download a isdc module package [Download Package](https://www.dropbox.com/s/48m8q3j52eowokq/isdc_modules.tar.gz?dl=0) then extract inside the isdc-module folder.
 
 > create a database with a name `geodb` and `securitydb`, then add new extension with a name `postgis` and `plpgsql` as a superuser.
 
-#### Create database
+### Create database
 
 GeoDB
 
@@ -86,7 +86,7 @@ CREATE DATABASE security_data
        CONNECTION LIMIT = -1;
 ```
 
-#### Create Extension
+### Create Extension
 
 Create extension for new db (`geodb` and `securitydb`)
 
@@ -104,3 +104,145 @@ Postgis
   SCHEMA public
   VERSION "2.1.8";
 ```
+
+from root project install new requiruments.txt `pip install -r requirements.txt`
+
+for OSX 
+=======
+#### install package manual:
+```
+pip install git+git://github.com/usgs/neicio.git
+pip install git+git://github.com/usgs/neicmap.git
+pip install git+git://github.com/usgs/libcomcat.git@1.0
+```
+
+#### if pygdal already installed:
+```
+pip install git+git://github.com/OpenGeoscience/dataqs.git 
+pip install git+git://github.com/OpenGeoscience/dataqs.git --no-deps
+```
+
+for Ubuntu
+==========
+#### Binaries:
+```
+sudo apt-get install gdal-bin
+sudo apt-get install libgdal-dev libgdal1h
+sudo apt-get install libspatialindex-dev
+```
+#### Python Modules:
+```
+pip install pygdal==$(gdal-config --version)
+pip install https://github.com/OpenGeoscience/dataqs/archive/master.zip --no-deps
+pip install rtree
+pip install rasterio
+pip install GDAL==$(gdal-config --version) --global-option=build_ext --global-option="-I/usr/include/gdal"
+pip install pip==10.0.1
+pip install setuptools==39.0.1
+pip install Celery==4.1.1
+pip install django-celery==3.1.17
+pip install git+git://github.com/usgs/neicio.git
+pip install git+git://github.com/usgs/neicmap.git
+pip install git+git://github.com/usgs/libcomcat.git@1.0
+```
+#### try different versions matplotlib==1.3.1 etc
+```
+pip install matplotlib==1.5.3
+```
+#### if pygdal already installed:
+```
+pip install git+git://github.com/OpenGeoscience/dataqs.git 
+pip install git+git://github.com/OpenGeoscience/dataqs.git --no-deps
+```
+
+## Settings
+
+### Local_Settings.py
+
+`import geonode_formhub`<br/>
+```
+# Import uploaded shapefiles into a GeoGig repository
+GEOGIG_DATASTORE = True
+GEOGIG_DATASTORE_NAME = 'geogig-repo'
+```
+
+```
+# Proxy paramaters for source : services.digitalglobe.com 
+DGB_UNAME = '*******' 
+DGB_UPASS = '*********' 
+DGB_USOURCE = 'services.digitalglobe.com'
+```
+
+
+in `local_settings.py` add this code below in `DATABASES` array:
+
+```
+'geodb': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        # 'ENGINE': '', # Empty ENGINE name disables
+        'NAME': 'geodb',
+        'USER': 'postgres',
+        'PASSWORD': 'rencong',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'CONN_TOUT': 900,
+    },
+    'securitydb' : {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        #'ENGINE': '', # Empty ENGINE name disables
+        'NAME': 'security_data',
+        'USER' : 'postgres',
+        'PASSWORD' : 'rencong',
+        # 'USER' : 'postgres', # db superuser account needed to install db extension on django-admin migrate
+        # 'PASSWORD' : '12345',
+        'HOST' : 'localhost',
+        'PORT' : '5432',
+        'CONN_TOUT': 900,
+    }
+```
+
+for GeoExplorer Setting :
+```
+# iMMAP SETTINGS
+INSTALLED_APPS += ('isdc_panel', 'isdc_baseline')
+IMMAP_LIST_PACKAGE = []
+ISDC_PANEL_BUTTON = []
+
+if 'isdc_panel' in INSTALLED_APPS:
+    ISDC_PANEL_BUTTON += [
+        {
+            'component': 'Statistic',
+            'icon': 'assignment', #material-icon,
+            'tooltip': 'Statistics'
+        },
+        {
+            'component': 'Findertool',
+            'icon': 'find_in_page',
+            'tooltip': 'Finder Tool'
+        },
+        {
+            'component': 'Humanitarian',
+            'icon': 'supervisor_account',
+            'tooltip': 'Humanitarian Access'
+        },
+        {
+            'component': 'Inspector',
+            'icon': 'local_library',
+            'tooltip': 'Settlement inspector'
+        }
+    ]
+    if 'isdc_baseline' in INSTALLED_APPS:
+        IMMAP_LIST_PACKAGE += [
+            {
+                'package' : 'isdc_baseline',
+                'js' : 'addbaseline.js',
+                'bundle': 'baseline.min.js',
+                # 'api': SITEURL+'/static/isdc_baseline/js/baseline.json',
+                'api': SITEURL+'/geoapi/statistic_baseline/',
+                'domID': 'baseline'
+            }
+        ]
+        
+IMMAP_PACKAGE = [{'panel_setting': ISDC_PANEL_BUTTON},{'official_package': IMMAP_LIST_PACKAGE}]
+```
+
