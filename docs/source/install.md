@@ -58,12 +58,29 @@ ${VIRTUAL_ENV}/lib/isdc-modules/isdc_drought/
 
 > create folder `isdc-modules` in `{environment}\lib` folder and download a isdc module package [Download Package](https://www.dropbox.com/s/48m8q3j52eowokq/isdc_modules.tar.gz?dl=0) then extract inside the isdc-module folder.
 
-> Clone optional ISDC module from https://github.com/dodiws/
+> Clone optional ISDC module from https://github.com/dodiws/ to ${VIRTUAL_ENV}/lib/isdc-modules/ folder accordingly
 
-> Example for Dashboard module:
+> Example:
 ```
 cd ${VIRTUAL_ENV}/lib/isdc-modules/
-gti clone https://github.com/dodiws/isdc_dashboard.git isdc_dashboard
+git clone https://github.com/dodiws/isdc_dashboard.git isdc_dashboard
+git clone https://github.com/dodiws/isdc_geodb.git isdc_geodb
+git clone https://github.com/dodiws/isdc_dashboard.git isdc_dashboard
+git clone https://github.com/dodiws/isdc_matrix.git isdc_matrix
+git clone https://github.com/dodiws/isdc_pushnotif.git isdc_pushnotif
+git clone https://github.com/dodiws/isdc_securitydb.git isdc_securitydb
+git clone https://github.com/dodiws/isdc_userstatistics.git isdc_userstatistics
+git clone https://github.com/dodiws/isdc_uploadpdf.git isdc_uploadpdf
+git clone https://github.com/dodiws/isdc_flood.git isdc_flood
+git clone https://github.com/dodiws/isdc_avalanche.git isdc_avalanche
+git clone https://github.com/dodiws/isdc_accessibility.git isdc_accessibility
+git clone https://github.com/dodiws/isdc_earthquake.git isdc_earthquake
+git clone https://github.com/dodiws/isdc_landslide.git isdc_landslide
+git clone https://github.com/dodiws/isdc_securityincident.git isdc_securityincident
+git clone https://github.com/dodiws/isdc_naturaldisaster.git isdc_naturaldisaster
+git clone https://github.com/dodiws/isdc_climate.git isdc_climate
+git clone https://github.com/dodiws/isdc_weather.git isdc_weather
+git clone https://github.com/dodiws/isdc_drought.git isdc_drought
 ```
 
 > create a database with a name `geodb` and `securitydb`, then add new extension with a name `postgis` and `plpgsql` as a superuser.
