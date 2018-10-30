@@ -59,11 +59,12 @@ ${VIRTUAL_ENV}/lib/isdc-modules/isdc_drought/
 > create folder `isdc-modules` in `{environment}\lib` folder and download a isdc module package [Download Package](https://www.dropbox.com/s/48m8q3j52eowokq/isdc_modules.tar.gz?dl=0) then extract inside the isdc-module folder.
 
 > Clone optional ISDC module from https://github.com/dodiws/
+
 > Example for Dashboard module:
-'''
+```
 cd ${VIRTUAL_ENV}/lib/isdc-modules/
 gti clone https://github.com/dodiws/isdc_dashboard.git isdc_dashboard
-'''
+```
 
 > create a database with a name `geodb` and `securitydb`, then add new extension with a name `postgis` and `plpgsql` as a superuser.
 
