@@ -275,7 +275,6 @@ Add installed optional modules to INSTALLED_APPS, DASHBOARD_PAGE_MODULES, QUICKO
 See code comments for descriptions.
 
 Example:
-
 ```
 # ISDC Settings Start
 
