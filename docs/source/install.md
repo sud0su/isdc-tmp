@@ -111,6 +111,7 @@ from root project install new requiruments.txt `pip install -r requirements.txt`
 
 #### install package manual:
 ```
+pip install scipy
 pip install git+git://github.com/usgs/neicio.git
 pip install git+git://github.com/usgs/neicmap.git
 pip install git+git://github.com/usgs/libcomcat.git@1.0
@@ -201,7 +202,7 @@ in `local_settings.py` add this code below in `DATABASES` array:
     }
 ```
 
-for GeoExplorer Setting :
+for GeoExplorer Setting replace the iMMAP setting with code below :
 ```
 # iMMAP SETTINGS
 INSTALLED_APPS += ('isdc_panel', 'isdc_baseline')
@@ -246,3 +247,13 @@ if 'isdc_panel' in INSTALLED_APPS:
 IMMAP_PACKAGE = [{'panel_setting': ISDC_PANEL_BUTTON},{'official_package': IMMAP_LIST_PACKAGE}]
 ```
 
+then migrate model of isdc module into database : 
+
+`./manage.py makemigrations`<br/>
+`./manage.py migrate`
+
+> fixing `... relation "people_profile" already exists` :
+> `./manage.py showmigrations` to checking the people migrate version
+> `./manage.py migrate people {migrate_version} --fake`
+> `./manage.py makemigrations`
+> `./manage.py migrate`
