@@ -213,7 +213,7 @@ regex==2016.7.21
 requests==2.18.4
 requests-oauthlib==0.8.0
 selenium==3.9.0
-Shapely==1.5.17
+#Shapely==1.5.17
 simplegeneric==0.8.1
 simplejson==3.13.2
 singledispatch==3.4.0.3
