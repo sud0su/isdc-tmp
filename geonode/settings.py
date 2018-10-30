@@ -1491,28 +1491,28 @@ DASHBOARD_PAGE_MODULES = [
     'naturaldisaster',
     'weather',
     'drought',
-    ]
+]
 
 # modules with components for geodb.geoapi.getRiskExecuteExternal() 
 GETRISKEXECUTEEXTERNAL_MODULES = [
     'flood',
     'avalanche',
-    ]
+]
 
 # modules with components for geodb.geo_calc.getQuickOverview() 
 QUICKOVERVIEW_MODULES = [
     'flood',
     'avalanche',
-    'accessibility',
-    'earthquake',
-    'landslide',
-    'securityincident',
+    # 'accessibility',
+    # 'earthquake',
+    # 'landslide',
+    # 'securityincident',
     # 'drought',
-    ]
+]
 
 DATABASE_ROUTERS = [
     'geonode.dbrouter.defaultdbrouter',
-    ]
+]
 
 DEFAULTDB = 'default'
 
@@ -1527,7 +1527,10 @@ MAP_APPS_TO_DB_CUSTOM = {
     'earthquake': 'geodb',
     'securityincident': 'geodb',
     'securitydb': 'securitydb',
-    }
+}
 MAP_APPS_TO_DB.update(MAP_APPS_TO_DB_CUSTOM)
+
+# default map code used for matrix resource usage tracking
+MATRIX_DEFAULT_MAP_CODE = '5'
 
 # ISDC Settings End

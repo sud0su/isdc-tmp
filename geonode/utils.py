@@ -1460,10 +1460,10 @@ def set_query_parameter(url, param_name, param_value):
     'http://example.com?foo=stuff&biz=baz'
 
     """
-    scheme, netloc, path, query_string, fragment = urlsplit(url)
-    query_params = parse_qs(query_string)
+    scheme, netloc, path, query_string, fragment = urlparse.urlsplit(url)
+    query_params = urlparse.parse_qs(query_string)
 
     query_params[param_name] = [param_value]
     new_query_string = urllib.urlencode(query_params, doseq=True)
 
-    return urlunsplit.urlunsplit((scheme, netloc, path, new_query_string, fragment))
+    return urlparse.urlunsplit((scheme, netloc, path, new_query_string, fragment))
