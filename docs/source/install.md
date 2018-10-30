@@ -58,6 +58,13 @@ ${VIRTUAL_ENV}/lib/isdc-modules/isdc_drought/
 
 > create folder `isdc-modules` in `{environment}\lib` folder and download a isdc module package [Download Package](https://www.dropbox.com/s/48m8q3j52eowokq/isdc_modules.tar.gz?dl=0) then extract inside the isdc-module folder.
 
+> Clone optional ISDC module from https://github.com/dodiws/
+> Example for Dashboard module:
+'''
+cd ${VIRTUAL_ENV}/lib/isdc-modules/
+gti clone https://github.com/dodiws/isdc_dashboard.git isdc_dashboard
+'''
+
 > create a database with a name `geodb` and `securitydb`, then add new extension with a name `postgis` and `plpgsql` as a superuser.
 
 ### Create database
@@ -246,6 +253,68 @@ if 'isdc_panel' in INSTALLED_APPS:
         
 IMMAP_PACKAGE = [{'panel_setting': ISDC_PANEL_BUTTON},{'official_package': IMMAP_LIST_PACKAGE}]
 ```
+Add installed optional modules to INSTALLED_APPS, DASHBOARD_PAGE_MODULES, QUICKOVERVIEW_MODULES, MAP_APPS_TO_DB_CUSTOM as necessary. See code comments for descriptions.
+
+Example:
+
+'''
+# ISDC Settings Start
+
+# modules with stand-alone page in dashboard
+DASHBOARD_PAGE_MODULES = [
+    'flood',
+    'avalanche',
+    'accessibility',
+    'earthquake',
+    'landslide',
+    'securityincident',
+    'naturaldisaster',
+    'weather',
+    'drought',
+]
+
+# modules with components for geodb.geoapi.getRiskExecuteExternal() 
+GETRISKEXECUTEEXTERNAL_MODULES = [
+    'flood',
+    'avalanche',
+]
+
+# modules with components for geodb.geo_calc.getQuickOverview() 
+QUICKOVERVIEW_MODULES = [
+    'flood',
+    'avalanche',
+    'accessibility',
+    'earthquake',
+    'landslide',
+    'securityincident',
+    # 'drought',
+]
+
+DATABASE_ROUTERS = [
+    'geonode.dbrouter.defaultdbrouter',
+]
+
+DEFAULTDB = 'default'
+
+# for every app in INSTALLED_APPS use DEFAULTDB database, then update with MAP_APPS_TO_DB_CUSTOM
+MAP_APPS_TO_DB = {app.split('.')[-1]: DEFAULTDB for app in INSTALLED_APPS}
+
+# add here for app using non-default database
+MAP_APPS_TO_DB_CUSTOM = {
+    'geodb': 'geodb',
+    'flood': 'geodb',
+    'avalanche': 'geodb',
+    'earthquake': 'geodb',
+    'securityincident': 'geodb',
+    'securitydb': 'securitydb',
+}
+MAP_APPS_TO_DB.update(MAP_APPS_TO_DB_CUSTOM)
+
+# default map code used for matrix resource usage tracking
+MATRIX_DEFAULT_MAP_CODE = '5'
+
+# ISDC Settings End
+'''
 
 then migrate model of isdc module into database : 
 
