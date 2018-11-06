@@ -1467,3 +1467,19 @@ def set_query_parameter(url, param_name, param_value):
     new_query_string = urllib.urlencode(query_params, doseq=True)
 
     return urlparse.urlunsplit((scheme, netloc, path, new_query_string, fragment))
+
+class JSONEncoderCustom(json.JSONEncoder):
+    def default(self, obj):
+        if obj.__class__.__name__ in ["GeoValuesQuerySet", 'ValuesQuerySet']:
+            return list(obj)
+        elif obj.__class__.__name__ == "date":
+            return obj.strftime("%Y-%m-%d")
+        elif obj.__class__.__name__ == "datetime":
+            return obj.strftime("%Y-%m-%d %H:%M:%S")
+        elif obj.__class__.__name__ == "Decimal":
+            return float(obj)
+        else:
+            print 'not converted to json:', obj.__class__.__name__
+            # return {} # convert un-json-able object to empty object
+            return 'not converted to json: %s' % (obj.__class__.__name__) # convert un-json-able object to empty object
+

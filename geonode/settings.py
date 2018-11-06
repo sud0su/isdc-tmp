@@ -420,8 +420,8 @@ INSTALLED_APPS = (
     'graphos',
 
     # isdc
-    # 'uploadpdf',
-    # 'matrix',
+    'uploadpdf',
+    'matrix',
     'dashboard',
     'geodb',
     'securitydb',
@@ -431,6 +431,8 @@ INSTALLED_APPS = (
     'earthquake',
     'landslide',
     'securityincident',
+    'drought',
+    'userstatistics',
 
 ) + GEONODE_APPS
 
@@ -1485,12 +1487,12 @@ DASHBOARD_PAGE_MODULES = [
     'flood',
     'avalanche',
     'accessibility',
-    'earthquake',
-    'landslide',
-    'securityincident',
-    'naturaldisaster',
-    'weather',
-    'drought',
+    # 'earthquake',
+    # 'landslide',
+    # 'securityincident',
+    # 'naturaldisaster',
+    # 'weather',
+    # 'drought',
 ]
 
 # modules with components for geodb.geoapi.getRiskExecuteExternal() 
@@ -1503,11 +1505,11 @@ GETRISKEXECUTEEXTERNAL_MODULES = [
 QUICKOVERVIEW_MODULES = [
     'flood',
     'avalanche',
-    # 'accessibility',
-    # 'earthquake',
-    # 'landslide',
-    # 'securityincident',
-    # 'drought',
+    'accessibility',
+    'earthquake',
+    'landslide',
+    'securityincident',
+    'drought',
 ]
 
 DATABASE_ROUTERS = [
@@ -1526,6 +1528,7 @@ MAP_APPS_TO_DB_CUSTOM = {
     'avalanche': 'geodb',
     'earthquake': 'geodb',
     'securityincident': 'geodb',
+    'drought': 'geodb',
     'securitydb': 'securitydb',
 }
 MAP_APPS_TO_DB.update(MAP_APPS_TO_DB_CUSTOM)

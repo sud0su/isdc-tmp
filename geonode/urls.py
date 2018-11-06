@@ -87,6 +87,8 @@ urlpatterns_isdc = [
     url(r'', include('climate.urls')),
     url(r'', include('drought.urls')),
     
+    url(r'^userstatistics$', 'userstatistics.views.userstatistics', name='userstatistics'),
+    
     ]
 
 urlpatterns = [  # '',
