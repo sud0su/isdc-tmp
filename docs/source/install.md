@@ -68,33 +68,58 @@ Add code below at the bottom of file `activate` that located at `{environment}\b
     ${VIRTUAL_ENV}/lib/isdc-modules/isdc_drought/
 ```
 ### Ubuntu
-To make import module works, add module directory to `PYTHONPATH` in terminal
+To make import module works, add module directory to `PYTHONPATH` 
+
+In terminal, open virtual environment activate script using nano:
 ```
     nano ~/isdc/bin/activate
+```
+Add code below at the bottom of file `activate` that located at `~/isdc/bin/activate` 
+```
     export PYTHONPATH=${PYTHONPATH}:\
-    ${HOME}/isdc/isdc_modules/:\
-    ${HOME}/isdc/isdc_modules/isdc_geodb/:\
-    ${HOME}/isdc/isdc_modules/isdc_dashboard/:\
-    ${HOME}/isdc/isdc_modules/isdc_matrix/:\
-    ${HOME}/isdc/isdc_modules/isdc_pushnotif/:\
-    ${HOME}/isdc/isdc_modules/isdc_securitydb/:\
-    ${HOME}/isdc/isdc_modules/isdc_userstatistics/:\
-    ${HOME}/isdc/isdc_modules/isdc_uploadpdf/
-    deactivate;
-    source ../bin/activate
+    ${HOME}/isdc/lib/isdc-modules/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_geodb/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_dashboard/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_matrix/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_pushnotif/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_securitydb/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_userstatistics/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_uploadpdf/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_flood/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_avalanche/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_accessibility/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_earthquake/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_landslide/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_securityincident/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_naturaldisaster/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_climate/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_weather/:\
+    ${HOME}/isdc/lib/isdc-modules/isdc_drought/:\
+```
+Restart virtual environment:
+```
+    deactivate;source ../bin/activate
 ```
 
-Create folder `isdc-modules` in `{environment}\lib` folder 
+Create folder `isdc-modules` in `${HOME}/isdc/lib` folder 
 
-Download ISDC module package [here](https://www.dropbox.com/s/48m8q3j52eowokq/isdc_modules.tar.gz?dl=0) and extract it inside the `isdc-module` folder.
+Clone ISDC module from `https://github.com/dodiws/` to `${HOME}/lib/isdc-modules/` folder accordingly (see example below)
 
-Clone optional ISDC module from `https://github.com/dodiws/` to `${VIRTUAL_ENV}/lib/isdc-modules/` folder accordingly (see example below)
+Base modules:
 ```
-    cd ${VIRTUAL_ENV}/lib/isdc-modules/
+    cd ${HOME}/lib/isdc-modules/
+
     git clone https://github.com/dodiws/isdc_dashboard.git isdc_dashboard
     git clone https://github.com/dodiws/isdc_geodb.git isdc_geodb
     git clone https://github.com/dodiws/isdc_dashboard.git isdc_dashboard
     git clone https://github.com/dodiws/isdc_matrix.git isdc_matrix
+    git clone https://github.com/dodiws/account.git account
+    git clone https://github.com/dodiws/avatar.git avatar
+    git clone https://github.com/dodiws/geonode_formhub.git geonode_formhub
+```
+Optional modules:
+```
+    cd ${VIRTUAL_ENV}/lib/isdc-modules/
     git clone https://github.com/dodiws/isdc_pushnotif.git isdc_pushnotif
     git clone https://github.com/dodiws/isdc_securitydb.git isdc_securitydb
     git clone https://github.com/dodiws/isdc_userstatistics.git isdc_userstatistics
