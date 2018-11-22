@@ -41,6 +41,7 @@ You can now start ISDC
     paver start
     paver stop
 ``` 
+Java JDK needs to be installed for Geoserver to work, download from [here](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
 
 ## Integration
 The following is a quick guide to integrate all packages that exist in iSDC
