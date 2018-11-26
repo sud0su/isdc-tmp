@@ -72,6 +72,8 @@ from django.db.models.query import QuerySet
 from itertools import izip
 from graphos.renderers.base import BaseChart
 
+import sys
+
 DEFAULT_TITLE = ""
 DEFAULT_ABSTRACT = ""
 
@@ -1425,6 +1427,14 @@ def div_by_zero_is_zero(a, b):
 class dict_ext(dict):
 
     '''
+    support for 'with' statement
+    '''
+    def __enter__(self):
+        return self
+    def __exit__(self, exc_type, exc_value, traceback):
+        return
+
+    '''
     get or set multi level sub dictionary
     '''
     def path(self, *args):
@@ -1443,14 +1453,20 @@ class dict_ext(dict):
         for arg in args:
             d = d.get(arg, dict_ext({}))
         return d
-    
+
 class list_ext(list):
 
     '''
-    like get method in dictionary
+    similar to 'get' method in dictionary
     '''
     def get(self, idx, defaultval=None):
         return self[idx] if idx < len(self) else defaultval
+
+    '''
+    return self with values removed
+    '''
+    def without(self, values=[]):
+        return [i for i in self if i not in values]
 
 def set_query_parameter(url, param_name, param_value):
     """Given a URL, set or replace a query parameter and return the
@@ -1483,3 +1499,11 @@ class JSONEncoderCustom(json.JSONEncoder):
             # return {} # convert un-json-able object to empty object
             return 'not converted to json: %s' % (obj.__class__.__name__) # convert un-json-able object to empty object
 
+class linenum():
+    import os, sys
+    def __repr__(self):
+        try:
+            raise Exception
+        except:
+            frame = sys.exc_info()[2].tb_frame.f_back
+            return '%s:%s:%s %s'%(os.path.basename(frame.f_code.co_filename), frame.f_code.co_name, frame.f_lineno, '\n')
