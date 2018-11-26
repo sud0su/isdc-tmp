@@ -46,8 +46,25 @@ Java JDK needs to be installed for Geoserver to work, download from [here](https
 ## Integration
 The following is a quick guide to integrate all packages that exist in iSDC
 
+**INSTAL GEO-EXPLORER PACKAGE FROM GITHUB**
+
+__install django-geonode-client__
+```
+pip install git+git://github.com/sud0su/isdc-geonode-client.git
+```
+__install isdc-geobaseline__
+```
+pip install git+git://github.com/sud0su/isdc-geobaseline.git@master#egg=isdc-geobaseline
+```
+__install isdc-geoaccessibility__
+```
+pip install git+git://github.com/sud0su/isdc-geoaccessibility.git@master#egg=isdc-geoaccessibility
+```
+
 ### OS X
 Add code below at the bottom of file `activate` that located at `{environment}\bin` 
+
+**DEVELOPMENT PACKAGE FOR LOCAL MACHINE**
 ```
     export PYTHONPATH=${VIRTUAL_ENV}/lib/isdc-modules/:${VIRTUAL_ENV}/lib/isdc-modules/:\
     ${VIRTUAL_ENV}/lib/isdc-modules/isdc_geodb/:\
@@ -76,6 +93,8 @@ In terminal, open virtual environment activate script using nano:
     nano ~/isdc/bin/activate
 ```
 Add code below at the bottom of file `activate` that located at `~/isdc/bin/activate` 
+
+**DEVELOPMENT PACKAGE FOR LOCAL MACHINE**
 ```
     export PYTHONPATH=${PYTHONPATH}:\
     ${HOME}/isdc/lib/isdc-modules/:\
