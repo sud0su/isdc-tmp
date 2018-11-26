@@ -46,7 +46,7 @@ Java JDK needs to be installed for Geoserver to work, download from [here](https
 ## Integration
 The following is a quick guide to integrate all packages that exist in iSDC
 
-**INSTAL GEO-EXPLORER PACKAGE FROM GITHUB**
+### Geo-Explorer
 
 __install django-geonode-client__
 ```
@@ -61,10 +61,10 @@ __install isdc-geoaccessibility__
 pip install git+git://github.com/sud0su/isdc-geoaccessibility.git@master#egg=isdc-geoaccessibility
 ```
 
-### OS X
+### Local Package
+#### OS X
 Add code below at the bottom of file `activate` that located at `{environment}\bin` 
 
-**DEVELOPMENT PACKAGE FOR LOCAL MACHINE**
 ```
     export PYTHONPATH=${VIRTUAL_ENV}/lib/isdc-modules/:${VIRTUAL_ENV}/lib/isdc-modules/:\
     ${VIRTUAL_ENV}/lib/isdc-modules/isdc_geodb/:\
@@ -85,7 +85,7 @@ Add code below at the bottom of file `activate` that located at `{environment}\b
     ${VIRTUAL_ENV}/lib/isdc-modules/isdc_weather/:\
     ${VIRTUAL_ENV}/lib/isdc-modules/isdc_drought/
 ```
-### Ubuntu
+#### Ubuntu
 To make import module works, add module directory to `PYTHONPATH` 
 
 In terminal, open virtual environment activate script using nano:
@@ -94,7 +94,6 @@ In terminal, open virtual environment activate script using nano:
 ```
 Add code below at the bottom of file `activate` that located at `~/isdc/bin/activate` 
 
-**DEVELOPMENT PACKAGE FOR LOCAL MACHINE**
 ```
     export PYTHONPATH=${PYTHONPATH}:\
     ${HOME}/isdc/lib/isdc-modules/:\
@@ -155,6 +154,9 @@ Optional modules:
     git clone https://github.com/dodiws/isdc_weather.git isdc_weather
     git clone https://github.com/dodiws/isdc_drought.git isdc_drought
 ```
+
+
+## Databases & Extension
 
 ### Create database
 Create a database with name `geodb` and `securitydb`
