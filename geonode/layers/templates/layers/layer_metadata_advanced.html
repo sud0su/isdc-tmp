@@ -1,145 +1,331 @@
 {% extends "metadata_base.html" %}
 {% load i18n %}
-{% load bootstrap_tags %}
+
 {% load base_tags %}
 {% load guardian_tags %}
+{% load widget_tweaks %}
 
 {% block title %}{{ layer.alternate }} — {{ block.super }}{% endblock %}
 
 {% block body_class %}data{% endblock %}
 
+{% block layer_breadcrumb %}
+    <a href="{% url 'layer_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Layers" %}</a>
+    {% if not layer.metadata_uploaded_preserve %}
+        <a href="{% url 'layer_detail' layername=resource.alternate %}" class="breadcrumb">{{ layer.title }}</a>
+    {% endif %}
+    <a href="#" class="breadcrumb">{% trans "Edit Metadata" %}</a>
+{% endblock layer_breadcrumb %}
+
 {% block body_outer %}
-
-{{ block.super }}
-
-<div class="page-header">
-  <a href="{% url "layer_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="btn btn-primary pull-right">{% trans "Explore Layers" %}</a>
-  <h2 class="page-title">{% trans "Edit Metadata" %}</h2>
-</div>
-<div class="row">
-  <div class="col-md-8">
-    <p class="lead">
-      {% blocktrans with layer.alternate as layer_title %}
-        Editing details for {{ layer_title }}
-      {% endblocktrans %}
-    </p>
-    <form id="metadata_update" class="form-horizontal" action="{% url "layer_metadata" layer.service_typename %}" method="POST">
-      {% if layer.metadata_uploaded_preserve %}
-        <p class="bg-warning">{% blocktrans %}Note: this layer's orginal metadata was populated and preserved by importing a metadata XML file.
-          This metadata cannot be edited.{% endblocktrans %}</p>
-      {% elif layer.metadata_uploaded %}
-        <p class="bg-warning">{% blocktrans %}Note: this layer's orginal metadata was populated by importing a metadata XML file.
-          GeoNode's metadata import supports a subset of ISO, FGDC, and Dublin Core metadata elements.
-          Some of your original metadata may have been lost.{% endblocktrans %}</p>
-      {% endif %}
-
-      {% if layer_form.errors or attribute_form.errors or category_form.errors or author_form.errors or poc.errors %}
-    	  <p class="bg-danger">{% blocktrans %}Error updating metadata.  Please check the following fields: {% endblocktrans %}</p>
-          <ul class="bg-danger">
-          {% if author_form.errors %}
-            <li>{% trans "Metadata Author" %}</li>
-            {{ author_form.errors }}
-          {% endif %}
-          {% if poc_form.errors %}
-            <li>{% trans "Point of Contact" %}</li>
-            {{ poc_form.errors }}
-          {% endif %}
-          {% for field in layer_form %}
-            {% if field.errors %}
-            <li>{{ field.label }}</li>
+    {{ block.super }}
+    
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">
+                {% trans "Edit Metadata" %}
+                {% if not layer.metadata_uploaded_preserve %}
+                    <a href="{% url 'layer_detail' layername=resource.alternate %}" class="btn-flat modal-trigger waves-effect waves-light red-text text-darken-3 btn-flat-border right">{% trans "Return to Layer" %}</a>
+                {% endif %}
+            </span>
+            <p>
+                {% blocktrans with layer.alternate as layer_title %}
+                    Editing details for {{ layer_title }}
+                {% endblocktrans %}
+            </p>
+            {% if layer.metadata_uploaded_preserve %}
+                <div class="card-panel yellow lighten-2">
+                    {% blocktrans %}Note: this layer's orginal metadata was populated and preserved by importing a metadata XML file.
+                    This metadata cannot be edited.{% endblocktrans %}
+                </div>
+            {% elif layer.metadata_uploaded %}
+                <div class="card-panel yellow lighten-2">
+                    {% blocktrans %}Note: this layer's orginal metadata was populated by importing a metadata XML file.
+                    GeoNode's metadata import supports a subset of ISO, FGDC, and Dublin Core metadata elements.
+                    Some of your original metadata may have been lost.{% endblocktrans %}
+                </div>
             {% endif %}
-          {% endfor %}
-          {% if not attribute_form.is_valid %}
-            <li>{% trans "Attributes" %}</li>
-            {% for field in attribute_form %}
-            {% if field.errors %}
-            <li>{{ field.errors }}</li>
-            {% endif %}
-            {% endfor %}
-          {% endif %}
-          {% if category_form.errors %}
-            <li>{{ category_form.errors.as_ul }}</li>
-          {% endif %}
-          </ul>
-        {% endif %}
+            <div class="row">
+                <form id="metadata_update" class="" action="{% url "layer_metadata" layer.service_typename %}" method="POST">
+                    {% csrf_token %}
+                    <div class="input-field col s12">
+                        {{ layer_form.owner |attr:"class:"|attr:"placeholder:" }}
+                        <!-- <label for="id_resource-owner-autocomplete">{% trans "Owner" %}</label> -->
+                        <span class="helper-text">{% trans "Owner" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.title |attr:"class:"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-title">{% trans "Title" %}</label>
+                        <span class="helper-text">{% trans "name by which the cited resource is known" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        <input type="text" class="datepicker hide" id="id_resource-date_first">
+                        <input type="text" class="timepicker hide" id="id_resource-time">
+                        <!-- <input type="text" class="" id="id_resource-date" value=""> -->
+                        {{ layer_form.date |attr:"class:datepicker" }}
+                        <label for="id_resource-date">{% trans "Date" %}</label>
+                        <span class="helper-text">{% trans "Date Created" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.date_type }}
+                        <label for="id_resource-date_type">{% trans "Date Type" %}</label>
+                        <span class="helper-text">{% trans "..." %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.edition |attr:"class:"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-edition">{% trans "Edition" %}</label>
+                        <span class="helper-text">{% trans "version of the cited resource" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.abstract |attr:"class:materialize-textarea"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-abstract">{% trans "Abstract" %}</label>
+                        <span class="helper-text">{% trans "brief narrative summary of the content of the resource(s)" %}</span>
+                    </div>
 
-        {% if not layer.metadata_uploaded_preserve %}
-        <div class="form-actions">
-          <a href="{% url 'layer_detail' layername=resource.alternate %}" class="btn btn-primary">{% trans "Return to Layer" %}</a>
-          <input type="submit" id="btn_upd_md_up" class="btn btn-primary" value="{% trans "Update" %}"/>
-        </div>
-        {% endif %}
+                    <div class="input-field col s12">
+                        {{ layer_form.purpose |attr:"class:materialize-textarea"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-purpose">{% trans "Purpose" %}</label>
+                        <span class="helper-text">{% trans "summary of the intentions with which the resource(s) was developed" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.maintenance_frequency |attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-maintenance_frequency">{% trans "Maintenance Frequency" %}</label>
+                        <span class="helper-text">{% trans "frequency with which modifications and deletions are made to the data after it is first produced" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.tkeywords |attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-tkeywords">{% trans "TKeywords" %}</label>
+                        <span class="helper-text">{% trans "formalised word(s) or phrase(s) from a fixed thesaurus used to describe the subject (space or comma-separated" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.regions }}
+                        <label for="id_resource-regions">{% trans "Regions" %}</label>
+                        <span class="helper-text">{% trans "aaa" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.restriction_code_type |attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-restriction_code_type">{% trans "Restrictions" %}</label>
+                        <span class="helper-text">{% trans "limitation(s) placed upon the access or use of the data." %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.constraints_other |attr:"class:materialize-textarea"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-constraints_other">{% trans "Restrictions Other" %}</label>
+                        <span class="helper-text">{% trans "other restrictions and legal prerequisites for accessing and using the resource or metadata" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.license |attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-license">{% trans "License" %}</label>
+                        <span class="helper-text">{% trans "license of the dataset" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.language |attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-language">{% trans "Language" %}</label>
+                        <span class="helper-text">{% trans "language used within the dataset" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.spatial_representation_type |attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-spatial_representation_type">{% trans "Spatial Representation Type" %}</label>
+                        <span class="helper-text">{% trans "method used to represent geographic information in the dataset." %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.temporal_extent_start }}
+                        <label for="id_resource-temporal_extent_start">{% trans "Temporal Extent Start" %}</label>
+                        <span class="helper-text">{% trans "aaa" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.temporal_extent_end }}
+                        <label for="id_resource-temporal_extent_end">{% trans "Temporal Extent End" %}</label>
+                        <span class="helper-text">{% trans "aaa" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.supplemental_information |attr:"class:materialize-textarea"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-supplemental_information">{% trans "Supplemental Information" %}</label>
+                        <span class="helper-text">{% trans "any other descriptive information about the dataset" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.data_quality_statement |attr:"class:materialize-textarea"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-data_quality_statement">{% trans "Data Quality Statement" %}</label>
+                        <span class="helper-text">{% trans "general explanation of the data producer's knowledge about the lineage of a dataset" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.group }}
+                        <label for="id_resource-group">{% trans "Group" %}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <p>
+                            <label>
+                                {{ layer_form.metadata_uploaded_preserve |attr:"class:filled-in red darken-4" }}
+                                <span style="">{% trans "Metadata Uploaded Preserve" %}</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="input-field col s12">
+                        <p>
+                            <label>
+                                {{ layer_form.featured |attr:"class:filled-in red darken-4" }}
+                                <span style="">{% trans "Featured" %}</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="input-field col s12">
+                        <p>
+                            <label>
+                                {{ layer_form.is_published |attr:"class:filled-in red darken-4" }}
+                                <span style="">{% trans "Is Published" %}</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="input-field col s12">
+                        <p>
+                            <label>
+                                {{ layer_form.is_approved |attr:"class:filled-in red darken-4" }}
+                                <span style="">{% trans "Approved" %}</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.thumbnail_url |attr:"class:materialize-textarea" }}
+                        <label for="id_resource-thumbnail_url">{% trans "Thumbnail URL" %}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.typename }}
+                        <label for="id_resource-typename">{% trans "Typename" %}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <p>
+                            <label>
+                                {{ layer_form.is_mosaic |attr:"class:filled-in red darken-4" }}
+                                <span style="">{% trans "Is Mosaic" %}</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="input-field col s12">
+                        <p>
+                            <label>
+                                {{ layer_form.has_time |attr:"class:filled-in red darken-4" }}
+                                <span style="">{% trans "Has Time" %}</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="input-field col s12">
+                        <p>
+                            <label>
+                                {{ layer_form.has_elevation |attr:"class:filled-in red darken-4" }}
+                                <span style="">{% trans "Has Elevation" %}</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.time_regex }}
+                        <label for="id_resource-time_regex">{% trans "Time Regex" %}</label>
+                        <!-- <span class="helper-text">{% trans "aaa" %}</span> -->
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.elevation_regex }}
+                        <label for="id_resource-elevation_regex">{% trans "Elevation Regex" %}</label>
+                        <!-- <span class="helper-text">{% trans "aaa" %}</span> -->
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.keywords }}
+                        <label for="id_resource-keywords">{% trans "Free-text Keywords" %}</label>
+                        <span class="helper-text">{% trans "aaa" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.poc |attr:"class:"|attr:"placeholder:" }}
+                        <!-- <label for="resource-poc-autocomplete">{% trans "Point of Contact" %}</label> -->
+                        <span class="helper-text">{% trans "Point of Contact" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ layer_form.metadata_author |attr:"placeholder:" }}
+                        <!-- <label for="id_resource-metadata_author-autocomplete">{% trans "Metadata Author" %}</label> -->
+                        <span class="helper-text">{% trans "Metadata Author" %}</span>
+                    </div>
+                    
+                    <div id="category_form" class="row">
+                        <p class="col s12">{% trans "Category" %}</p>
+                        {% autoescape off %}
+                            {% for choice in category_form.category_choice_field.field.choices %}
+                                <div class="input-field col s6 l4">
+                                    <p>
+                                        <label>
+                                            <input type="radio" name="category_choice_field" value="{{ choice.0 }}" class="with-gap red darken-4"
+                                            {% ifequal category_form.initial choice.0 %} checked="checked" {% endifequal %} />
+                                            <span>{{ choice.1 }}</span>
+                                        </label>
+                                    </p>
+                                </div>
+                            {% endfor %}
+                        {% endautoescape %}
+                    </div>
 
-        {% csrf_token %}
-        <div class="col-md-6 form-controls">
-          {{ layer_form|as_bootstrap }}
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <label class="control-label required-field">{% trans "Category" %}</label>
-            <fieldset id="category_form">
-              {% autoescape off %}
-              {% for choice in category_form.category_choice_field.field.choices %}
-              <div class="col-md-6">
-                <label class="fancy-checkbox">
-                    <input type="radio" name="category_choice_field" value="{{ choice.0 }}"
-                      {% ifequal category_form.initial choice.0 %} checked="checked" {% endifequal %} />
-                    {{ choice.1 }}
-                </label>
-              </div>
-              <!-- div class="radio col-md-6">
-                <input type="radio" name="category_choice_field" value="{{ choice.0 }}"
-                  {% ifequal category_form.initial choice.0 %} checked="checked" {% endifequal %}>
-                  {{ choice.1 }}
-                </input>
-              </div -->
-              {% endfor %}
-              {% endautoescape %}
-            </fieldset>
-          </div>
+                    <div class="row">
+                        {{ attribute_form.management_form }}
+                        <div class="col s3">
+                            {% trans "Attribute" %}
+                        </div>
+                        <div class="col s3">
+                            {% trans "Label" %}
+                        </div>
+                        <div class="col s3">
+                            {% trans "Description" %}
+                        </div>
+                        <div class="col s3">
+                            {% trans "Display Order" %}
+                        </div>
+                        {% for form in attribute_form.forms %}
+                            {% if form.attribute %}
+                                {{ form.id |attr:"class:hide" }}
+                                <div class="input-field col s3">
+                                    {{ form.attribute }}
+                                </div>
+                                <div class="input-field col s3">
+                                    {{ form.attribute_label }}
+                                </div>
+                                <div class="input-field col s3">
+                                    {{ form.description }}
+                                </div>
+                                <div class="input-field col s3">
+                                    {{ form.display_order }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
 
-          <div class="col-md-12 grid-spacer">
-            <h5>{% trans "Attributes" %}</h5>
-            {{ attribute_form.management_form }}
-            <table class="table table-striped table-bordered table-condensed">
-              <tr>
-                <th>{% trans "Attribute" %}</th>
-                <th>{% trans "Label" %}</th>
-                <th>{% trans "Description" %}</th>
-                <th>{% trans "Display Order" %}</th>
-              </tr>
-              {% for form in attribute_form.forms %}
-              {% if form.attribute %}
-              <tr>
-                <td><div style="display:none">{{form.id}}</div>{{form.attribute}}</td>
-                <td>{{form.attribute_label}}</td>
-                <td>{{form.description}}</td>
-                <td>{{form.display_order}}</td>
-              </tr>
-              {% endif %}
-              {% endfor %}
-            </table>
+                    <div id="poc_form" class="modal">
+                        <div class="modal-content">
+                            <h4>{% trans "Point of Contact" %}</h4>
+                            <p>{{ poc_form }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+                        </div>
+                    </div>
+                
+                    <div id="metadata_form" class="modal">
+                        <div class="modal-content">
+                            <h4>{% trans "Metadata Provider" %}</h4>
+                            <p>{{ author_form }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+                        </div>
+                    </div>
 
-            <fieldset class="form-controls modal-forms modal hide fade" id="poc_form" >
-              <h2>{% trans "Point of Contact" %}</h2>
-              {{ poc_form|as_bootstrap }}
-              <button type='button' class="modal-cloose-btn btn btn-primary">Done</button>
-            </fieldset>
-            <fieldset class="form-controls modal-forms modal hide fade" id="metadata_form">
-              <h2>{% trans "Metadata Provider" %}</h2>
-                {{ author_form|as_bootstrap }}
-              <button type='button' class="modal-cloose-btn btn btn-primary">Done</button>
-            </fieldset>
-
-            {% if not layer.metadata_uploaded_preserve %}
-            <div class="form-actions">
-              <a href="{% url 'layer_detail' layername=resource.alternate %}" class="btn btn-primary">{% trans "Return to Layer" %}</a>
-              <input type="submit" id="btn_upd_md_dwn" class="btn btn-primary" value="{% trans "Update" %}"/>
+                    {% if not layer.metadata_uploaded_preserve %}
+                        <div class="right">
+                            <a href="{% url 'layer_detail' layername=resource.alternate %}" class="btn-flat modal-trigger waves-effect waves-light red-text text-darken-3 btn-flat-border">{% trans "Return to Layer" %}</a>
+                            <button type="submit" id="btn_upd_md_dwn" class="waves-effect waves-light btn red darken-3">{% trans "Update" %}</button>
+                            <!-- <input type="submit" id="btn_upd_md_dwn" class="waves-effect waves-light btn red darken-3 white-text" value="{% trans "Update" %}"/> -->
+                        </div>
+                    {% endif %}
+                </form>
             </div>
-            {% endif %}
-          </div>
         </div>
-      </form>
-  </div>
-</div>
+    </div>
+
+    <script>
+        $("#id_resource-owner").remove();
+        $("#id_resource-poc").remove();
+        $("#id_resource-metadata_author").remove();
+    </script>
 {% endblock %}

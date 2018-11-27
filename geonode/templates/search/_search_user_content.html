@@ -1,62 +1,75 @@
 {% load i18n %}
-<div class="row" ng-controller="CartList">
-  <div class="col-md-3">
-    <div class="row">
-      <div class="col-xs-12">
-        {% load base_tags %}
-        <nav class="filter">
-            <h4><a href="" class="toggle toggle-nav">
-                    <i class="fa fa-chevron-down"></i>
-                    {% trans "search" %}
-                </a></h4>
-            <ul class="nav open" id="text">
+
+{% block total %}
+    <span ng-controller="CartList">
+        <span ng-bind="total_counts"></span>
+        <span>User Found</span>
+    </span>
+{% endblock %}
+
+<div>
+    <div class="col s12">
+        <a href="#" data-target="filter_right" class="button-collapse btn-flat btn-flat-border sidenav-trigger btn-sidenav-right grey-text text-darken-2" style="display:inline-block;">
+            <!-- <i class="material-icons">sort</i> -->
+            {% trans "Filter" %}
+        </a>
+        <!-- {% trans "Showing max 20" %} -->
+        <!-- <span ng-bind="'from '+ total_counts + ' {{ facet_type | title }}'"></span> -->
+        {% include "search/_sort_filters.html" %}
+    </div>
+    {% if facet_type == 'groups' %}
+        {% include 'search/_group_snippet.html' %}
+    {% elif facet_type == 'groupcategories' %}
+        {% include 'search/_groupcategory_snippet.html' %}
+    {% elif facet_type == 'people' %}
+        {% include "people/_profile_list_item.html" %}
+    {% endif %}
+</div>
+<div class="right">
+    {% include 'search/_pagination.html' %}
+</div>
+
+<aside>
+    <ul class="sidenav sidenav-right sidenav-fixed grey lighten-4" id="filter_right" style="padding-top:10;">
+        <li class="red darken-3 white-text filter-menu-title">
+            <div class="">
+                <a class="waves-effect btn-flat show-on-medium-and-down hide-on-large-only white-text filter-menu-close"><i class="material-icons">arrow_back</i></a>
+                {% trans "Filters" %}
+                <a href="." id="clear-search" class="white-text right">{% trans "RESET" %}</a>
+            </div>
+        </li>
+        <li class="filter-menu-content">
+            <div class="input-field">
+                <input id="text_search_input" type="text" name="text_search_input" class="" ng-model="text_query">
+                <label for="text_search_input">{% trans "Search" %}</label>
+                <button id="text_search_btn" class="btn-flat waves-effect waves-light" type="submit" style="position: absolute;
+                top: 10px;
+                right: -15px;">
+                    <i class="material-icons">search</i>
+                </button>
+            </div>
+        </li>
+        {% if facet_type == 'groups' %}
+        <li class="no-padding">
+            <ul class="collapsible popout">
                 <li>
-                    <div class="input-group">
-                    <input name="text_search_input" id="text_search_input" ng-model="text_query" type="text"
-                           placeholder="Search by name" class="form-control" data-query-key='name__icontains'>
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="submit" id="text_search_btn"><i class="fa fa-search"></i></button>
-                    </span>
+                    <div class="collapsible-header red darken-3 white-text"><i class="material-icons">filter_drama</i>{% trans "Categories" %}</div>
+                    <div class="collapsible-body">
+                        <div style="padding: 15px;">
+                            {% verbatim %}
+                            <div id="groupcategories">
+                                <label ng-repeat="category in categories" ng-if="category.member_count > 0">
+                                    <input type="checkbox" class="filled-in {{category.active}}" id="" data-value="{{ category.slug }}" data-filter="categories__slug" ng-click="multiple_choice_listener($event)" />
+                                    <span>{{ category.name | limitTo: 25 }}{{ category.name.length > 25 ? '...' : ''}}</span>
+                                    <span class="badge">{{ category.member_count }}</span>
+                                </label>
+                            </div>
+                            {% endverbatim %}
+                        </div>
                     </div>
                 </li>
             </ul>
-        </nav>
-        {% if facet_type == 'groups' %}
-
-        <nav class="filter">
-          <h4><a href="#" class="toggle toggle-nav"><i class="fa fa-chevron-right"></i>{% trans "Categories" %}</a></h4>
-          <ul class="nav closed" id="groupcategories">
-            {% verbatim %}
-              <li ng-repeat="category in categories" ng-if="category.member_count > 0">
-                <a data-value="{{ category.slug }}" data-filter="categories__slug"
-                 ng-click="multiple_choice_listener($event)" class="{{category.active}}"><div class="fa-stack fa-1g"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa {{category.fa_class}} fa-stack-1x"></i></div>{{ category.name | limitTo: 25 }}{{ category.name.length > 25 ? '...' : ''}}
-                  <span class="badge pull-right">{{ category.member_count }}</span>
-                </a>
-              </li>
-            {% endverbatim %}
-          </ul>
-        </nav>
-
+        </li>
         {% endif %}
-      </div>
-    </div>
-
-  </div>
-  <div class="col-md-9">
-    <div class="col-md-2">
-      <span>Total: </span>
-      <span ng-bind="total_counts"></span>
-    </div>
-    {% include "search/_sort_filters.html" %}
-    <div class="col-md-12 grid-spacer">
-        {% if facet_type == 'groups' %}
-            {% include 'search/_group_snippet.html' %}
-        {% elif facet_type == 'groupcategories' %}
-            {% include 'search/_groupcategory_snippet.html' %}
-        {% elif facet_type == 'people' %}
-            {% include "people/_profile_list_item.html" %}
-        {% endif %}
-    </div>
-    {% include 'search/_pagination.html' %}
-  </div>
-</div>
+    </ul>
+</aside>

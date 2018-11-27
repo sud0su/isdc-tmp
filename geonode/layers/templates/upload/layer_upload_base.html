@@ -1,8 +1,9 @@
-{% extends "geonode_base.html" %}
-{% load i18n %}
+{% extends "geonode_base.html" %} 
+{% load i18n %} 
 
-{% block head %}
-{{ block.super }}
+{% block head %} 
+    {{ block.super }}
+
 <style>
     #left {
         float: left;
@@ -16,12 +17,13 @@
         /* height: 40px; */
     }
 
-    .inline-headers h4, .inline-headers select {
-      display: inline-block;
-      vertical-align: top;
+    .inline-headers h4,
+    .inline-headers select {
+        display: inline-block;
+        vertical-align: top;
     }
 
-    .active {
+    .progress-bar.active {
         background-color: #cccccc !important;
         font-weight: bold !important;
     }
@@ -33,13 +35,14 @@
 
     .panel-heading [data-toggle="collapse"]:after {
         font-family: 'FontAwesome';
-        content: "\f078"; /* "play" icon */
+        content: "\f078";
+        /* "play" icon */
         float: right;
         color: #F58723;
         font-size: 18px;
         line-height: 22px;
         /* rotate "play" icon from > (right arrow) to down arrow */
-    /*    -webkit-transform: rotate(-90deg);
+        /*    -webkit-transform: rotate(-90deg);
         -moz-transform: rotate(-90deg);
         -ms-transform: rotate(-90deg);
         -o-transform: rotate(-90deg);
@@ -48,7 +51,7 @@
 
     .panel-heading [data-toggle="collapse"].collapsed:after {
         /* rotate "play" icon from > (right arrow) to ^ (up arrow) */
-    /*    -webkit-transform: rotate(90deg);
+        /*    -webkit-transform: rotate(90deg);
         -moz-transform: rotate(90deg);
         -ms-transform: rotate(90deg);
         -o-transform: rotate(90deg);
@@ -56,7 +59,7 @@
         color: #454444;
     }
 
-    .help-tip{
+    .help-tip {
         position: absolute;
         /* top: 18px;
         right: 18px;
@@ -72,19 +75,19 @@
         cursor: default;
     }
 
-    .help-tip:before{
-        content:'?';
+    .help-tip:before {
+        content: '?';
         font-weight: bold;
-        color:#fff;
+        color: #fff;
     }
 
-    .button-tip{
+    .button-tip {
         position: absolute;
     }
 
     .help-tip:hover p,
-    .button-tip:hover p{
-        display:block;
+    .button-tip:hover p {
+        display: block;
         transform-origin: 100% 0%;
 
         -webkit-animation: fadeIn 0.3s ease-in-out;
@@ -92,7 +95,8 @@
     }
 
     .help-tip p,
-    .button-tip p{    /* The tooltip */
+    .button-tip p {
+        /* The tooltip */
         display: none;
         text-align: justify;
         background-color: #1E2021;
@@ -110,59 +114,66 @@
     }
 
     .help-tip p:before,
-    .button-tip p:before{ /* The pointer of the tooltip */
+    .button-tip p:before {
+        /* The pointer of the tooltip */
         position: absolute;
         content: '';
-        width:0;
+        width: 0;
         height: 0;
-        border:6px solid transparent;
-        border-bottom-color:#1E2021;
-        right:10px;
-        top:-12px;
+        border: 6px solid transparent;
+        border-bottom-color: #1E2021;
+        right: 10px;
+        top: -12px;
     }
 
     .help-tip p:after,
-    .button-tip p:after{ /* Prevents the tooltip from being hidden */
-        width:100%;
-        height:40px;
-        content:'';
+    .button-tip p:after {
+        /* Prevents the tooltip from being hidden */
+        width: 100%;
+        height: 40px;
+        content: '';
         position: absolute;
-        top:-40px;
-        left:0;
+        top: -40px;
+        left: 0;
     }
 
     /* CSS animation */
 
     @-webkit-keyframes fadeIn {
         0% {
-            opacity:0;
+            opacity: 0;
             transform: scale(0.6);
         }
 
         100% {
-            opacity:100%;
+            opacity: 100%;
             transform: scale(1);
         }
     }
 
     @keyframes fadeIn {
-        0% { opacity:0; }
-        100% { opacity:100%; }
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 100%;
+        }
     }
 </style>
-{% endblock %}
+{% endblock %} 
 
-{% block title %} {{ block.super }} {% endblock %}
-
+{% block title %} {{ block.super }} {% endblock %} 
 {% block body_class %}data{% endblock %}
 
 {% block body_outer %}
-<div class="page-header">
-  <a href="{% url "layer_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="btn btn-primary pull-right">{% trans "Explore Layers" %}</a>
-  <h2 class="page-title">{% trans "Upload Layers" %}</h2>
-</div>
-<div class="row">
-  {% block body %}{% endblock body %}
-  {% block sidebar %}{% endblock sidebar %}
-</div>
+    <div class="page-header">
+        <a href="{% url "layer_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="btn btn-primary pull-right">{% trans "Explore Layers" %}</a>
+        <h2 class="page-title">{% trans "Upload Layers" %}</h2>
+    </div>
+    <div class="row">
+        {% block body %}
+        {% endblock body %} 
+        {% block sidebar %}
+        {% endblock sidebar %}
+    </div>
 {% endblock body_outer %}

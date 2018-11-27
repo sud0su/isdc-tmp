@@ -1,38 +1,124 @@
 {% load i18n %}
 
-<div class="modal fade" id="_permissions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <form id="permission_form" accept-charset="UTF-8" method="post" class="modal-form" action="{% url "resource_permissions" resource.id %}">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="myModalLabel">{% trans "Set permissions for this resource" %}</h4>
-        </div>
-        <div class="modal-body">
-          {% include "_permissions.html" %}
+<div id="_permissions" class="modal modal-fixed-footer">
+    <form id="permission_form" accept-charset="UTF-8" method="post" class="modal-form" action="{% url "resource_permissions" resource.id %}">
+        <div class="modal-content">
+            <h4>{% trans "Set Permission" %}</h4>
+            <div class="row">
+                <div class="tabs-vertical">
+                    <div class="col s4 l3">
+                        <ul class="tabs">
+                            <li class="tab"><a href="#privacy"><i class="material-icons">lock</i> <span class="hide-on-small-only"> {% trans "Privacy" %}</span></a></li>
+                            <li class="tab"><a href="#edit"><i class="material-icons">edit</i> <span class="hide-on-small-only"> {% trans "Edit" %}</span></a></li>
+                            <li class="tab"><a href="#manage"><i class="material-icons">group</i> <span class="hide-on-small-only"> {% trans "Manage" %}</span></a></li>
+                        </ul>
+                    </div>
+                    <div class="col s8 l9">
+                        <div id="privacy" class="row">
+                            <div class="col l4">
+                                {% trans "Who can view it?" %}
+                            </div>
+                            <div class="col l8">
+                                <div class="row">
+                                    <div class="col s12">
+                                        <label>
+                                            <input type="checkbox" class="filled-in" name="view_anonymous" id="perms_view_anyone" value="AnonymousUser" {% if DEFAULT_ANONYMOUS_VIEW_PERMISSION %}checked{% endif %} />
+                                            <span>{% trans "Anyone" %}</span>
+                                        </label>
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <input id="view_resourcebase_users" type="text" class="user-select">
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <input id="view_resourcebase_groups" type="text" class="group-select">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col l4">
+                                {% trans "Who can download it?" %}
+                            </div>
+                            <div class="col l8">
+                                <div class="row">
+                                    <div class="col s12">
+                                        <label>
+                                            <input type="checkbox" class="filled-in" name="download_anonymous" id="perms_download_resourcebase_anyone" value="AnonymousUser" {% if DEFAULT_ANONYMOUS_DOWNLOAD_PERMISSION %}checked{% endif %} />
+                                            <span>{% trans "Anyone" %}</span>
+                                        </label>
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <input id="download_resourcebase_users" type="text" name="download_resourcebase" class="user-select">
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <input id="download_resourcebase_groups" type="text" name="download_resourcebase" class="group-select">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="edit" class="row">
+                            <div class="col l4">
+                                {% trans "Who can change metadata for it?" %}
+                            </div>
+                            <div class="col l8">
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <input id="change_resourcebase_metadata_users" type="text" name="change_resourcebase_metadata" class="user-select">
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <input id="change_resourcebase_metadata_groups" type="text" name="change_resourcebase_metadata" class="group-select">
+                                    </div>
+                                </div>
+                            </div>
+                            {% if is_layer %}
+                            <div class="col l4">
+                                {% trans "Who can edit data for this layer?" %}
+                            </div>
+                            <div class="col l8">
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <input id="change_layer_data_users" type="text" name="change_layer_data" class="user-select">
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <input id="change_layer_data_groups" type="text" name="change_layer_data" class="group-select">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col l4">
+                                {% trans "Who can edit styles for this layer?" %}
+                            </div>
+                            <div class="col l8">
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <input id="change_layer_style_users" type="text" name="change_layer_style" class="user-select">
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <input id="change_layer_style_groups" type="text" name="change_layer_style" class="group-select">
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div id="manage" class="col s12">
+                            <div class="col l4">
+                                {% trans "Who can manage it? (update, delete, change permissions, publish/unpublish it)" %}
+                            </div>
+                            <div class="col l8">
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <input id="manage_resourcebase_users" type="text" name="manage_resourcebase" class="user-select">
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <input id="manage_resourcebase_groups" type="text" name="manage_resourcebase" class="group-select">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
-          <a href="#" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</a>
-          <a href="#" class="btn btn-primary" data-dismiss="modal" id="perms_submit">{% trans "Apply Changes" %}</a>
+            <a href="#" class="modal-close waves-effect waves-light btn-flat">{% trans 'Cancel' %}</a>
+            <a href="#" class="waves-effect waves-light btn red darken-3" id="perms_submit">{% trans 'Apply' %}</a>
         </div>
-      </div>
-    </div>
-  </form>
-</div>
-
-<div class="modal fade" id="_permissions_feedbacks" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">Message box</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
+    </form>
 </div>

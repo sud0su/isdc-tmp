@@ -1,23 +1,54 @@
 {% load i18n %}
-<li class="list-group-item">
-  <h4>{% trans "About" %}</h4>
-  {% if resource.owner == resource.poc and resource.owner == resource.metadata_author %}
-  <p>{% trans "Owner, Point of Contact, Metadata Author" %}</p>
-    {% with resource.owner as profile %}
-      {% include "people/_profile_about_item.html" %}
-    {% endwith %}
-  {% else %}
-  <p>{% trans "Owner" %}</p>
-    {% with resource.owner as profile %}
-      {% include "people/_profile_about_item.html" %}
-    {% endwith %}
-  <p>{% trans "Point of Contact" %}</p>
-    {% with resource.poc as profile %}
-      {% include "people/_profile_about_item.html" %}
-    {% endwith %}
-  <p>{% trans "Metadata Author" %}</p>
-    {% with resource.metadata_author as profile %}
-      {% include "people/_profile_about_item.html" %}
-    {% endwith %}
-  {% endif %}
-</li>  
+{% load agon_ratings_tags %}
+{% load base_tags %}
+
+
+{% if resource.owner == resource.poc and resource.owner == resource.metadata_author %}
+    <ul class="collection">
+        <li class="collection-item avatar">
+            {% with resource.owner as profile %}
+                {% include "people/_profile_about_item.html" %}
+            {% endwith %}
+            <p>{% trans "Owner, Point of Contact, Metadata Author" %}</p>
+            {% if DISPLAY_RATINGS %}
+                {% overall_rating resource "layer" as layer_rating %}
+                {% num_ratings resource as num_votes %}
+                <div class="secondary-content overall_rating" data-score="{{ layer_rating }}"></div>
+            {% endif %}
+        </li>
+    </ul>
+{% else %}
+    <div class="collection">
+        <ul class="collection collection-item">
+            <div class="col l3">
+                <li class="collection-item avatar">
+                    {% with resource.owner as profile %}
+                        {% include "people/_profile_about_item.html" %}
+                    {% endwith %}
+                    <p>{% trans "Owner" %}</p>
+                </li>
+            </div>
+            <div class="col l3">
+                <li class="collection-item avatar">
+                    {% with resource.poc as profile %}
+                        {% include "people/_profile_about_item.html" %}
+                    {% endwith %}
+                    <p>{% trans "Point of Contact" %}</p>
+                </li>
+            </div>
+            <div class="col l3">
+                <li class="collection-item avatar">
+                    {% with resource.metadata_author as profile %}
+                        {% include "people/_profile_about_item.html" %}
+                    {% endwith %}
+                    <p>{% trans "Metadata Author" %}</p>
+                </li>
+            </div>
+            {% if DISPLAY_RATINGS %}
+                {% overall_rating resource "layer" as layer_rating %}
+                {% num_ratings resource as num_votes %}
+                <div class="secondary-content overall_rating" data-score="{{ layer_rating }}"></div>
+            {% endif %}
+        </ul>
+    </div>
+{% endif %}

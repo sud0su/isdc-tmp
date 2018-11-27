@@ -5,7 +5,19 @@
 
 {% block body_class %}documents{% endblock %}
 
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                {% block document_breadcrumb %} 
+                {% endblock document_breadcrumb %}
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}
+
 {% block body_outer %}
-  {% block body %}{% endblock body %}
-  {% block sidebar %}{% endblock sidebar %}
+    {% block body %}{% endblock body %}
+    {% block sidebar %}{% endblock sidebar %}
 {% endblock body_outer %}

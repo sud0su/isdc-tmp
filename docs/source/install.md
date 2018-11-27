@@ -331,15 +331,27 @@ Fixing error `... relation "people_profile" already exists`
     ./manage.py migrate
 ```
 
-For GeoExplorer Setting replace the `iMMAP SETTINGS` with code below
+Download package from [here]() and install it one by one by using pip install (see example below)
+```
+    pip install {package_location}/isdc-geofloods-1.0.0.tar.gz
+```
+
+For GeoExplorer Setting replace the `iMMAP SETTINGS` with example code below
 ```
     # iMMAP SETTINGS
-    INSTALLED_APPS += ('isdc_panel', 'isdc_baseline')
+    INSTALLED_APPS += (
+        'isdc_geopanel', 
+        'isdc_geobaseline',
+        'isdc_geoaccessibility',
+        'isdc_geofloods',
+        'isdc_geoavalanches',
+        'isdc_geoearthquake'
+        )
     IMMAP_LIST_PACKAGE = []
-    ISDC_PANEL_BUTTON = []
+    ISDC_GEOPANEL_BUTTON = []
 
-    if 'isdc_panel' in INSTALLED_APPS:
-        ISDC_PANEL_BUTTON += [
+    if 'isdc_geopanel' in INSTALLED_APPS:
+        ISDC_GEOPANEL_BUTTON += [
             {
                 'component': 'Statistic',
                 'icon': 'assignment', #material-icon,
@@ -361,19 +373,59 @@ For GeoExplorer Setting replace the `iMMAP SETTINGS` with code below
                 'tooltip': 'Settlement inspector'
             }
         ]
-        if 'isdc_baseline' in INSTALLED_APPS:
+        if 'isdc_geobaseline' in INSTALLED_APPS:
             IMMAP_LIST_PACKAGE += [
                 {
-                    'package' : 'isdc_baseline',
+                    'package' : 'isdc_geobaseline',
                     'js' : 'addbaseline.js',
                     'bundle': 'baseline.min.js',
-                    # 'api': SITEURL+'/static/isdc_baseline/js/baseline.json',
+                    # 'api': SITEURL+'/static/isdc_geobaseline/js/baseline.json',
                     'api': SITEURL+'/geoapi/statistic_baseline/',
                     'domID': 'baseline'
                 }
             ]
+        if 'isdc_geoaccessibility' in INSTALLED_APPS:
+            IMMAP_LIST_PACKAGE += [
+                {
+                    'package' : 'isdc_geoaccessibility',
+                    'js' : 'addaccessibility.js',
+                    'bundle': 'accessibility.min.js',
+                    'api': SITEURL+'/geoapi/statistic_accessibility/',
+                    'domID': 'accessibility'
+                }
+            ]
+        if 'isdc_geofloods' in INSTALLED_APPS:
+            IMMAP_LIST_PACKAGE += [
+                {
+                    'package' : 'isdc_geofloods',
+                    'js' : 'addfloods.js',
+                    'bundle': 'floods.min.js',
+                    'api': SITEURL+'/geoapi/statistic_floodrisk/',
+                    'domID': 'floods'
+                }
+            ]
+        if 'isdc_geoavalanches' in INSTALLED_APPS:
+            IMMAP_LIST_PACKAGE += [
+                {
+                    'package' : 'isdc_geoavalanches',
+                    'js' : 'addavalanches.js',
+                    'bundle': 'avalanches.min.js',
+                    'api': SITEURL+'/geoapi/statistic_avalanches/',
+                    'domID': 'avalanches'
+                }
+            ]
+        if 'isdc_geoearthquake' in INSTALLED_APPS:
+            IMMAP_LIST_PACKAGE += [
+                {
+                    'package' : 'isdc_geoearthquake',
+                    'js' : 'addearthquake.js',
+                    'bundle': 'earthquake.min.js',
+                    'api': SITEURL+'/geoapi/statistic_earthquake/',
+                    'domID': 'earthquake'
+                }
+            ]
             
-    IMMAP_PACKAGE = [{'panel_setting': ISDC_PANEL_BUTTON},{'official_package': IMMAP_LIST_PACKAGE}]
+    IMMAP_PACKAGE = [{'panel_setting': ISDC_GEOPANEL_BUTTON},{'official_package': IMMAP_LIST_PACKAGE}]
 ```
 
 ### settings.py

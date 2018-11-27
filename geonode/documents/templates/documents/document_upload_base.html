@@ -8,19 +8,27 @@
 
 {% block body_class %}documents{% endblock %}
 
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="{% url 'document_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Documents" %}</a>
+                <a href="{% url 'document_upload' %}" class="breadcrumb">{% trans "Upload Documents" %}</a>
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}
+
 {% block body_outer %}
-<div class="page-header">
-  <a href="{% url "document_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="btn btn-primary pull-right">{% trans "Explore Documents" %}</a>
-  <h2 class="page-title">{% trans "Upload Documents" %}</h2>
-	<p>Allowed document types:</p>
-	<p>
-	{% for doc in ALLOWED_DOC_TYPES %}
-		<span class="label label-default">.{{ doc }}</span>
-	{% endfor %}
-	</p>
-</div>
-<div class="row">
-  {% block body %}{% endblock body %}
-  {% block sidebar %}{% endblock sidebar %}
-</div>
+	<section style="min-height: 64vh;">
+		<div class="page-header" style="padding: 0 15px;">
+			<a href="{% url "document_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="btn waves-effect waves-light red darken-3 right">{% trans "Explore Documents" %}</a>
+			<h4 class="page-title">{% trans "Upload Documents" %}</h4>
+		</div>
+		<div class="row">
+			{% block body %}{% endblock body %}
+			{% block sidebar %}{% endblock sidebar %}
+		</div>
+	</section>
 {% endblock body_outer %}

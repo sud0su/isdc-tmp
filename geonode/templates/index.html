@@ -1,330 +1,663 @@
-{% extends "geonode_base.html" %}
-{% load i18n %}
-{% load staticfiles %}
-{% load base_tags %}
+{% extends "geonode_base.html" %} 
+{% load i18n %} 
+{% load staticfiles %} 
+{% load base_tags %} 
 
-{% block title %} {% trans "Welcome!" %} - {{ block.super }} {% endblock %}
+{% block title %} {% trans "Welcome!" %} - {{ block.super }} {% endblock %} 
+{% block body_class %}home{% endblock %} 
 
-{% block body_class %}home{% endblock %}
+{% block middle %} 
+    {{ block.super }} 
+    {% block hero %}
+    
+    {% endblock %} 
 
-{% block middle %}
-  {{ block.super }}
-  {% block hero %}
-  <div class="jumbotron">
-  	<div class="container">
-  		<h1>{% trans "Welcome" %}</h1>
-  		<p></p>
-  		<p>{% blocktrans %}GeoNode is an open source platform for sharing geospatial data and maps.{% endblocktrans %}</p>
-		<p>{% blocktrans %}If you have any questions about the software or service, join our <a href="http://lists.osgeo.org/cgi-bin/mailman/listinfo/geonode-users">mailing list</a>.{% endblocktrans %}</p>
-  		<a class="btn btn-default btn-lg" target="_blank" href="http://docs.geonode.org/en/master/tutorials/users/index.html" role="button">{% blocktrans %}Get Started &raquo;{% endblocktrans %}</a>
-  	</div>
-  </div>
-  {% endblock %}
-
-  {% block mainbody %}
-  {% block bigsearch %}
-  <div class="big-search">
-  	<div class="container">
-  		<h1>{% trans "Search for Data." %}</h1>
-  		<div class="search">
-  			<form id="search" action="{% url "search" %}" >
-  				<span class="fa fa-search fa-2x"></span>
-  				{% if HAYSTACK_SEARCH %}
-  				<input id="search_input" type="text" placeholder="Search" class="form-control" name="q">
-  				{% else %}
-  				<input id="search_input" type="text" placeholder="Search" class="form-control" name="title__icontains">
-  				{% endif %}
-  			</form>
-  		</div>
-  		<p><a class="btn btn-default btn-lg" href="{% url "search" %}">Advanced Search</a></p>
-  	</div>
-  </div>
-  {% endblock %}
-
-  {% block datasets %}
-  <section id="datasets">
-  	<div class="container">
-  		<div class="row">
-  			<div class="container text-center">
-  				<h1>Discover the available datasets.</h1>
-                <div class="row">
-      				<div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=boundaries&category__identifier__in=biota" data-toggle="tooltip" data-placement="auto"
-      						title="Flora and/or fauna in natural environment. Examples: wildlife, vegetation, biological sciences, ecology, wilderness, sealife, wetlands, habitat.">
-      						<div class="category">
-      							<i class="fa fa-leaf fa-2x"></i>
-      							<h4>Biota</h4>
-      						</div>
-      					</a>
-      				</div>
-      				<div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=boundaries" data-toggle="tooltip" data-placement="auto"
-      						title="Legal land descriptions. Examples: political and administrative boundaries." >
-      						<div class="category">
-      							<i class="fa fa-ellipsis-h fa-2x"></i>
-      							<h4>Boundaries</h4>
-      						</div>
-      					</a>
-      				</div>
-      				<div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=climatologyMeteorologyAtmosphere" data-toggle="tooltip" data-placement="auto"
-      						title="Processes and phenomena of the atmosphere. Examples: cloud cover, weather, climate, atmospheric conditions, climate change, precipitation." >
-      						<div class="category">
-      							<i class="fa fa-cloud fa-2x"></i>
-      							<h4>Climate</h4>
-      						</div>
-      					</a>
-      				</div>
-      				<div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=economy" data-toggle="tooltip" data-placement="auto"
-      						title="Economic activities, conditions and employment. Examples: production, labour, revenue, commerce, industry, tourism and ecotourism, forestry, fisheries, commercial or subsistence hunting, exploration and exploitation of resources such as minerals, oil and gas." >
-      						<div class="category">
-      							<i class="fa fa-shopping-cart fa-2x"></i>
-      							<h4>Economy</h4>
-      						</div>
-      					</a>
-      				</div>
-      				<div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=elevation" data-toggle="tooltip" data-placement="auto"
-      						title="Height above or below sea level. Examples: altitude, bathymetry, digital elevation models, slope, derived products." >
-      						<div class="category">
-      							<i class="fa fa-flag fa-2x"></i>
-      							<h4>Elevation</h4>
-      						</div>
-      					</a>
-      				</div>
-      				<div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=environment" data-toggle="tooltip" data-placement="auto"
-      						title="Environmental resources, protection and conservation. Examples: environmental pollution, waste storage and treatment, environmental impact assessment, monitoring environmental risk, nature reserves, landscape." >
-      						<div class="category">
-      							<i class="fa fa-tree fa-2x"></i>
-      							<h4>Environment</h4>
-      						</div>
-      					</a>
-      				</div>
-      				<div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=farming" data-toggle="tooltip" data-placement="auto"
-      						title="Rearing of animals and/or cultivation of plants. Examples: agriculture, irrigation, aquaculture, plantations, herding, pests and diseases affecting crops and livestock." >
-      						<div class="category">
-      							<i class="fa fa-lemon-o fa-2x"></i>
-      							<h4>Farming</h4>
-      						</div>
-      					</a>
-      				</div>
-      				<div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=farming&category__identifier__in=geoscientificInformation" data-toggle="tooltip" data-placement="auto"
-      						title="Information pertaining to earth sciences. Examples: geophysical features and processes, geology, minerals, sciences dealing with the composition, structure and origin of the earth s rocks, risks of earthquakes, volcanic activity, landslides, gravity information, soils, permafrost, hydrogeology, erosion." >
-      						<div class="category">
-      							<i class="fa fa-bullseye fa-2x"></i>
-      							<h4>Geoscientific Information</h4>
-      						</div>
-      					</a>
-      				</div>
-      				<div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=health" data-toggle="tooltip" data-placement="auto"
-      						title="Health, health services, human ecology, and safety. Examples: disease and illness, factors affecting health, hygiene, substance abuse, mental and physical health, health services." >
-      						<div class="category">
-      							<i class="fa fa-stethoscope fa-2x"></i>
-      							<h4>Health</h4>
-      						</div>
-      					</a>
-      				</div>
-      				<div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=imageryBaseMapsEarthCover" data-toggle="tooltip" data-placement="auto"
-      						title="Base maps. Examples: land cover, topographic maps, imagery, unclassified images, annotations." >
-      						<div class="category">
-      							<i class="fa fa-globe fa-2x"></i>
-      							<h4>Imagery Base Maps Earth Cover</h4>
-      						</div>
-      					</a>
-      				</div>
-      				<div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=inlandWaters" data-toggle="tooltip" data-placement="auto"
-      						title="Inland water features, drainage systems and their characteristics. Examples: rivers and glaciers, salt lakes, water utilization plans, dams, currents, floods, water quality, hydrographic charts." >
-      						<div class="category">
-      							<i class="fa fa-tint fa-2x"></i>
-      							<h4>Inland Waters</h4>
-      						</div>
-      					</a>
-      				</div>
-      				<div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=intelligenceMilitary" data-toggle="tooltip" data-placement="auto"
-      						title="Military bases, structures, activities. Examples: barracks, training grounds, military transportation, information collection." >
-      						<div class="category">
-      							<i class="fa fa-fighter-jet fa-2x"></i>
-      							<h4>Intelligence Military</h4>
-      						</div>
-      					</a>
-      				</div>
+    {% block mainbody %} 
+        {% block bigsearch %}
+        <section>
+            <div class="parallax-container">
+                <div class="parallax">
+                    <!-- <img src="http://asdc.immap.org/static/v2/images/ASDC_FrontPage_Full_Size.jpg"> -->
+                    <img src="#" alt="" class="red darken-3">
                 </div>
-                <div class="row">
-                    <div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=location" data-toggle="tooltip" data-placement="auto"
-      						title="Positional information and services. Examples: addresses, geodetic networks, control points, postal zones and services, place names." >
-      						<div class="category">
-      							<i class="fa fa-map-marker fa-2x"></i>
-      							<h4>Location</h4>
-      						</div>
-      					</a>
-      				</div>
-                    <div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=oceans" data-toggle="tooltip" data-placement="auto"
-      						title="Features and characteristics of salt water bodies (excluding inland waters). Examples: tides, tidal waves, coastal information, reefs." >
-      						<div class="category">
-      							<i class="fa fa-anchor fa-2x"></i>
-      							<h4>Oceans</h4>
-      						</div>
-      					</a>
-      				</div>
-                    <div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=planningCadastre" data-toggle="tooltip" data-placement="auto"
-      						title="Information used for appropriate actions for future use of the land. Examples: land use maps, zoning maps, cadastral surveys, land ownership." >
-      						<div class="category">
-      							<i class="fa fa-home fa-2x"></i>
-      							<h4>Planning Cadastre</h4>
-      						</div>
-      					</a>
-      				</div>
-                    <div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=population" data-toggle="tooltip" data-placement="auto"
-      						title="Settlements, anthropology, archaeology, education, traditional beliefs, manners and customs, demographic data, recreational areas and activities, social impact assessments, crime and justice, census information. Economic activities, conditions and employment." >
-      						<div class="category">
-      							<i class="fa fa-male fa-2x"></i>
-      							<h4>Population</h4>
-      						</div>
-      					</a>
-      				</div>
-                    <div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=society" data-toggle="tooltip" data-placement="auto"
-      						title="Characteristics of society and cultures. Examples: settlements, anthropology, archaeology, education, traditional beliefs, manners and customs, demographic data, recreational areas and activities, social impact assessments, crime and justice, census information." >
-      						<div class="category">
-      							<i class="fa fa-comments fa-2x"></i>
-      							<h4>Society</h4>
-      						</div>
-      					</a>
-      				</div>
-                    <div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=structure" data-toggle="tooltip" data-placement="auto"
-      						title="Man-made construction. Examples: buildings, museums, churches, factories, housing, monuments, shops, towers." >
-      						<div class="category">
-      							<i class="fa fa-building fa-2x"></i>
-      							<h4>Structure</h4>
-      						</div>
-      					</a>
-      				</div>
-                    <div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=transportation" data-toggle="tooltip" data-placement="auto"
-      						title="Means and aids for conveying persons and/or goods. Examples: roads, airports/airstrips, shipping routes, tunnels, nautical charts, vehicle or vessel location, aeronautical charts, railways." >
-      						<div class="category">
-      							<i class="fa fa-truck fa-2x"></i>
-      							<h4>Transportation</h4>
-      						</div>
-      					</a>
-      				</div>
-                    <div class="col-xs-1 col-sm-1">
-      					<a href="{% url "search" %}?limit=100&offset=0&category__identifier__in=utilitiesCommunication" data-toggle="tooltip" data-placement="auto"
-      						title="Energy, water and waste systems and communications infrastructure and services. Examples: hydroelectricity, geothermal, solar and nuclear sources of energy, water purification and distribution, sewage collection and disposal, electricity and gas distribution, data communication, telecommunication, radio, communication networks." >
-      						<div class="category">
-      							<i class="fa fa-phone fa-2x"></i>
-      							<h4>Utilities Communication</h4>
-      						</div>
-      					</a>
-      				</div>
+                <div class="big-search">
+                    <div class="container">
+                        <div class="valign-wrapper hero-container">
+                            <div class="center white-text" style="width:100%;">
+                                <h1 class="">Find Your Spatial Data Needs</h1>
+                                <h5 class="">Discover Spatial Data Information with iSDC</h5>
+                                <div class="row">
+                                    <form id="search" action="{% url 'search' %}" class="col s12">
+                                        <div class="">
+                                            <div class="input-field">
+                                                {% if HAYSTACK_SEARCH %}
+                                                <input id="search_input" type="text" name="q" placeholder="Search">
+                                                {% else %}
+                                                <input id="search_input" type="text" name="title__icontains" placeholder="Search">
+                                                {% endif %}
+                                                <i class="material-icons">search</i>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-  			</div>
-  		</div>
-  	</div>
-  </section>
-  {% endblock %}
-
-  {% block showcase %}
-  <section id="showcase">
-    <div class="row">
-      <div class="container text-center">
-        <h2>Featured Datasets</h2>
-        <div class="row home-facets">
-        {% with facet_type='home' %}
-         {% facets as facets %}
-          <div class="col-md-6">
-            <p><a href="{% url "layer_browse" %}"><i class="fa fa-square-o fa-4x rotate-45"></i></a></p>
-            <h2><a href="{% url "layer_browse" %}">{{ facets.layer|default:_("No") }} {% blocktrans count counter=facets.layer %}Layer{% plural %}Layers{% endblocktrans %}</a></h2>
-            <p>{% trans "Click to search for geospatial data published by other users, organizations and public sources. Download data in standard formats." %}</p>
-            {% if user.is_authenticated %}
-            <p class="text-center"><a class="btn btn-default" href="{% url "layer_upload" %}" role="button">{% trans "Add layers" %} &raquo;</a></p>
-            {% else %}
-            <p class="text-center"><a class="btn btn-default" href="{% url "layer_browse" %}" role="button">{% trans "Explore layers" %} &raquo;</a></p>
-            {% endif %}
-          </div>
-          <div class="col-md-6">
-            <p><a href="{% url "maps_browse" %}"><i class="fa fa-map-marker fa-4x"></i></a></p>
-            <h2><a href="{% url "maps_browse" %}">{{ facets.map|default:_("No") }} {% blocktrans count counter=facets.map %}Map{% plural %}Maps{% endblocktrans %}</a></h2>
-            <p>{% trans "Data is available for browsing, aggregating and styling to generate maps which can be saved, downloaded, shared publicly or restricted to specify users only." %}</p>
-            {% if user.is_authenticated %}
-            <p><a class="btn btn-default" href="{% url "new_map" %}" role="button">{% trans "Create maps" %} &raquo;</a></p>
-            {% else %}
-            <p><a class="btn btn-default" href="{% url "maps_browse" %}" role="button">{% trans "Explore maps" %} &raquo;</a></p>
-            {% endif %}
-          </div>
-          <div class="col-md-6">
-            <p><a href="{% url "document_browse" %}"><i class="fa fa-newspaper-o fa-4x"></i></a></p>
-            <h2><a href="{% url "document_browse" %}">{{ facets.document|default:_("No") }} {% blocktrans count counter=facets.document %}Document{% plural %}Documents{% endblocktrans %}</a></h2>
-            <p>{% trans "As for the layers and maps GeoNode allows to publish tabular and text data, manage theirs metadata and associated documents." %}</p>
-            {% if user.is_authenticated %}
-            <p class="text-center"><a class="btn btn-default" href="{% url "document_browse" %}" role="button">{% trans "Add documents" %} &raquo;</a></p>
-            {% else %}
-            <p class="text-center"><a class="btn btn-default" href="{% url "document_browse" %}" role="button">{% trans "Explore documents" %} &raquo;</a></p>
-            {% endif %}
-          </div>
-          <div class="col-md-6">
-            <p><a href="{% url "profile_browse" %}"><i class="fa fa-user fa-4x"></i></a></p>
-            <h2><a href="{% url "profile_browse" %}">{{ facets.user|default:_("No") }} {% blocktrans count counter=facets.user %}User{% plural %}Users{% endblocktrans %}</a></h2>
-            <p>{% trans "Geonode allows registered users to easily upload geospatial data and various documents in several formats." %}</p>
-            <p><a class="btn btn-default" href="{% url "profile_browse" %}" role="button">{% trans "See users" %} &raquo;</a></p>
-          </div>
-        {% endwith %}
-        </div>
-      </div>
-    </div>
-    <div class="row">
-        <div class="container text-center">
-            {% verbatim %}
-            <div ng-app="featured">
-              <div ng-repeat="item in featured | limitTo:4">
-                <div class="col-md-3">
-                  <a href="{{ item.detail_url }}"><img ng-src="{{ item.thumbnail_url }}" /></a>
-                  <h4>{{ item.title | limitTo: 20 }}{{item.title.length > 20 ? '...' : ''}}</h4>
-                </div>
-              </div>
             </div>
-      		{% endverbatim %}
-            <p><a href="/search/">Explore all datasets</a></p>
-        </div>
-    </div>
-  </section>
-  {% endblock %}
+        </section>
+        {% endblock %} 
 
-  {% endblock %}
+        {% block counter %}
+        <section class="count-prop grey lighten-4">
+            <div class="container-custom">
+                {% with facet_type='home' %}
+                {% facets as facets %}
+                <div class="row hide">
+                    <div class="col s12 m3">
+                        <a href="{% url 'layer_browse' %}" class="center counter-panel ">
+                            <div class="card-panel circle center cyan white-text hoverable">
+                                <i class="material-icons">layers</i>
+                                <div class="count">
+                                    <span>{{ facets.layer|default:_("0") }}</span>
+                                </div>
+                                <div class="name">{% trans "Layers" %}</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m3">
+                        <a href="{% url 'maps_browse' %}" class="center counter-panel ">
+                            <div class="card-panel circle center amber white-text hoverable">
+                                <i class="material-icons">map</i>
+                                <div class="count">
+                                    <span>{{ facets.map|default:_("0") }}</span>
+                                </div>
+                                <div class="name">{% trans "Interactive Maps" %}</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m3">
+                        <a href="{% url 'document_browse' %}" class="center counter-panel ">
+                            <div class="card-panel circle center deep-purple white-text hoverable">
+                                <i class="material-icons">insert_drive_file</i>
+                                <div class="count">
+                                    <span>{{ facets.document|default:_("0") }}</span>
+                                </div>
+                                <div class="name">{% trans "Static Maps" %}</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m3">
+                        <a href="{% url 'profile_browse' %}" class="center counter-panel ">
+                            <div class="card-panel circle center light-green white-text hoverable">
+                                <i class="material-icons">group</i>
+                                <div class="count">
+                                    <span>{{ facets.user|default:_("0") }}</span>
+                                </div>
+                                <div class="name">{% blocktrans count counter=facets.user %}User{% plural %}Users{% endblocktrans %}</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row hide">
+                    <div class="col s3 center">
+                        <div class="count-container">
+                            <a href="{% url 'layer_browse' %}">
+                                <i class="material-icons cyan hoverable">layers</i>
+                                <h3 class="counting">{{ facets.layer|default:_("0") }}</h3>
+                                <h5>{% trans "Layers" %}</h5>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col s3 center">
+                        <div class="count-container">
+                            <a href="{% url 'maps_browse' %}">
+                                <i class="material-icons amber hoverable">map</i>
+                                <h3 class="counting">{{ facets.map|default:_("0") }}</h3>
+                                <h5>{% trans "Interactive Maps" %}</h5>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col s3 center">
+                        <div class="count-container">
+                            <a href="{% url 'document_browse' %}">
+                                <i class="material-icons deep-purple hoverable">insert_drive_file</i>
+                                <h3 class="counting">{{ facets.document|default:_("0") }}</h3>
+                                <h5>{% trans "Static Maps" %}</h5>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col s3 center">
+                        <div class="count-container">
+                            <a href="{% url 'profile_browse' %}">
+                                <i class="material-icons light-green hoverable">group</i>
+                                <h3 class="counting">{{ facets.user|default:_("0") }}</h3>
+                                <h5>{% blocktrans count counter=facets.user %}User{% plural %}Users{% endblocktrans %}</h5>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row hide">
+                    <div class="col s12 m5 offset-m1 l3">
+                        <a href="{% url 'layer_browse' %}">
+                            <div class="card horizontal cyan white-text hoverable">
+                                <div class="card-image valign-wrapper">
+                                    <i class="material-icons count-ico">layers</i>
+                                </div>
+                                <div class="card-stacked">
+                                    <div class="card-content">
+                                        <span class="card-title count-num">{{ facets.layer|default:_("0") }}</span>
+                                        <p>{% trans "Layers" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m5 l3">
+                        <a href="{% url 'maps_browse' %}">
+                            <div class="card horizontal amber white-text hoverable">
+                                <div class="card-image valign-wrapper">
+                                    <i class="material-icons count-ico">map</i>
+                                </div>
+                                <div class="card-stacked">
+                                    <div class="card-content">
+                                        <span class="card-title count-num">{{ facets.map|default:_("0") }}</span>
+                                        <p>{% trans "Interactive Maps" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m5 offset-m1 l3">
+                        <a href="{% url 'document_browse' %}">
+                            <div class="card horizontal deep-purple white-text hoverable">
+                                <div class="card-image valign-wrapper">
+                                    <i class="material-icons count-ico">insert_drive_file</i>
+                                </div>
+                                <div class="card-stacked">
+                                    <div class="card-content">
+                                        <span class="card-title count-num">{{ facets.document|default:_("0") }}</span>
+                                        <p>{% trans "Static Maps" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m5 l3">
+                        <a href="{% url 'profile_browse' %}">
+                            <div class="card horizontal light-green white-text hoverable">
+                                <div class="card-image valign-wrapper">
+                                    <i class="material-icons count-ico">group</i>
+                                </div>
+                                <div class="card-stacked">
+                                    <div class="card-content">
+                                        <span class="card-title count-num">{{ facets.user|default:_("0") }}</span>
+                                        <p>{% blocktrans count counter=facets.user %}User{% plural %}Users{% endblocktrans %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m5 offset-m1 l3">
+                        <a href="{% url 'layer_browse' %}">
+                            <div class="card horizontal black-text hoverable card-left-highlight">
+                                <div class="card-image cyan white-text valign-wrapper" style="padding: 0 20px;">
+                                    <i class="material-icons medium">layers</i>
+                                </div>
+                                <div class="card-stacked">
+                                    <div class="card-content right-align">
+                                        <span class="card-title count-num">{{ facets.layer|default:_("0") }}</span>
+                                        <p>{% trans "Layers" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m5 l3">
+                        <a href="{% url 'maps_browse' %}">
+                            <div class="card horizontal black-text hoverable card-left-highlight">
+                                <div class="card-image amber white-text valign-wrapper">
+                                    <i class="material-icons medium">map</i>
+                                </div>
+                                <div class="card-stacked">
+                                    <div class="card-content right-align">
+                                        <span class="card-title count-num">{{ facets.map|default:_("0") }}</span>
+                                        <p>{% trans "Interactive Maps" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m5 offset-m1 l3">
+                        <a href="{% url 'document_browse' %}">
+                            <div class="card horizontal black-text hoverable card-left-highlight">
+                                <div class="card-image deep-purple white-text valign-wrapper">
+                                    <i class="material-icons medium">insert_drive_file</i>
+                                </div>
+                                <div class="card-stacked">
+                                    <div class="card-content right-align">
+                                        <span class="card-title count-num">{{ facets.document|default:_("0") }}</span>
+                                        <p>{% trans "Static Maps" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m5 l3">
+                        <a href="{% url 'profile_browse' %}">
+                            <div class="card horizontal black-text hoverable card-left-highlight">
+                                <div class="card-image light-green white-text valign-wrapper">
+                                    <i class="material-icons medium">group</i>
+                                </div>
+                                <div class="card-stacked">
+                                    <div class="card-content right-align">
+                                        <span class="card-title count-num">{{ facets.user|default:_("0") }}</span>
+                                        <p>{% blocktrans count counter=facets.user %}User{% plural %}Users{% endblocktrans %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endwith %}
+            </div>
+        </section>
+        {% endblock counter %}
 
-{% endblock %}
+        {% block forecast %}
+        <section class="latest grey darken-4">
+            <div class="container">
+                <h2 class="center white-text">{% trans "Latest Update" %}</h2>
+                <div class="row">
+                    <div class="col m6 l4">
+                        <div class="card">
+                            <div class="card-image waves-effect waves-block waves-light">
+                                <a href="#">
+                                    <img class="activator" src="http://asdc.immap.org/getOverviewMaps/getWMS?service=WMS&version=1.1.0&request=GetMap&layers=geonode:glofas_gfms_merge,afg_admbnda_adm1&styles=,snapshot_admin1&VIEWPARAMS=year:2018;month:9;day:17;&bbox=60.4720890240001,29.3771715570001,74.889451148,38.4907374680001&width=768&height=485&srs=EPSG:4326&format=image%2Fpng&_rdm=484">
+                                    <img src="http://asdc.immap.org/getOverviewMaps/getWMS?request=GetLegendGraphic&width=20&height=20&layer=geonode:glofas_gfms_merge&transparent=true&format=image%2Fpng&legend_options=dpi:180;fontAntiAliasing%3Atrue%3BfontSize%3A11%3BfontName%3AArial&SCALE=4367821.451455975" alt="isdc latest flood" class="snapshot-legend">
+                                </a>
+                            </div>
+                            <div class="card-content">
+                                <span class="card-title activator grey-text text-darken-4">
+                                    <i class="material-icons right">info</i>
+                                    {% trans "Current Flood Prediction" %}
+                                </span>
+                                <p>
+                                    <!-- {% verbatim %}{{ lastupdatedvalues.flood_forecast_last_updated | timeAgo }}{% endverbatim %} -->
+                                    updated about one hour ago
+                                </p>
+                            </div>
+                            <div class="card-reveal">
+                                <span class="card-title grey-text text-darken-4">{% trans "Current Flood Prediction" %}
+                                    <i class="material-icons right">close</i>
+                                </span>
+                                <p>{% trans 'River flood prediction are valid for 4 days and updated every 6 hours, whereas the flash floods are valid for 6 hours and updated hourly.' %}{% trans 'The map and statistics are updated every 6 hours.' %}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col m6 l4">
+                        <div class="card hoverable">
+                            <div class="card-image waves-effect waves-block waves-light">
+                                <a href="#">
+                                    <img class="activator" src="http://asdc.immap.org/getOverviewMaps/getWMS?service=WMS&version=1.1.0&request=GetMap&layers=geonode:current_avalanche_forecast_villages,afg_admbnda_adm1&styles=,snapshot_admin1&bbox=60.4720890240001,29.3771715570001,74.889451148,38.4907374680001&width=768&height=485&srs=EPSG:4326&format=image%2Fpng&_rdm=484">
+                                    <img src="http://asdc.immap.org/getOverviewMaps/getWMS?request=GetLegendGraphic&width=20&height=20&layer=geonode:current_avalanche_forecast_villages&transparent=true&format=image%2Fpng&legend_options=dpi:180;fontAntiAliasing%3Atrue%3BfontSize%3A11%3BfontName%3AArial&SCALE=4367821.451455975" alt="isdc latest avalanches" class="snapshot-legend">
+                                </a>
+                            </div>
+                            <div class="card-content">
+                                <span class="card-title activator grey-text text-darken-4">
+                                    <i class="material-icons right">info</i>
+                                    {% trans "Current Avalanche" %}
+                                </span>
+                                <p>
+                                    <!-- {% verbatim %}{{ lastupdatedvalues.avalanche_forecast_last_updated | timeAgo }}{% endverbatim %} -->
+                                    updated about one hour ago
+                                </p>
+                            </div>
+                            <div class="card-reveal">
+                                <span class="card-title grey-text text-darken-4">{% trans "Current Avalanche" %}
+                                    <i class="material-icons right">close</i>
+                                </span>
+                                <p>{% trans 'The map and statistics are updated on a daily basis (less than 24 hours).' %}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col m6 offset-m3 l4">
+                        <div class="card">
+                            <div class="card-image waves-effect waves-block waves-light">
+                                <a href="#">
+                                    <img class="activator" src="http://asdc.immap.org/getOverviewMaps/getWMS?service=WMS&version=1.1.0&request=GetMap&layers=geonode:current_snow_depth,afg_admbnda_adm1&styles=,snapshot_admin1&bbox=60.4720890240001,29.3771715570001,74.889451148,38.4907374680001&width=768&height=485&srs=EPSG:4326&format=image%2Fpng&_rdm=484">
+                                    <img src="http://asdc.immap.org/getOverviewMaps/getWMS?request=GetLegendGraphic&width=20&height=20&layer=geonode:current_snow_depth&transparent=true&format=image%2Fpng&legend_options=dpi:180;fontAntiAliasing%3Atrue%3BfontSize%3A11%3BfontName%3AArial&SCALE=4367821.451455975" alt="isdc latest snow" class="snapshot-legend snow-legend">
+                                </a>
+                            </div>
+                            <div class="card-content">
+                                <span class="card-title activator grey-text text-darken-4">
+                                    <i class="material-icons right">info</i>
+                                    {% trans "Current Snow Cover" %}
+                                </span>
+                                <p>
+                                    <!-- {% verbatim %}{{ lastupdatedvalues.snow_cover_forecast_last_updated | timeAgo }}{% endverbatim %} -->
+                                    updated about one hour ago
+                                </p>
+                            </div>
+                            <div class="card-reveal">
+                                <span class="card-title grey-text text-darken-4">{% trans "Current Snow Cover" %}
+                                    <i class="material-icons right">close</i>
+                                </span>
+                                <p>{% trans 'The map and statistics are updated 4 times a day.' %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endblock %} 
 
-{% block extra_script %}
-{{ block.super }}
-{% if DEBUG_STATIC %}
-<script src="{{ STATIC_URL }}lib/js/angular.js"></script>
-{% endif %}
-<script type="text/javascript">
-    FEATURED_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='featured' %}'
-    'use strict';
-    (function(){
-      var module = angular.module('featured', []);
-      module.run(function($http, $rootScope){
-        $http.get(FEATURED_URL).success(function(data){
-          $rootScope.featured = data.objects;
-        });
-      });
-    })();
-</script>
-<script>
-	$('[data-toggle="tooltip"]').tooltip();
-</script>
+        {% block tutorial %}
+        <section class="doc red darken-3">
+            <div class="container">
+                <div class="center">
+                    <h2 class="center white-text">{% trans "Check our documentation how iSDC fits your needs" %}</h2>
+                    <div class="row center">
+                        <div class="col s4 m2 offset-m3">
+                            <a href="http://afghanistanflooding.org/">
+                                <div class="hoverable transparent white-text z-depth-0 card-hover">
+                                    <div class="center"> 
+                                        <div class="btn-flat-border circle waves-effect waves-light card-circle-icon-container">
+                                            <i class="icon-disaster_flash_flood card-circle-icon"></i><br>
+                                        </div>
+                                        <span class="">{% trans "Flooding" %}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col s4 m2">
+                            <a href="http://www.afghanistanavalanches.org/">
+                                <div class="hoverable transparent white-text z-depth-0 card-hover">
+                                    <div class="center"> 
+                                        <div class="btn-flat-border circle waves-effect waves-light card-circle-icon-container">
+                                            <i class="icon-disaster_snow_avalanche card-circle-icon"></i><br>
+                                        </div>
+                                        <span class="">{% trans "Avalanches" %}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col s4 m2">
+                            <a href="http://www.afghanistanearthquakes.org/">
+                                <div class="hoverable transparent white-text z-depth-0 card-hover">
+                                    <div class="center"> 
+                                        <div class="btn-flat-border circle waves-effect waves-light card-circle-icon-container">
+                                            <i class="icon-disaster_earthquake card-circle-icon"></i><br>
+                                        </div>
+                                        <span class="">{% trans "Earthquake" %}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endblock %}
+        
+        {% block testimony %}
+        <section class="testimony">
+            <div class="container">
+                <h2 class="center">{% trans "Our Users" %}</h2>
+                <div class="row carousel">
+                    <div class="">
+                        <div class="carousel-item col s10 l9 xl6">
+                            <div class="card-panel white lighten-5 z-depth-1">
+                                <div class="row row-bt-0 carousel-container">
+                                    <div class="col s12 m3">
+                                        <img src="{{ STATIC_URL }}isdc/img/partner/wfp.png" alt="isdc " class="responsive-img">
+                                    </div>
+                                    <div class="col s12 m9">
+                                        <span class="black-text">{% trans '"I will share the iSDC tool with my people in the field and make them use the tool to get information, and we will definitely be using the tool a lot for proposal writing in our projects at WFP."' %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item col s10 l9 xl6">
+                            <div class="card-panel white lighten-5 z-depth-1">
+                                <div class="row row-bt-0 carousel-container">
+                                    <div class="col s12 m3">
+                                        <img src="{{ STATIC_URL }}isdc/img/testimony/savechild.png" alt="isdc " class="responsive-img">
+                                    </div>
+                                    <div class="col s12 m9">
+                                        <span class="black-text">{% trans '"Finding maps and information from a trusted source is very important and now I know ASDC is that source. I use it for many purposes."' %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item col s10 l9 xl6">
+                            <div class="card-panel white lighten-5 z-depth-1">
+                                <div class="row row-bt-0 carousel-container">
+                                    <div class="col s12 m3">
+                                        <img src="{{ STATIC_URL }}isdc/img/partner/iom.png" alt="isdc " class="responsive-img">
+                                    </div>
+                                    <div class="col s12 m9">
+                                        <span class="black-text">{% trans '"The ASDC is a great portal for understanding disaster risk, humanitarian access, security incidents and more."' %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item col s10 l9 xl6">
+                            <div class="card-panel white lighten-5 z-depth-1">
+                                <div class="row row-bt-0 carousel-container">
+                                    <div class="col s12 m3">
+                                        <img src="{{ STATIC_URL }}isdc/img/testimony/oxfam.png" alt="isdc " class="responsive-img">
+                                    </div>
+                                    <div class="col s12 m9">
+                                        <span class="black-text">{% trans '"As we facilitate big government projects, we are using many different sources and now I understand that your tool is very accurate and we can get accurate data form ASDC."' %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item col s10 l9 xl6">
+                            <div class="card-panel white lighten-5 z-depth-1">
+                                <div class="row row-bt-0 carousel-container">
+                                    <div class="col s12 m3">
+                                        <img src="{{ STATIC_URL }}isdc/img/testimony/dmac.png" alt="isdc " class="responsive-img">
+                                    </div>
+                                    <div class="col s12 m9">
+                                        <span class="black-text">{% trans '"ASDC is useful for us, especially for analyzing data. The methodology of the training was very good and, as I am working with GIS it is very efficient for me."' %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item col s10 l9 xl6">
+                            <div class="card-panel white lighten-5 z-depth-1">
+                                <div class="row row-bt-0 carousel-container">
+                                    <div class="col s12 m3">
+                                        <img src="{{ STATIC_URL }}isdc/img/testimony/unmas.png" alt="isdc " class="responsive-img">
+                                    </div>
+                                    <div class="col s12 m9">
+                                        <span class="black-text">{% trans '"I am doing maps in our office. When someone wants any map I spend a lot of time doing it, but now I can make any map with exact data with the ASDC in five minutes."' %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item col s10 l9 xl6">
+                            <div class="card-panel white lighten-5 z-depth-1">
+                                <div class="row row-bt-0 carousel-container">
+                                    <div class="col s12 m3">
+                                        <img src="{{ STATIC_URL }}isdc/img/partner/andma.png" alt="isdc " class="responsive-img">
+                                    </div>
+                                    <div class="col s12 m9">
+                                        <span class="black-text">{% trans '"iMMAP did a really good job on the ASDC. The ASDC and is a valid data source where we can obtain a lot of interesting data that is useful for our field work."' %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item col s10 l9 xl6">
+                            <div class="card-panel white lighten-5 z-depth-1">
+                                <div class="row row-bt-0 carousel-container">
+                                    <div class="col s12 m3">
+                                        <img src="{{ STATIC_URL }}isdc/img/testimony/fews.png" alt="isdc " class="responsive-img">
+                                    </div>
+                                    <div class="col s12 m9">
+                                        <span class="black-text">{% trans '"When people want us to send them information about natural disasters, population and other related data, I know I can find the best data on the ASDC and help them."' %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item col s10 l9 xl6">
+                            <div class="card-panel white lighten-5 z-depth-1">
+                                <div class="row row-bt-0 carousel-container">
+                                    <div class="col s12 m3">
+                                        <img src="{{ STATIC_URL }}isdc/img/partner/who.png" alt="isdc " class="responsive-img">
+                                    </div>
+                                    <div class="col s12 m9">
+                                        <span class="black-text">{% trans '"We learned many new things thanks to the training. We value the ASDC since it has a lot of relevant operational data in one single site."' %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item col s10 l9 xl6">
+                            <div class="card-panel white lighten-5 z-depth-1">
+                                <div class="row row-bt-0 carousel-container">
+                                    <div class="col s12 m3">
+                                        <img src="{{ STATIC_URL }}isdc/img/testimony/whh.png" alt="isdc " class="responsive-img">
+                                    </div>
+                                    <div class="col s12 m9">
+                                        <span class="black-text">{% trans '"The training was very good and we learned many new things from this sessions, and we request iMMAP for more training, especially for our provincial colleagues."' %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endblock %}
+
+        {% block partner %}
+        <section class="partner grey lighten-3">
+            <div class="container center">
+                <h2>Partner</h2>
+                <div class="row">
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/wmo.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/hrc.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/noaa.svg" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/nsidc.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/usgs.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/ornl.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/maryland.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/nasa.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/usaid.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/meti.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/copernicus.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/nci.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/wfp.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/fao.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/who.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/ocha.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/iom.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/moia.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/moph.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/mrrd.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/agcho.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/cso.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/andma.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/dacaar.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/osm.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/chelsa.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/ventusky.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/ecmwf.png" alt="isdc partner logo" >
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/noaa_star.png" alt="isdc partner logo">
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/calu.png" alt="isdc partner logo">
+                    </div>
+                    <div class="col s3 m2 l1 partner-container">
+                        <img class="" src="{{ STATIC_URL }}isdc/img/partner/northeastern.png" alt="isdc partner logo">
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endblock partner %} 
+        
+    {% endblock %} 
+{% endblock %} 
+    
+{% block extra_script %} 
+    {{ block.super }} 
+    {% if DEBUG_STATIC %}
+    <script src="{{ STATIC_URL }}lib/js/angular.js"></script>
+    {% endif %}
+    <script type="text/javascript">
+        FEATURED_URL = "{% url 'api_dispatch_list' api_name='api' resource_name='featured' %}"
+        'use strict';
+        (function () {
+            var module = angular.module('featured', []);
+            module.run(function ($http, $rootScope) {
+                $http.get(FEATURED_URL).success(function (data) {
+                    $rootScope.featured = data.objects;
+                });
+            });
+        })();
+    </script>
+    <script>
+        $('[data-toggle="tooltip"]').tooltip();
+    </script>
 {% endblock extra_script %}

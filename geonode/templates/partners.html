@@ -1,0 +1,651 @@
+{% extends "static_base.html" %}
+{% load i18n %}
+
+{% block title %} {% trans "Partners and Data Providers" %} — {{ block.super }} {% endblock %}
+{% block body_class %}partners grey lighten-4{% endblock %}
+
+{% block docs_breadcrumb %}
+    <a href="{% url 'partners' %}" class="breadcrumb">{% trans "Partners" %}</a>
+{% endblock docs_breadcrumb %}
+
+{% block isi %}
+    <div class="row">
+        <div class="col s12">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">{% trans "Partners" %}</span>
+                    <p>{% trans "This list provides an insight in the main partners who have provided or are providing essential data." %}
+                        {% trans "For each of the organisations the main contributions for the ASDC are listed." %}<br>
+                        {% trans "Homepage | Photo credit to Bob McKerrow, description:  Teshkan Valley, Badakhshan" %}</p>
+                    <p>&nbsp;</p>
+                </div>
+            </div>
+        </div>
+        <div class="partner-list">
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/wmo.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "World Meteorological Organization (WMO)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "World Meteorological Organization (WMO)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "WMO data is used for the flash flood prediction, as well as providing snow water equivalent data used to calculate snow depth" %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/hrc.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Hydrologic Research Center" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Hydrologic Research Center" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Flash Flood Guidiance System (FFGS) from Hydrologic Research Center" %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/noaa.svg" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "National Oceanic and Atmospheric Administration (NOAA)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "National Oceanic and Atmospheric Administration (NOAA)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Global Flood Monitoring System (GFMS) is supported by NOAA and is an essential component of the flood prediction system" %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/nsidc.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "National Snow and Ice Data Center (NSIDC)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "National Snow and Ice Data Center (NSIDC)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "NSIDC data is used to calculate the daily snow coverage and avalanche risk. It was also used to calculate the historic snow average per month." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/usgs.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "United States Geological Survey (USGS)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "United States Geological Survey (USGS)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "USGS Earthquake monitoring program, provides the historical earthquake data, latest epicentre data and shakemaps." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/ornl.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Oak Ridge National Laboratory" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Oak Ridge National Laboratory" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Provided the Landscan data, which was merged with various other datasets, to estimate population numbers at village level." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/maryland.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "University Of Maryland" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "University Of Maryland" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Global Flood Monitoring System (GFMS) is maintained by the university of Maryland. The data is essential for one component of the river flood prediction in Afghanistan. NOAA and NASA are other partners which  help create this data" %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/nasa.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "National Aeronautics and Space Administration (NASA)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "National Aeronautics and Space Administration (NASA)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Global Flood Monitoring System (GFMS) is maintained by the university of Maryland. The data is essential for one component of the river flood prediction in Afghanistan. NOAA and NASA are other partners which  help create this data." %}</p>
+                        <p>{% trans "NASA also provided SRTM and ASTER data." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/usaid.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "United States Agency for International Development (USAID)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "United States Agency for International Development (USAID)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "The USAID MISTI project provided the Village Settlement database, one of the core datasets." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/meti.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Japan: Ministry of Economy, Trade and Industry (METI)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Japan: Ministry of Economy, Trade and Industry (METI)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "METI/J-System (Japan) and NASA provided the ASTER DEM data. This data is used to create hillshading, model avalanche areas, calculate slope and subsequently road travel time." %}</p>
+                        <p>{% trans "The Advanced Spaceborne Thermal Emission and Reflection Radiometer (ASTER). The data is used to create detailed maps of land surface temperature, reflectance, and elevation." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/copernicus.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Joint Research Commission (JRC) - Global Flood Awareness System (GloFAS)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Joint Research Commission (JRC) - Global Flood Awareness System (GloFAS)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "The Global Flood Awareness System (GloFAS) data is since 2017 being used to aid with flood prediction. It has a time horizon of 30 days, of which 20 days are used for our flood prediction estimates. The Global Flood Awareness System (GloFAS), jointly developed by the European Commission and the European Centre for Medium-Range Weather Forecasts." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/nci.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "NATO Communications and Information Agency (NCI Agency)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "NATO Communications and Information Agency (NCI Agency)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Afghanistan Flood Hazard Map was provided by NATO NCI Agency (previously NC3A), it is a crucial data set without which static flood risk and flash/river flood prediction would not be possible" %}</p>
+                        <p>{% trans "Further data data provided are basin layer." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/wfp.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "World Food Program (WFP)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "World Food Program (WFP)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Provided one of the initial airport datasets." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/fao.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Food and Agriculture Organization of the United Nations (FAO)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Food and Agriculture Organization of the United Nations (FAO)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Land cover dataset created by John Latham of FAO, were not only crucial in determining the general land cover, but also played an essential role in estimating the population. Furthermore, FAO data is used to assess the areas at risk of natural disasters." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/who.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "World Health Organisation (WHO)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "World Health Organisation (WHO)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "WHO and MoPH provided the initial health facility data, which was reviewed and adjusted. This data is essential to assess accessibility." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/ocha.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Office for the Coordination of Humanitarian Affairs (OCHA)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Office for the Coordination of Humanitarian Affairs (OCHA)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Play an essential role in coordinating, relaying information and data. Both placing these online on the various OCHA maintained portals and helping organisations reach out to iMMAP." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/iom.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "International Organization for Migration (IOM)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "International Organization for Migration (IOM)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Has provided historical Rapid Assessment Form (RAF) information, which is used to calibrate the prediction model." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/moia.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Ministry of Interior Affairs (MoIA)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Ministry of Interior Affairs (MoIA)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Security Incident are presently mainly extracted from MoIA reports. This data is essential to assess humanitarian access. In the past there were a variety of other sources." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/moph.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Ministry of Public Health (MoPH)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Ministry of Public Health (MoPH)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "WHO and MoPH provided the initial health facility data, which was reviewed and adjusted. This data is essential to assess accessibility." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/mrrd.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Ministry of Rural Rehabilitation and Development (MRRD)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Ministry of Rural Rehabilitation and Development (MRRD)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "MRRD plays an essential role in infrastructural data provision, especially segments of the rural road network." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/agcho.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Afghan Geodesy and Cartography Head Office (AGCHO)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Afghan Geodesy and Cartography Head Office (AGCHO)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Provision of Administrative boundaries. AGCHO and the Independent Directorate for Local Governance (IDLG) are recognised as the sole authoritative source for legal and technical issues related to the delimitation of administrative boundaries, composition, and division of the administrative units of Afghanistan." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/cso.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Central Statistics Organization (CSO)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Central Statistics Organization (CSO)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Central Statistics Organization, Afghanistan (CSO) as NSO of any other country, is the driving force behind rebuilding an effective, robust and reliable. Its population estimates were essential in determining village allocated size." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/andma.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Ministry of Disaster Management and Humanitarian Affairs of Afghanistan / Afghanistan National Disaster Management Authority (ANDMA)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Ministry of Disaster Management and Humanitarian Affairs of Afghanistan / Afghanistan National Disaster Management Authority (ANDMA)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Plays an essential role in coordinating and relaying information." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/dacaar.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Danish Committee for Aid to Afghan Refugees (DACAAR)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Danish Committee for Aid to Afghan Refugees (DACAAR)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Has collected the most extensive water well data in Afghanistan." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/osm.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "OpenStreetMap (OSM)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "OpenStreetMap (OSM)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "OSM provided the road network coverage in highly populated cities of Afghanistan." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/chelsa.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Climatologies at High resolution for the Earth’s Land Surface Areas (CHELSA)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Climatologies at High resolution for the Earth’s Land Surface Areas (CHELSA)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "CHELSA provides ASDC with Climate and Climate Change data. CHELSA is a high resolution (30 arc sec) climate data set for the earth land surface areas currently hosted by the Swiss Federal Institute for Forest, Snow and Landscape Research WSL (Dr. Dirk N. Karger, Prof. Dr. Niklaus Zimmermann), and has been developed in coorporation with the Department of Geography of the University of Hamburg (Prof. Dr. Jürgen Böhner, Dr. Olaf Conrad, Tobias Kawohl), the University of Zurich (Dr. Michael Kessler), and the University of Göttingen (Prof. Dr. Holger Kreft)." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/ventusky.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Ventusky" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Ventusky" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Ventusky provides wonderfully styled access to weather forecast in the ASDC dashboard and settlement inspector. It provides data for Afghanistan mostly from Deutsche Wetter Dienst ICON (7.5 km resolution), or alternatively from NOAA’s Global Forecast System GFS (15 km resolution). Ventusky is a product provided by InMeteo, a Czech meteorological company, in collaboration with Marek Mojzík and Martin Prantl" %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/ecmwf.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "European Centre for Medium-Range Weather Forecasts (ECMWF)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "European Centre for Medium-Range Weather Forecasts (ECMWF)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "The European Centre for Medium-Range Weather Forecasts (ECMWF) is an independent intergovernmental organisation supported by 34 states. It provides much of the input data for the GLOFAS data, in addition the ASDC utilizes data from other partner organisations which rely on ECMWF data (weather forecast data, climate and climate change data)." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/noaa_star.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "NOAA STAR (Satellite Applications and Research)" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "NOAA STAR (Satellite Applications and Research)" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Global Vegetation Health Products" %}</p>
+                        <p>{% trans "The current drought risk map is based on the Vegetation Health (VH) Index, provided by NOAA. The VH products can be used as proxy data for monitoring vegetation health, drought and others. Due to the resolution and the modelling properties overestimation of risk will occur. The Global and Regional Vegetation Health (VH) is a NOAA/NESDIS system estimating vegetation health, moisture condition, thermal condition and their products. It contains Vegetation Health Indices (VHI) derived from the radiance observed by the VIIRS satellite." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/calu.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "California University of Pennsylvania" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "California University of Pennsylvania" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "California University of Pennsylvania has integrated parts of the ASDC into its Geography syllabus and has become the most prolific Educational ASDC user. Cal U uses the ASDC to teach undergraduate students basic applied geography insights within a disaster management context. The training course is being led by Professor Dr. Thomas R. Mueller, who has taught a wide variety of courses including World Regional Geography, GIS, crime mapping, demographic analysis, and spatial models in public safety." %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6 m4 l3 xl2">
+                <div class="card hoverable">
+                    <div class="card-image valign-wrapper">
+                        <a href="">
+                            <img src="{{ STATIC_URL }}isdc/img/partner/northeastern.png" >
+                        </a>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                    </div>
+                    <div class="card-content">
+                        <a href="">
+                            <span class="card-title">{% trans "Northeastern University" %}</span>
+                            <p></p>
+                        </a>
+                    </div>
+                    <div class="card-reveal grey darken-4 white-text">
+                        <span class="card-title">{% trans "Northeastern University" %}<i class="material-icons right close">close</i></span>
+                        <p>{% trans "Northeastern University has integrated parts of the ASDC into their Crisis Mapping for Humanitarian Action  syllabus. Northeastern University uses the ASDC to teach graduate students applied geography insights within a disaster management context." %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

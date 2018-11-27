@@ -1,6 +1,7 @@
 {% extends "documents/document_upload_base.html" %}
 {% load bootstrap_tags %}
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% block title %} {% trans "Upload Document" %} - {{ block.super }} {% endblock %}
 
@@ -13,47 +14,78 @@
 {% endblock %}
 
 {% block body %}
+    <div class="col l12">
+        <div class="row">
+            <form id="upload_form" method="post" enctype="multipart/form-data" action="{% url "document_upload" %}">
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+                <div style="padding: 0 15px;">
+                    {{ form.non_field_errors }}
+                    {{ form.doc_file.errors }}
+                    {{ form.doc_url.errors }}
+                </div>
+                <div class="input-field col s12">
+                    {{ form.title }}
+                    <label for="id_title">Title</label>
+                </div>
+                <div class="file-field input-field col s12">
+                    <div class="btn waves-effect waves-light red darken-3">
+                        <span>File</span>
+                        {{ form.doc_file }}
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                    <span class="helper-text">
+                        {% trans "Allowed document types:" %}
+                        {% for doc in ALLOWED_DOC_TYPES %}
+                            .{{ doc }}
+                        {% endfor %}
+                    </span>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.doc_url }}
+                    <label for="id_doc_url">URL</label>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.links }}
+                    <label for="id_links">Link to</label>
+                </div>
 
-<div class="col-md-8">
-  <form id="upload_form"  method="post" enctype="multipart/form-data" action="{% url "document_upload" %}">
-    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
-    {{ form.as_p }}
-    <button type="submit" id="upload-button" class="btn btn-danger">{% trans "Upload" %}</button>
-  </form>
-</div>
+                <section class="right" style="padding: 0 15px;">
+                    <!-- Modal Trigger -->
+                    <a href="#modal_permission" id="" class="btn-flat modal-trigger waves-effect waves-light red-text text-darken-3" style="border: 1px solid;">{% trans "Change Permissions" %}</a>
+                    <button type="submit" id="upload-button" class="btn waves-effect waves-light red darken-3">{% trans "Upload" %}</button>
+                </section>
+            </form>
+        </div>
+    </div>
 
-{% endblock %}
-
-{% block sidebar %}
-
-<div class="col-md-4">
-  <h3>{% trans "Permissions"  %}</h3>
-  <form id="permission_form">
-    {% include "_permissions.html" %}
-  </form>
-</div>
-
+    <form id="permission_form">
+        {% include "_permissions02.html" %}
+    </form>
 {% endblock %}
 
 {% block extra_script %}
-{{ block.super }}
-{% include "_permissions_form_js.html" %}
+    {{ block.super }}
+    {% include "_permissions_form_js.html" %}
 
-<script type="text/javascript">
-    $('#id_doc_file').on('change', function(){
-        if($('#id_title').val() == ''){
-            $('#id_title').val($('#id_doc_file').val().replace("C:\\fakepath\\", ""));
-        }
-    });
-    $("#id_links").select2({
-        width: '100%'
-    });
-    $('#upload_form').submit(function(){
-      $('#permissions').val(JSON.stringify(permissionsString($('#permission_form'),'base')));
-    });
+    <script type="text/javascript">
+        $('#id_doc_file').on('change', function(){
+            if($('#id_title').val() == ''){
+                $('#id_title').val($('#id_doc_file').val().replace("C:\\fakepath\\", ""));
+            }
+        });
+        $("#id_links").select2({
+            width: '100%'
+        });
+        $('#upload_form').submit(function(){
+          $('#permissions').val(JSON.stringify(permissionsString($('#permission_form'),'base')));
+        });
 
-    $('#upload-button').click(function(){
-      $('#_resource_uploading').modal('toggle');
-    });
-</script>
+        $('#upload-button').click(function(){
+        //   $('#_resource_uploading').modal('toggle');
+        });
+
+        // M.toast({html: ''})
+    </script>
 {% endblock extra_script %}

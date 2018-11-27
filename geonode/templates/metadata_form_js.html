@@ -12,7 +12,8 @@
 
     $('#id_resource-poc').change(function(){
       if($(this).val() === ''){
-        $('#poc_form').modal();
+        $('#poc_form').modal('open');
+        // $('#poc_form').modal();
       }
     });
 
@@ -418,7 +419,8 @@
         $('#btn_upd_md_up').click(function(){
             if((!is_advanced && $('#category_form').hasClass("input-empty")) ||
                 (is_advanced && !$('#category_form input:checked').val())) {
-                $('#category_mandatoryDialog').modal();
+                    $('#category_mandatoryDialog').modal('open');
+                    // $('#category_mandatoryDialog').modal();
             } else if
               ( is_group_mandatory &&
                 (
@@ -426,16 +428,19 @@
                   (is_advanced && !$('#id_resource-group').val())
                 )
               ) {
-                $('#group_mandatoryDialog').modal();
+                $('#group_mandatoryDialog').modal('open');
+                // $('#group_mandatoryDialog').modal();
             } else {
-                $('#preview_pleaseWaitDialog').modal();
+                $('#preview_pleaseWaitDialog').modal('open');
+                // $('#preview_pleaseWaitDialog').modal();
             }
         });
 
         $('#btn_upd_md_dwn').click(function(){
             if((!is_advanced && $('#category_form').hasClass("input-empty")) ||
                 (is_advanced && !$('#category_form input:checked').val())) {
-                $('#category_mandatoryDialog').modal();
+                    $('#category_mandatoryDialog').modal('open');
+                // $('#category_mandatoryDialog').modal();
             } else if
               ( is_group_mandatory &&
                 (
@@ -443,16 +448,19 @@
                   (is_advanced && !$('#id_resource-group').val())
                 )
               ) {
-                $('#group_mandatoryDialog').modal();
+                $('#group_mandatoryDialog').modal('open');
+                // $('#group_mandatoryDialog').modal();
             } else {
-                $('#preview_pleaseWaitDialog').modal();
+                $('#preview_pleaseWaitDialog').modal('open');
+                // $('#preview_pleaseWaitDialog').modal();
             }
         });
 
         $('#btn_upd_md_done').click(function(){
             if((!is_advanced && $('#category_form').hasClass("input-empty")) ||
                 (is_advanced && !$('#category_form input:checked').val())) {
-                $('#category_mandatoryDialog').modal();
+                    $('#category_mandatoryDialog').modal('open');
+                // $('#category_mandatoryDialog').modal();
             } else if
               ( is_group_mandatory &&
                 (
@@ -460,9 +468,11 @@
                   (is_advanced && !$('#id_resource-group').val())
                 )
               ) {
-                $('#group_mandatoryDialog').modal();
+                $('#group_mandatoryDialog').modal('open');
+                // $('#group_mandatoryDialog').modal();
             } else {
-                $('#preview_pleaseWaitDialog').modal();
+                $('#preview_pleaseWaitDialog').modal('open');
+                // $('#preview_pleaseWaitDialog').modal();
                 $('#metadata_update').submit();
                 metadata_update_done = true;
             }
@@ -471,7 +481,8 @@
         $('#preview_tab').on('show.bs.tab', function(){
             if((!is_advanced && $('#category_form').hasClass("input-empty")) ||
                 (is_advanced && !$('#category_form input:checked').val())) {
-                $('#category_mandatoryDialog').modal();
+                    $('#category_mandatoryDialog').modal('open');
+                // $('#category_mandatoryDialog').modal();
             } else if
               ( is_group_mandatory &&
                 (
@@ -479,9 +490,11 @@
                   (is_advanced && !$('#id_resource-group').val())
                 )
               ) {
-                $('#group_mandatoryDialog').modal();
+                $('#group_mandatoryDialog').modal('open');
+                // $('#group_mandatoryDialog').modal();
             } else {
-                $('#preview_pleaseWaitDialog').modal();
+                $('#preview_pleaseWaitDialog').modal('open');
+                // $('#preview_pleaseWaitDialog').modal();
                 try {
                     $('#preview_encoder_iframe')[0].style.width='0';
                     $('#preview_encoder_iframe')[0].style.height='0';
@@ -513,7 +526,8 @@
         $('#metadata_update').submit(function(e) {
             if((!is_advanced && $('#category_form').hasClass("input-empty")) ||
                 (is_advanced && !$('#category_form input:checked').val())) {
-                $('#category_mandatoryDialog').modal();
+                    $('#category_mandatoryDialog').modal('open');
+                // $('#category_mandatoryDialog').modal();
             } else if
               ( is_group_mandatory &&
                 (
@@ -521,7 +535,8 @@
                   (is_advanced && !$('#id_resource-group').val())
                 )
               ) {
-                $('#group_mandatoryDialog').modal();
+                $('#group_mandatoryDialog').modal('open');
+                // $('#group_mandatoryDialog').modal();
             } else {
                 var formData = $(this).serializeArray();
                 formData.forEach(function(entry) {
@@ -564,24 +579,26 @@
                                     errors += "<li>" + error + ": " + xhr.responseJSON['errors'][error][0] + "</li>";
                                 }
                                 errors += "</ul>";
-                                $("#preview_errorDialog .modal-body").html(errors);
+                                $("#preview_errorDialog .modal-content p").html(errors);
                             } else {
-                                $("#preview_errorDialog .modal-body").html(xhr.responseText);
+                                $("#preview_errorDialog .modal-content p").html(xhr.responseText);
                             }
                         } catch(err) {
-                            $("#preview_errorDialog .modal-body").html(xhr.responseText);
+                            $("#preview_errorDialog .modal-content p").html(xhr.responseText);
                         }
-                        $('#preview_errorDialog').modal();
+                        $('#preview_errorDialog').modal('open');
+                        // $('#preview_errorDialog').modal();
                         metadata_update_done = false;
                     }).always(function (a, textStatus, b) {
-                          $('#preview_pleaseWaitDialog').modal('hide');
-                          if(textStatus === 'success' && metadata_update_done) {
-                              if(new RegExp(".*/metadata$").test(e.target.action)) {
-                                  window.location.replace(e.target.action.replace('/metadata',''));
-                              } else if(new RegExp(".*/"+metadata_uri+"$").test(e.target.action)) {
-                                  window.location.replace(e.target.action.replace('/'+metadata_uri,''));
-                              }
-                          }
+                        $('#preview_pleaseWaitDialog').modal('close');
+                        // $('#preview_pleaseWaitDialog').modal('hide');
+                        if(textStatus === 'success' && metadata_update_done) {
+                            if(new RegExp(".*/metadata$").test(e.target.action)) {
+                                window.location.replace(e.target.action.replace('/metadata',''));
+                            } else if(new RegExp(".*/"+metadata_uri+"$").test(e.target.action)) {
+                                window.location.replace(e.target.action.replace('/'+metadata_uri,''));
+                            }
+                        }
                     });
             }
             e.preventDefault();
@@ -601,7 +618,8 @@
 
     $('#id_resource-metadata_author').change(function(){
       if($(this).val() === ''){
-        $('#metadata_form').modal();
+        $('#metadata_form').modal('open');
+        // $('#metadata_form').modal();
       }
     });
 

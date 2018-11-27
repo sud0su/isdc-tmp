@@ -4,37 +4,66 @@
 
 {% block title %} {% trans "Explore Layers" %} - {{ block.super }} {% endblock %}
 
-{% block body_class %}layers explore{% endblock %}
+{% block body_class %}layers explore grey lighten-4{% endblock %}
 
-{% block body %}
-<div class="page-header">
-  <a href="{% url "layer_upload" %}" class="btn btn-primary pull-right">{% trans "Upload Layers" %}</a>
-  <h2 class="page-title">{% trans "Explore Layers" %}</h2>
-</div>
-  {% with include_type_filter='true' %}
-  {% with header='Type' %}
-  {% with filter='type__in' %}
-  {% include "search/_search_content.html" %}
-  {% endwith %}
-  {% endwith %}
-  {% endwith %}
-  {% include "_bulk_permissions_form.html" %}
+{% block middle %} 
+    {{ block.super }}
+{% endblock middle %}
+
+{% block layer_breadcrumb %}
+{% endblock layer_breadcrumb %}
+
+{% block isi %}
+    <div class="row">
+        <div class="col s12">
+            <div class="card">
+                <div class="card-content">
+                    <div class="right">
+                        {% if request.user.is_authenticated %}
+                            <a href="#_bulk_permissions" class="waves-effect waves-light btn-floating red darken-3 modal-trigger tooltipped" data-position="bottom" data-tooltip="{% trans 'Set Permission' %}" ng-disabled="!cart.getCart().items.length">
+                                <i class="material-icons left">group_add</i>
+                            </a>
+                        {% endif %}
+                        {% if facet_type == 'layers' %}
+                            <button class="waves-effect waves-light btn-floating red darken-3 tooltipped" data-position="bottom" data-tooltip="{% trans 'Create Map' %}" ng-disabled="!cart.getCart().items.length" ng-click="newMap()">
+                                <i class="material-icons">create</i>
+                            </button>
+                        {% endif %}
+                        <a href="{% url "layer_upload" %}" class="waves-effect waves-light btn-floating red darken-3 tooltipped" data-position="bottom" data-tooltip="{% trans 'Upload Layer' %}">
+                            <i class="material-icons">cloud_upload</i>
+                        </a>
+                    </div>
+                    <span class="card-title">{% trans "Explore Layers" %}</span>
+                </div>
+            </div>
+        </div>
+        <div class="product-menu">
+            {% with include_type_filter='true' %}
+                {% with header='Type' %}
+                    {% with filter='type__in' %}
+                        {% include "search/_search_content.html" %}
+                    {% endwith %}
+                {% endwith %}
+            {% endwith %}
+            {% include "_bulk_permissions_form.html" %}
+        </div>
+    </div>
 {% endblock %}
 
 {% block extra_script %}
-{{ block.super }}
-  {% if GEONODE_SECURITY_ENABLED %}
-    {% include "_permissions_form_js.html" %}
-  {% endif %}
-  <script type="text/javascript">
-      {% if HAYSTACK_SEARCH %}
-          SEARCH_URL = '{% url 'api_get_search' api_name='api' resource_name='base' %}?type__in=layer'
-      {% else %}
-          SEARCH_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='layers' %}';
-      {% endif %}
-    FILTER_TYPE = 'layer';
-  </script>
-  {% with include_spatial='true' %}
-  {% include 'search/search_scripts.html' %}
-  {% endwith %}
+    {{ block.super }}
+        {% if GEONODE_SECURITY_ENABLED %}
+            {% include "_permissions_form_js.html" %}
+        {% endif %}
+        <script type="text/javascript">
+            {% if HAYSTACK_SEARCH %}
+                SEARCH_URL = '{% url 'api_get_search' api_name='api' resource_name='base' %}?type__in=layer'
+            {% else %}
+                SEARCH_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='layers' %}';
+            {% endif %}
+            FILTER_TYPE = 'layer';
+        </script>
+        {% with include_spatial='true' %}
+            {% include 'search/search_scripts.html' %}
+        {% endwith %}
 {% endblock extra_script %}

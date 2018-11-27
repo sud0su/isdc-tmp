@@ -1,0 +1,122 @@
+{% extends "static_base.html" %}
+{% load i18n %}
+
+{% block title %} {% trans "Training" %} — {{ block.super }} {% endblock %}
+{% block body_class %}training {{ block.super }}{% endblock %}
+
+{% block docs_breadcrumb %}
+    <a href="{% url 'training' %}" class="breadcrumb">{% trans "Training" %}</a>
+{% endblock docs_breadcrumb %}
+
+{% block isi %}
+    <div class="row">
+        <div class="col s12">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">{% trans "Training" %}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 xl3">
+            <div class="card">
+                <div class="card-image">
+                    <img src="{{ STATIC_URL }}isdc/img/training/training5.png">
+                </div>
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <span class="card-title">{% trans "Dedicated Training Program" %}</span>
+                        <p>{% trans "A dedicated training program is available. Make an appointment at the iMMAP offices in Kabul for basic or in-depth training. Training sessions can exist in the form of a half day introductory session, up to 3-day in-depth training sessions." %}</p>
+                        <p>{% trans "Workshops are conducted  by one of our international and two of our local national ASDC experts. Therefore, the training can be delivered in both English and Dari." %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 xl9">
+            <div class="card responsive-horizontal">
+                <div class="card-image">
+                    <img src="{{ STATIC_URL }}isdc/img/training/training4.png">
+                </div>
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <span class="card-title">{% trans "ASDC Professional User Certification program" %}</span>
+                        <p>{% trans "iMMAP has initiated the ASDC Professional User Certification program, which further expands the ASDC training program with hands-on exercises. The certification highlights user proficiency with the functionalities of the ASDC and the capability to independently advance this knowledge." %}</p>
+                        <p>{% trans "The certification takes place online and consist of 80 interactive questions &#40;75&#37; passing mark&#41;, tied to various scenarios. For proficient users it will take approximately 1-2 hours to complete, whereas for novice yet trained users it can take more than 3 hours. Having seen the ASDC Training videos is a perquisite to be able to complete." %}</p>
+                        <p>{% trans "In the future, the certification will be a perquisite to access the Humanitarian Access tool/data" %}</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="../dashboard/classmarker" target="_blank">{% trans "Go to Certification Portal" %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 xl9">
+            <div class="card responsive-horizontal">
+                <div class="card-image">
+                    <img src="{{ STATIC_URL }}isdc/img/partner/calu.png">
+                    <img src="{{ STATIC_URL }}isdc/img/partner/northeastern.png" style="width: 100px; margin:auto;">
+                </div>
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <span class="card-title">{% trans "ASDC University Certification Program (Introduction to ASDC)" %}</span>
+                        <p>{% trans "In Collaboration with the California University of Pennsylvania and Northeastern University, under the guidance of Professor Dr. Thomas R. Mueller the ASDC is providing testing/certification access to participating universities." %}</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="../dashboard/classmarker_university" target="_blank">{% trans "Go to University Certification Portal" %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col s6 m4 l6 xl4">
+            <div class="card hoverable">
+                <div class="card-image valign-wrapper">
+                    <a href="">
+                        <img src="{{ STATIC_URL }}isdc/img/training/training5.png" >
+                    </a>
+                    <a class="btn-floating halfway-fab waves-effect waves-light red darken-3 activator"><i class="material-icons">info</i></a>
+                </div>
+                <div class="card-content">
+                    <a href="">
+                        <span class="card-title">{% trans "Dedicated Training Program" %}</span>
+                        <p></p>
+                    </a>
+                </div>
+                <div class="card-reveal grey darken-4 white-text">
+                    <span class="card-title">{% trans "Dedicated Training Program" %}<i class="material-icons right close">close</i></span>
+                    <p>{% trans "A dedicated training program is available. Make an appointment at the iMMAP offices in Kabul for basic or in-depth training. Training sessions can exist in the form of a half day introductory session, up to 3-day in-depth training sessions." %}</p>
+                    <p>{% trans "Workshops are conducted  by one of our international and two of our local national ASDC experts. Therefore, the training can be delivered in both English and Dari." %}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col s12">
+            <div class="card card-panel-custom row valign-wrapper">
+                <div class="col s3 no-padding">
+                    <img src="{{ STATIC_URL }}isdc/img/training/training5.png" class="responsive-img">
+                </div>
+                <div class="col s9">
+                    <span class="card-title">{% trans "Dedicated Training Program" %}</span>
+                    <p>{% trans "A dedicated training program is available. Make an appointment at the iMMAP offices in Kabul for basic or in-depth training. Training sessions can exist in the form of a half day introductory session, up to 3-day in-depth training sessions." %}</p>
+                    <p>{% trans "Workshops are conducted  by one of our international and two of our local national ASDC experts. Therefore, the training can be delivered in both English and Dari." %}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col s12 l3">
+            <div id="flood_hazard_analysis"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script %}
+    <script>
+        var pdf_options = {
+            height: "500px",
+            pdfOpenParams: {
+                view: 'FitH',
+                pagemode: 'thumbs'
+            }
+        };
+        PDFObject.embed("{{ STATIC_URL }}isdc/pdf/ASDC_ExerciseFinal.pdf", "#flood_hazard_analysis", pdf_options);
+    </script>
+{% endblock extra_script %}

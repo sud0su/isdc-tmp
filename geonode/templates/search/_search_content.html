@@ -1,63 +1,114 @@
 {% load i18n %}
-<div class="row" ng-controller="CartList">
-  <div class="col-md-3">
-    <resource-cart data-facet-type="{{ facet_type }}"></resource-cart>
-    <div class="row">
-      <div class="col-xs-12">
-        {% block bulk_perms_button %}
-        <div class="btn-group btn-group-justified" role="group" aria-label="tools">
-          {% if request.user.is_authenticated %}
-          <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default" ng-disabled="!cart.getCart().items.length" data-toggle="modal" data-target="#_bulk_permissions">{% trans "Set permissions" %}</button>
-          </div>
-          {% endif %}
-          {% if facet_type == 'layers' %}
-          <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default" ng-disabled="!cart.getCart().items.length" ng-click="newMap()">{% trans "Create a Map" %}</button>
-          </div>
-          {% endif %}
-        </div>
-        {% endblock %}
 
-        <div class="selections">
-            {% trans "Filters" %}
-            <a href="." id="clear-search" class="pull-right">{% trans "Clear" %}</a>
-        </div>
-            {% if SEARCH_FILTERS.TEXT_ENABLED %}
-              {% include "search/_text_filter.html" %}
-            {% endif  %}
-        <div id="slide-pane">
-            {% if SEARCH_FILTERS.H_KEYWORDS_ENABLED %}
-              {% include "search/_h_keywords_filter.html" %}
-            {% endif %}
-            {% if SEARCH_FILTERS.T_KEYWORDS_ENABLED %}
-              {% include "search/_t_keywords_filter.html" %}
-            {% endif %}
-            {% if SEARCH_FILTERS.TYPE_ENABLED and include_type_filter == 'true' %}
-              {% include "search/_type_filters.html" %}
-            {% endif %}
-            {% include "search/_general_filters.html" %}
-            {% if SEARCH_FILTERS.REGION_ENABLED %}
-              {% include "search/_region_filter.html" %}
-            {% endif %}
-            {% if SEARCH_FILTERS.EXTENT_ENABLED %}
-              {% include "search/_extent_filter.html" %}
-            {% endif %}
-        </div>
-      </div>
+<div>
+    <div class="col s12">
+        <a href="#" data-target="filter_right" class="button-collapse btn-flat btn-flat-border sidenav-trigger btn-sidenav-right grey-text text-darken-2" style="display:inline-block;">
+            <!-- <i class="material-icons">sort</i> -->
+            {% trans "Filter" %}
+        </a>
+        <!-- {% trans "Showing max 20" %} -->
+        <!-- <span ng-bind="'from '+ total_counts + ' {{ facet_type | title }}'"></span> -->
+        {% include "search/_sort_filters.html" %}
     </div>
-  </div>
-  <div class="col-md-9">
-    <div class="row">
-      <div class="col-md-10"><span style="font-size: 34px;" ng-bind="total_counts + ' {{ facet_type | title }} found'"></span></div>
-      <div class="col-md-2">{% include "search/_sort_filters.html" %}</div>
-    </div>
-    <div class="row">
-      <div class="col-md-12 grid-spacer">
-        {% include 'base/_resourcebase_snippet.html' %}
-        {% include 'search/_pagination.html' %}
-      </div>
-    </div>
-  </div>
-  {% include "_bulk_permissions_form.html" %}
+    {% include 'base/_resourcebase_snippet.html' %}
 </div>
+<div class="right">
+    {% include 'search/_pagination.html' %}
+</div>
+
+{% include "_bulk_permissions_form.html" %}
+
+<aside>
+    <!-- <resource-cart data-facet-type="{{ facet_type }}"></resource-cart> -->
+    <ul class="sidenav sidenav-right sidenav-fixed grey lighten-4" id="filter_right" style="padding-top:10;">
+        <li class="red darken-3 white-text filter-menu-title">
+            <div class="">
+                <a class="waves-effect btn-flat show-on-medium-and-down hide-on-large-only white-text filter-menu-close"><i class="material-icons">arrow_back</i></a>
+                {% trans "Filters" %}
+                <a href="." id="clear-search" class="white-text right">{% trans "RESET" %}</a>
+            </div>
+        </li>
+        <li class="filter-menu-content">
+            {% if SEARCH_FILTERS.TEXT_ENABLED %}
+                {% include "search/_text_filter.html" %}
+            {% endif  %}
+        </li>
+        <li class="no-padding">
+            <ul class="collapsible popout">
+                {% if SEARCH_FILTERS.TYPE_ENABLED and include_type_filter == 'true' %}
+                    {% include "search/_type_filters.html" %}
+                {% endif %}
+                <li>
+                    <div class="collapsible-header red darken-3 white-text"><i class="material-icons">filter_drama</i>Regions</div>
+                    <div class="collapsible-body">
+                        <div style="padding: 0 15px;">
+                            <div>
+                                <label>
+                                    <input type="checkbox" class="filled-in" />
+                                    <span>Afghanistan</span>
+                                    <span class="badge">7</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header red darken-3 white-text"><i class="material-icons">filter_drama</i>Provinces/District</div>
+                    <div class="collapsible-body">
+                        <ul class="collapsible expandable" style="max-height: 240px; overflow-y: scroll;">
+                            <li>
+                                <div class="collapsible-header collapsible-prov">
+                                    <div>
+                                        <label>
+                                            <input type="checkbox" class="filled-in" />
+                                            <span>Badakhshan</span>
+                                            <span class="badge">40</span>
+                                        </label>
+                                    </div>
+                                    <i class="material-icons">expand_more</i>
+                                </div>
+                                <div class="collapsible-body">
+                                    <div style="padding: 15px;">
+                                        <div>
+                                            <label>
+                                                <input type="checkbox" class="filled-in" />
+                                                <span>Nationwide</span>
+                                                <span class="badge">4</span>
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label>
+                                                <input type="checkbox" class="filled-in" checked />
+                                                <span>Provincial</span>
+                                                <span class="badge">7</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="collapsible-header">Drought</div>
+                                <div class="collapsible-body">
+                                    <div style="padding: 15px;">
+                                        <div>
+                                            <label>
+                                                <input type="checkbox" class="filled-in" />
+                                                <span>Forecast</span>
+                                                <span class="badge">4</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                {% include "search/_general_filters.html" %}
+                {% if SEARCH_FILTERS.EXTENT_ENABLED %}
+                    {% include "search/_extent_filter.html" %}
+                {% endif %}
+            </ul>
+        </li>
+    </ul>
+</aside>
+

@@ -1,24 +1,28 @@
 {% verbatim %}
-<div class="row">
-  <article ng-repeat="groupcategory in results" resource_id="{{ groupcategory.id }}" ng-cloak class="ng-cloak">
-    <div class="col-xs-12 item-container">
-        <div class="col-xs-8 item-details">
-          <h4><a href="{{ groupcategory.detail_url }}">{{ groupcategory.name }}</a></h4>
-          <div class="row">
-            <div class="col-xs-12 item-items">
-              <ul class="list-inline">
-                <li>
-                    <a href="{{ groupcategory.detail_url }}">
-                      <strong>{{ groupcategory.member_count }}</strong>
-                      <ng-pluralize count="groupcategory.member_count" when="{'1': 'Member', 'other': 'Members'}"></ng-pluralize>
+    <div class="row">
+        <div class="col s12 m6 xl3 ng-cloak" ng-repeat="groupcategory in results" resource_id="{{ groupcategory.id }}" ng-cloak>
+            <div class="card hoverable">
+                <div class="card-image">
+                    <a href="{{ groupcategory.detail_url }}">
+                        <img ng-src="{{ group.logo }}" alt="{{ group.title }}">
                     </a>
-                </li>
-              </ul>
+                    <a class="btn-floating halfway-fab waves-effect waves-light red activator"><i class="material-icons">info</i></a>
+                </div>
+                <div class="card-content">
+                    <a href="{{ groupcategory.detail_url }}">
+                        <span class="card-title">{{ groupcategory.name }}</span>
+                    </a>
+                </div>
+                <div class="card-reveal">
+                    <span class="card-title grey-text text-darken-4">{{ groupcategory.name }}<i class="material-icons right close">close</i></span>
+                    <p>
+                        <a href="{{ groupcategory.detail_url }}">
+                            <strong>{{ groupcategory.member_count }}</strong>
+                            <ng-pluralize count="groupcategory.member_count" when="{'1': 'Member', 'other': 'Members'}"></ng-pluralize>
+                        </a>
+                    </p>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </article>
-</div>
 {% endverbatim %}

@@ -53,6 +53,7 @@ class NewSingupForm(forms.Form):
                 self.fields[myField].widget.attrs['id'] = 'id__'+myField
                 self.fields[myField].widget.attrs['required'] = ''
                 self.fields[myField].widget.attrs['aria-required'] = 'true'
+                # self.fields[myField].widget.attrs['placeholder'] = ''
                 
             
     class Meta:

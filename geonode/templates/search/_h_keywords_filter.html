@@ -1,5 +1,16 @@
 {% load i18n %}
-<nav class="filter">
-  <h4><a href="#" class="toggle toggle-nav"><i class="fa fa-chevron-right"></i> {% trans "Keywords" %}</a></h4>
-    <div id="treeview" class="nav" style="display: none;"></div>
-</nav>
+
+<li>
+    <div class="collapsible-header red darken-3 white-text"><i class="material-icons">date_range</i>{% trans "Keywords" %}</div>
+    <div class="collapsible-body">
+        <div style="padding: 0 15px;">
+            <div>
+                <label>
+                    <input type="checkbox" class="filled-in" />
+                    <span>Keywords</span>
+                    <span class="badge">7</span>
+                </label>
+            </div>
+        </div>
+    </div>
+</li>

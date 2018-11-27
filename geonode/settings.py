@@ -430,10 +430,13 @@ INSTALLED_APPS = (
     'accessibility',
     'earthquake',
     'landslide',
-    'securityincident',
     'drought',
+    'securityincident',
     'userstatistics',
+    'naturaldisaster',
+    'weather',
 
+    'widget_tweaks',
 ) + GEONODE_APPS
 
 MONITORING_ENABLED = False
@@ -1476,7 +1479,7 @@ THUMBNAIL_GENERATOR = "geonode.layers.utils.create_gs_thumbnail_geonode"
 ACCOUNT_SIGNUP_FORM_CLASS = 'customallauth.forms.NewSingupForm'
 # ACCOUNT_FORMS = {'signup': 'customallauth.forms.NewSingupForm'}
 
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+# ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
 # ACCOUNT_ADAPTER = 'customallauth'
 
@@ -1485,8 +1488,8 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 # modules with stand-alone page in dashboard
 DASHBOARD_PAGE_MODULES = [
     'flood',
-    'avalanche',
-    'accessibility',
+    # 'avalanche',
+    # 'accessibility',
     # 'earthquake',
     # 'landslide',
     # 'securityincident',
@@ -1527,8 +1530,10 @@ MAP_APPS_TO_DB_CUSTOM = {
     'flood': 'geodb',
     'avalanche': 'geodb',
     'earthquake': 'geodb',
-    'securityincident': 'geodb',
     'drought': 'geodb',
+    'landslide': 'geodb',
+    'accessibility': 'geodb',
+    'securityincident': 'geodb',
     'securitydb': 'securitydb',
 }
 MAP_APPS_TO_DB.update(MAP_APPS_TO_DB_CUSTOM)

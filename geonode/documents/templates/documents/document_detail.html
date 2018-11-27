@@ -9,231 +9,249 @@
 {% block title %}{{ resource.title }} — {{ block.super }}{% endblock %}
 
 {% block head %}
+    {% if TWITTER_CARD %}
+        {% include "base/_resourcebase_twittercard.html" %}
+    {% endif %}
+    {% if OPENGRAPH_ENABLED %}
+        {% include "base/_resourcebase_opengraph.html" %}
+    {% endif %}
 
-  {% if TWITTER_CARD %}
-    {% include "base/_resourcebase_twittercard.html" %}
-  {% endif %}
-  {% if OPENGRAPH_ENABLED %}
-    {% include "base/_resourcebase_opengraph.html" %}
-  {% endif %}
-
-{{ block.super }}
+    {{ block.super }}
 {% endblock %}
 
 {% block body_class %}documents{% endblock %}
 
+{% block document_breadcrumb %}
+    <a href="{% url 'document_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Documents" %}</a>
+    <a href="#" class="breadcrumb">{{ resource.title }}</a>
+{% endblock document_breadcrumb %}
+
 {% block body_outer %}
-
-<div class="page-header">
-  <h2>{{ resource.title }}</h2>
-</div>
-
-<div class="row">
-  <div class="col-md-8">
-    {% if "download_resourcebase" in perms_list %}
-      {% if resource.extension|lower in imgtypes and resource.doc_file %}
-      <div id="embedded_map">
-        <a style="text-decoration:none;" href="{% url "document_download" resource.id %}" target="_blank">
-          <img src="{% url "document_download" resource.id %}" width='500' class="img-responsive" />
-        </a>
-      </div>
-      {% elif resource.doc_file %}
-      <p><a href="{% url "document_download" resource.id %}" target="_blank">Download the {{ resource }} document</a></p>
-      {% elif  resource.doc_url %}
-      <p><a href="{{ resource.doc_url }}" target="_blank">Download the {{ resource }} document.</a> <small>({% trans 'External Resource' %})</small></p>
-      {%  endif %}
-    {%  endif %}
-
-    <div class="documents-actions">
-      {% include "_actions.html" %}
-    </div>
-
-    <div class="tab-content">
-      <article id="info" class="tab-pane{% if tab == 'info' or not tab %} active{% endif %}">
-      {% include "base/resourcebase_info_panel.html" %}
-      </article>
-
-      {% block social_links %}
-        {% if DISPLAY_SOCIAL %}
-        {% include "social_links.html" %}
-        {% endif %}
-      {% endblock %}
-
-      {% if DISPLAY_COMMENTS %}
-      <article id="comments" class="tab-pane">
-      {% include "_comments.html" %}
-      </article>
-      {% endif %}
-
-      {% if DISPLAY_RATINGS %}
-      <article id="rate" class="tab-pane">
-        <!-- TODO: Move this to a reusable template snippet -->
-        {% if request.user.is_authenticated %}
-        <h4>{% trans "Rate this document" %}</h4>
-        {% user_rating request.user resource "document" as user_document_rating %}
-        <div id="user_rating" class="category-layer" data-score="{{user_document_rating}}"></div>
-        {% endif %}
-        <h4>{% trans 'Average Rating' %}</h4>
-        {% overall_rating resource "document" as document_rating %}
-        {% num_ratings resource as num_votes %}
-        <div class="overall_rating" style="float:left" data-score="{{ document_rating }}"></div> ({{num_votes}})
-        <!-- TODO: Add display of who gave what rating based -->
-      </article>
-      {% endif %}
-
-      {% if EXIF_ENABLED and exif_data %}
-        {% with "exif/_exif_document_detail.html" as exif_template %}
-            {% include exif_template %}
-        {% endwith %}
-      {% endif %}
-    </div>
-  </div>
-
-  <div class="col-md-4">
-
-    <li class="list-group-item">
-        <a href="{% url "document_metadata_detail" resource.id %}">
-            <button class="btn btn-primary btn-md btn-block">{% trans "Metadata Detail" %}</button>
-        </a>
-    </li>
-
-    <ul class="list-group">
-      <li class="list-group-item">
-      {% if "download_resourcebase" in perms_list %}
-        {% if resource.extension|lower in imgtypes and resource.doc_file %}
-          <a style="text-decoration:none;" target="_blank" href="{% url "document_download" resource.id %}"><button class="btn btn-primary btn-md btn-block">{% trans "Download Document" %}</button></a>
-        {% elif resource.doc_file %}
-          <a style="text-decoration:none;" target="_blank" href="{% url "document_download" resource.id %}"><button class="btn btn-primary btn-md btn-block">{% trans "Download Document" %}</button></a>
-        {% elif  resource.doc_url %}
-          <a style="text-decoration:none;" target="_blank" href="{{ resource.doc_url }}"><button class="btn btn-primary btn-md btn-block">{% trans "Download Document" %}</button></a>
-        {%  endif %}
-      {% else %}
-        {% if request.user.is_authenticated %}
-        <button class="btn btn-primary btn-md btn-block" id="request-download">{% trans "Request Download" %}</button>
-        {%  endif %}
-      {%  endif %}
-      </li>
-
-      <li class="list-group-item">
-        <button class="btn btn-primary btn-md btn-block" data-toggle="modal" data-target="#edit-document">{% trans "Edit Document" %}</button>
-      </li>
-      <div class="modal fade" id="edit-document" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title" id="myModalLabel">{% trans "Edit Document" %}</h4>
-            </div>
-            <div class="modal-body">
-
-              <div class="row edit-modal">
-                {% if "change_resourcebase_metadata" in perms_list %}
-                <div class="col-sm-3">
-                  <i class="fa fa-list-alt fa-3x"></i>
-                  <h4>{% trans "Metadata" %}</h4>
-                  <a class="btn btn-default btn-block btn-xs" href="{% url "document_metadata" resource.id %}">{% trans "Wizard" %}</a>
-                  <a class="btn btn-default btn-block btn-xs" href="{% url "document_metadata_advanced" resource.id %}">{% trans "Advanced Edit" %}</a>
+    <div class="row">
+        <div class="col s12">
+            <div class="card">
+                <div class="card-content">
+                    <h4>{{ resource.title }}</h4>
+                    {% include "base/_resourcebase_contact_snippet.html" %}
                 </div>
-                {% endif %}
-                {% if "change_resourcebase" in perms_list %}
-                <div class="col-sm-3">
-                  <i class="fa fa-photo fa-3x"></i>
-                  <h4>{% trans "Thumbnail" %}</h4>
-                  <a class="btn btn-default btn-block btn-xs" href="{% url "document_thumb_upload" resource.id %}" id="set_thumbnail">{% trans "Set" %}</a>
-                </div>
-                {% endif %}
-                {% if "change_resourcebase" in perms_list or "delete_resourcebase" in perms_list %}
-                <div class="col-sm-3">
-                  <i class="fa fa-file-text-o fa-3x"></i>
-                  <h4>{% trans "Document" %}</h4>
-                  {% if "change_resourcebase" in perms_list %}
-                  <a class="btn btn-default btn-block btn-xs" href="{% url "document_replace" resource.id %}">{% trans "Replace" %}</a>
-                  {% endif %}
-                  {% if "delete_resourcebase" in perms_list %}
-                  <a class="btn btn-danger btn-block btn-xs" href="{% url "document_remove" resource.id %}">{% trans "Remove" %}</a>
-                  {% endif %}
-                </div>
-                {% endif %}
-              </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
-            </div>
-          </div>
         </div>
-      </div>
-
-      <li class="list-group-item">
-        <button class="btn btn-default btn-md btn-block" data-toggle="modal" data-target="#download-metadata">{% trans "Download Metadata" %}</button>
-      </li>
-      <div class="modal fade" id="download-metadata" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title" id="myModalLabel">{% trans "Download Metadata" %}</h4>
+        <div class="col l8">
+            <div class="card">
+                {% if "download_resourcebase" in perms_list %}
+                    {% if resource.extension|lower in imgtypes and resource.doc_file %}
+                        <div id="embedded_map">
+                            <a style="text-decoration:none;" href="{% url "document_download" resource.id %}" target="_blank">
+                                <img src="{% url "document_download" resource.id %}" class="responsive-img" />
+                            </a>
+                        </div>
+                    {% elif resource.doc_file %}
+                        <p><a href="{% url "document_download" resource.id %}" target="_blank">Download the {{ resource }} document</a></p>
+                    {% elif  resource.doc_url %}
+                        <p><a href="{{ resource.doc_url }}" target="_blank">Download the {{ resource }} document.</a> <small>({% trans 'External Resource' %})</small></p>
+                    {%  endif %}
+                {%  endif %}
             </div>
-            <div class="modal-body">
-			    <div style="margin-bottom:20px">
-					<h5 class="modal-title" id="myModalLabel">
-					Full metadata
-					</h5>
-					<ul style="list-style: outside none none;padding: 0;">
-						<li><a target="_blank" href="../catalogue/csw_to_extra_format/{{resource.uuid}}/{{resource.title}}.txt"> Text format </a></li>
-						<li><a target="_blank" href="../catalogue/csw_to_extra_format/{{resource.uuid}}/{{resource.title}}.html"> HTML format </a></li>
-					</ul>
-				</div>
-			  <h5 class="modal-title" id="myModalLabel">
-			  Standard Metadata - XML format
-			  </h5>
-              <ul style="list-style: outside none none;padding: 0;">
+
+            <div class="card">
+                <div class="card-tabs">
+                    {% include "_actions.html" %}
+                </div>
+                <div class="card-content">
+                    <div id="info" class="">
+                        {% include "base/resourcebase_info_panel.html" %}
+                    </div>
+
+                    {% if DISPLAY_RATINGS %}
+                    <div id="rate" class="">
+                        <table class="">
+                            {% if request.user.is_authenticated %}
+                            <tr>
+                                <td><span class="card-title">{% trans "Rate this Document" %}</span></td>
+                                {% user_rating request.user resource "document" as user_document_rating %}
+                                <td><div id="user_rating" class="category-layer" data-score="{{ user_document_rating }}"></div></td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td><span class="card-title">{% trans 'Average Rating' %}</span></td>
+                                {% overall_rating resource "document" as document_rating %}
+                                {% num_ratings resource as num_votes %}
+                                <td><div class="overall_rating" data-score="{{ document_rating }}"></div>{% trans 'From' %} {{num_votes}} {% trans 'votes' %}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    {% endif %}
+
+                    {% if DISPLAY_COMMENTS %}
+                    <div id="comments" class="">
+                        {% include "_comments.html" %}
+                    </div>
+                    {% endif %}
+
+                    {% if EXIF_ENABLED and exif_data %}
+                        {% with "exif/_exif_document_detail.html" as exif_template %}
+                            {% include exif_template %}
+                        {% endwith %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col l4">
+            <div class="card">
+                <div class="card-tabs">
+                    <ul id="tabs_swipe_details_content" class="tabs red darken-3 tabs-fixed-width tabs-transparent">
+                        <li class="tab"><a href="#rel_docs" class="white-text">{% trans "Document Resources" %}</a></li>
+                    </ul>
+                </div>
+                <div class="card-content" style="height: 30vh; overflow-y: auto;">
+                    <div id="rel_docs" class="col s12">
+                        {% if layer.maps %}
+                            <p>{% trans "List of resources using this document:" %}</p>
+                        {% endif %}
+                        <ul class="list-unstyled">
+                            {% for resource in related %}
+                                <li><a href="{{ resource.get_absolute_url }}">{{ resource.title }}</a></li>
+                            {% empty %}
+                                <p>{% trans "This document is not related to any maps or layers" %}</p>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    {% if documents.count > 0 %}
+                    <div id="rel_docs" class="col s12">
+                        <p>{% trans "List of documents related to this map:" %}</p>
+                        <ul class="list-unstyled">
+                            {% for document in documents %}
+                                <li><a href="{{ document.get_absolute_url }}">{{ document.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="center card-content">
+                    {% if "download_resourcebase" in perms_list %}
+                        {% if resource.extension|lower in imgtypes and resource.doc_file %}
+                            <a href="{% url "document_download" resource.id %}" target="_blank" class="waves-effect waves-light btn red darken-3">{% trans "Download" %}</a>
+                        {% elif resource.doc_file %}
+                            <a href="{% url "document_download" resource.id %}" target="_blank" class="waves-effect waves-light btn red darken-3">{% trans "Download" %}</a>
+                        {% elif  resource.doc_url %}
+                            <a href="{{ resource.doc_url }}" target="_blank" class="waves-effect waves-light btn red darken-3">{% trans "Download" %}</a>
+                        {%  endif %}
+                    {% else %}
+                        {% if request.user.is_authenticated %}
+                            <button class="waves-effect waves-light btn red darken-3" id="request-download">{% trans "Request Download" %}</button>
+                        {%  endif %}
+                    {%  endif %}
+
+                    <button class="btn-flat btn-flat-border modal-trigger waves-effect waves-light red-text text-darken-3" data-target="download-metadata">{% trans "Metadata" %}</button>
+
+                    <button class="btn-flat btn-flat-border modal-trigger waves-effect waves-light red-text text-darken-3 tooltipped" data-target="edit-document" data-position="bottom" data-tooltip="{% trans "Edit Document" %}"><i class="material-icons">edit</i></button>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="card-content">
+                    {% if "change_resourcebase_permissions" in perms_list %}
+                        <span class="card-title">
+                            {% trans "Permissions" %}
+                            <a href="#_permissions" id="" class="btn-flat modal-trigger waves-effect waves-circle waves-light right">
+                                <i class="material-icons red-text text-darken-3">group_add</i>
+                            </a>
+                        </span>
+                        <p>{% trans "Specify which users can view or modify this document" %}</p>
+                        <!-- <a href="#_permissions" id="" class="btn-flat modal-trigger waves-effect waves-light red-text text-darken-3 btn-block" style="border: 1px solid;">{% trans "Change Permissions" %}</a> -->
+                        {% include "_permissions_form.html" %}
+                    {% endif %}
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="card-content">
+                    {% block social_links %}
+                        {% if DISPLAY_SOCIAL %}
+                            {% include "social_links.html" %}
+                        {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="download-metadata" class="modal">
+        <div class="modal-content">
+            <h4>{% trans "Download Metadata" %}</h4>
+            <div style="">
+                <h5 class="modal-title" id="myModalLabel">
+                    Full metadata
+                </h5>
+                <ul style="list-style: outside none none;padding: 0;">
+                    <li><a target="_blank" href="../catalogue/csw_to_extra_format/{{resource.uuid}}/{{resource.title}}.txt"> Text format </a></li>
+                    <li><a target="_blank" href="../catalogue/csw_to_extra_format/{{resource.uuid}}/{{resource.title}}.html"> HTML format </a></li>
+                </ul>
+            </div>
+            <h5 class="modal-title" id="myModalLabel">
+                Standard Metadata - XML format
+            </h5>
+            <ul style="list-style: outside none none;padding: 0;">
                 {% for link in metadata %}
                 <li><a href="{{ link.url }}">{{ link.name }}</a></li>
                 {% endfor %}
-              </ul>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
-            </div>
-          </div>
+            </ul>
         </div>
-      </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-light btn-flat">{% trans "Cancel" %}</a>
+            <a href="{% url "document_metadata_detail" resource.id %}" class="btn waves-effect waves-light red darken-3">{% trans "Metadata Detail" %}</a>
+        </div>
+    </div>
 
-      <li class="list-group-item">
-        <h4>{% trans "Resources using this document" %}</h4>
-        {% if layer.maps %}
-        <p>{% trans "List of resources using this document:" %}</p>
-        {% endif %}
-        <ul class="list-unstyled">
-          {% for resource in related %}
-          <li><a href="{{ resource.get_absolute_url }}">{{ resource.title }}</a></li>
-          {% empty %}
-          <p>{% trans "This document is not related to any maps or layers" %}</p>
-          {% endfor %}
-        </ul>
-      </li>
+    <div id="edit-document" class="modal">
+        <div class="modal-content">
+            <h4>{% trans "Edit Document" %}</h4>
+            <div class="row center">
+                {% if "change_resourcebase_metadata" in perms_list %}
+                    <div class="col l3">
+                        <i class="fa fa-list-alt fa-3x"></i>
+                        <h4>{% trans "Metadata" %}</h4>
+                        <a class="btn btn-flat btn-block btn-small" href="{% url "document_metadata" resource.id %}">{% trans "Wizard" %}</a>
+                        <a class="btn btn-flat btn-block btn-small" href="{% url "document_metadata" resource.id %}">{% trans "Advanced Edit" %}</a>
+                    </div>
+                {% endif %}
+                
+                {% if "change_resourcebase" in perms_list %}
+                    <div class="col l3">
+                        <i class="fa fa-photo fa-3x"></i>
+                        <h4>{% trans "Thumbnail" %}</h4>
+                        <a class="btn btn-flat btn-block btn-small" href="{% url "document_thumb_upload" resource.id %}" id="set_thumbnail">{% trans "Set" %}</a>
+                    </div>
+                {% endif %}
 
-      {% if "change_resourcebase_permissions" in perms_list %}
-      <li class="list-group-item">
-        <h4>{% trans "Permissions" %}</h4>
-        <p>{% trans "Click the button below to change the permissions of this document." %}</p>
-        <p><a href="#modal_perms" data-toggle="modal" class="btn btn-primary btn-block" data-target="#_permissions">{% trans "Change Document Permissions" %}</a></p>
-      </li>
-      {% include "_permissions_form.html" %}
-      {% endif %}
-
-      {% include "base/_resourcebase_contact_snippet.html" %}
-
-    </ul>
-  </div>
-</div>
+                {% if "change_resourcebase" in perms_list or "delete_resourcebase" in perms_list %}
+                    <div class="col l3">
+                        <i class="fa fa-file-text-o fa-3x"></i>
+                        <h4>{% trans "Document" %}</h4>
+                        {% if "change_resourcebase" in perms_list %}
+                            <a class="btn btn-flat btn-block btn-small" href="{% url "document_replace" resource.id %}">{% trans "Replace" %}</a>
+                        {% endif %}
+                        {% if "delete_resourcebase" in perms_list %}
+                        <a class="btn btn-flat btn-block btn-small red darken-3 white-text" href="{% url "document_remove" resource.id %}">{% trans "Remove" %}</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-close waves-effect waves-light btn-flat">Close</a>
+        </div>
+    </div>
 {% endblock %}
 
 {% block extra_script %}
-{{ block.super }}
-{% if DISPLAY_SOCIAL %}
-    {% include 'facebook_sdk.html' %}
-{% endif %}
+    {{ block.super }}
+    {% if DISPLAY_SOCIAL %}
+        {% include 'facebook_sdk.html' %}
+    {% endif %}
     {% if request.user.is_authenticated %}
         {% user_rating_js request.user resource "document" %}
     {% else %}
@@ -243,11 +261,11 @@
     {% include 'request_download.html' %}
     <script type="text/javascript">
         {% if DISPLAY_SOCIAL %}
-        (function() {
-            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-            po.src = 'https://apis.google.com/js/plusone.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-        })();
+            (function() {
+                var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                po.src = 'https://apis.google.com/js/plusone.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+            })();
         {% endif %}
     </script>
     {% include "_permissions_form_js.html" %}

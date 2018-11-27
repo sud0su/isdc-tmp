@@ -1,7 +1,12 @@
-{% extends "groups/group_create.html" %}
+{% extends "groups/groupcategory_form.html" %}
 {% load i18n %}
 
 {% block head_title %}{% trans "Edit Group Category" %} {{ object.name }}{% endblock %}
+
+{% block group_breadcrumb %} 
+    <a href="{% url 'group_category_list' %}" class="breadcrumb">{% trans "Group Category" %}</a>
+    <a href="#" class="breadcrumb">{% trans "Edit" %}</a>
+{% endblock group_breadcrumb %}
 
 {% block body_page_title %}{% trans "Edit Group Category" %} {{ object.name }}{% endblock %}
 

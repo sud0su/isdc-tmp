@@ -1,0 +1,24 @@
+{% extends "geonode_base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %} {% trans "Search" %} - {{ block.super }} {% endblock %}
+
+{% block body_class %}search grey lighten-4{% endblock %}
+
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                {% block search_breadcrumb %} 
+                {% endblock search_breadcrumb %}
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}
+
+{% block body_outer %}
+    {% block body %}{% endblock body %}
+    {% block sidebar %}{% endblock sidebar %}
+{% endblock body_outer %}

@@ -1,0 +1,14 @@
+{% extends "geonode_base.html" %} 
+{% load i18n %}
+
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                {% block docs_breadcrumb %} 
+                {% endblock docs_breadcrumb %}
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}

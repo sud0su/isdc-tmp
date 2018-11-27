@@ -1,6 +1,25 @@
 {% extends "groups/group_create.html" %}
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% block head_title %}{% trans "Create Group Category" %}{% endblock %}
+{% block body_class %}groups create{% endblock %}
+
+
+{% block group_breadcrumb %} 
+    <a href="{% url 'group_category_list' %}" class="breadcrumb">{% trans "Group Category" %}</a>
+    <a href="{% url 'group_category_create' %}" class="breadcrumb">{% trans "Create" %}</a>
+{% endblock group_breadcrumb %}
 
 {% block body_page_title %}{% trans "Create a Group Category" %}{% endblock %}
+
+{% block group_form %}
+    <div class="input-field col s12">
+        {{ form.name |attr:"aria-required:true"|attr:"required" }}
+        <label for="id_name">{% trans 'Name' %}</label>
+    </div>
+    <div class="input-field col s12">
+        {{ form.description |attr:"class:materialize-textarea" }}
+        <label for="id_description">{% trans 'Description' %}</label>
+    </div>
+{% endblock group_form %}

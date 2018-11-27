@@ -1,9 +1,11 @@
 {% extends "account/base.html" %}
 
 {% load i18n %}
+{% load widget_tweaks %}
 {% load account socialaccount %}
 {% load widget_tweaks %}
 {% block title %}{% trans "Sign up" %}{% endblock %}
+{% block body_class %}red darken-3{% endblock %}
 
 {% block body_outer %}
     <div class="row">
@@ -17,83 +19,88 @@
       {% endif %}
     </div>
 
-
-    {% if form.errors %}
-        {% for field in form %}
-            {% for error in field.errors %}
-                <div class="alert alert-error">
-                    <strong>{{ error|escape }}</strong>
-                </div>
-            {% endfor %}
-        {% endfor %}
-        {% for error in form.non_field_errors %}
-            <div class="alert alert-error">
-                <strong>{{ error|escape }}</strong>
-            </div>
-        {% endfor %}
-    {% endif %}
-
-
-    {% if form.password1.errors %}
-        {% for error in form.password1.errors %}
-            <p>This field is required</p>
-        {% endfor %}
-    {% endif %}
-
     <div class="row">
         <div class="col s12 m8 offset-m2 xl6 offset-xl3 valign-wrapper" style="height: 100vh;">
             <div class="card white z-depth-4">
                 <div class="card-content red-text text-darken-2">
-                    <span class="card-title">{% trans "Sign up" %}</span>
+                    <div class="row valign-wrapper">
+                        <div class="col s9 m10 xl10">
+                            <span class="card-title">{% trans "Sign up" %}</span>
+                        </div>
+                        <div class="col s3 m2 xl2">
+                            <a href="{% url 'home' %}">
+                                <img src="{{ STATIC_URL }}isdc/img/immap_logo/immap_full_color.png" width="60" class="circle responsive-img">
+                            </a>
+                        </div>
+                    </div>
                     <div class="row">
-                        <form id="signup_form" method="post" action="{% url "account_signup" %}" autocapitalize="off" {% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
+                        <form id="signup_form" method="post" action="{% url "account_signup" %}" autocapitalize="off" {% if form.is_multipart %}
+                        enctype="multipart/form-data" {% endif %}>
                             {% csrf_token %}
                             <div class="input-field col s3">
                                 {{ form.title }}
+                                <!-- <select aria-required="true" required="" class="validate">
+                                    <option value="" disabled selected>Title</option>
+                                    <option value="1">Mr</option>
+                                    <option value="2">Mrs</option>
+                                    <option value="3">Ms</option>
+                                    <option value="2">Dr</option>
+                                    <option value="3">Prof</option>
+                                </select> -->
+                                <label>Title</label>
                             </div>
                             <div class="input-field col s5">
                                 {{ form.first_name }}
+                                <!-- <input id="id__first_name" type="text" class="validate" aria-required="true" required=""> -->
                                 <label for="id__first_name">First Name</label>
                             </div>
                             <div class="input-field col s4">
                                 {{ form.last_name }}
+                                <!-- <input id="last_name" type="text" class="validate"> -->
                                 <label for="id__last_name">Last Name</label>
                             </div>
                             <div class="input-field col s12">
                                 {{ form.username }}
+                                <!-- <input id="usr" type="email" class="validate"> -->
                                 <label for="id__username">Username</label>
                                 <span class="helper-text" data-error="wrong" data-success="valid">You can use letters, numbers & periods</span>
                             </div>
                             <div class="input-field col s12">
                                 {{ form.email }}
+                                <!-- <input id="email" type="email" class="validate"> -->
                                 <label for="id__email">Email</label>
                                 <span class="helper-text" data-error="Please use valid email address" data-success="valid"></span>
                             </div>
                             <div class="input-field col s5">
-                                {{ form.password1 |attr:"class:validate"|attr:"aria-required:true"|attr:"onchange:form.id_password2.pattern = RegExp.escape(this.value);"|attr:"pattern:(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" }}
+                                {{ form.password1 |attr:"class:validate"|attr:"aria-required:true"|attr:"required"|attr:"onchange:form.id_password2.pattern = RegExp.escape(this.value);"|attr:"pattern:(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" }}
+                                <!-- <input id="id_password1" name="password1" type="password" class="validate" aria-required="true" required onchange="form.id_password2.pattern = RegExp.escape(this.value);" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"> -->
                                 <label for="id_password1">Password</label>
-                                <span class="helper-text" data-error="wrong" data-success="valid">Use 8 or more characters with a mix of letters, numbers & symbols</span>
+                                <span class="helper-text" data-error="Passwords must contain at least 6 characters, including uppercase, lowercase letters and numbers." data-success="valid">Use 6 or more characters with a mix of letters, numbers & symbols</span>
                             </div>
                             <div class="input-field col s5">
-                                {{ form.password2 |attr:"class:validate"|attr:"aria-required:true" }}
+                                {{ form.password2 |attr:"class:validate"|attr:"aria-required:true"|attr:"required" }}
+                                <!-- <input id="id_password2" name="password2" type="password" class="validate" aria-required="true" required> -->
                                 <label for="id_password2">Confirm Password</label>
-                                <span class="helper-text" data-error="wrong" data-success="valid">Re-type the password</span>
+                                <span class="helper-text" data-error="Please enter the same password" data-success="valid">Re-type the password</span>
                             </div>
                             <div class="input-field col s2">
                                 <a class="waves-effect waves-light btn-floating red darken-4"><i id="vis_pwd" class="material-icons">visibility_off</i></a>
                             </div>
                             <div class="input-field col s8">
                                 {{ form.organization }}
+                                <!-- <input id="org" type="text" class="validate"> -->
                                 <label for="id__organization">Organization</label>
                                 <span class="helper-text" data-error="wrong" data-success="valid">Your Workplace</span>
                             </div>
                             <div class="input-field col s4">
                                 {{ form.org_acronym }}
+                                <!-- <input id="arc" type="text" class="validate"> -->
                                 <label for="id__org_acronym">Acronym</label>
                                 <span class="helper-text" data-error="wrong" data-success="valid">Helper text</span>
                             </div>
                             <div class="input-field col s12">
                                 {{ form.position }}
+                                <!-- <input id="job" type="text" class="validate"> -->
                                 <label for="id__position">Function/Position</label>
                                 <span class="helper-text" data-error="wrong" data-success="valid">Helper text</span>
                             </div>
@@ -104,8 +111,9 @@
                                 <button class="btn waves-effect waves-light col s12 red darken-4" type="submit" name="action">{% trans "Register" %}</button>
                             </div>
                             <div class="col s12 center">
-                                <p class="">
-                                    <a href="{% url 'account_login' %}" class="red-text">Go back to Sign in</a>
+                                <p class="grey-text text-darken-2">
+                                    Already have an account? 
+                                    <a href="{% url 'account_login' %}" class="red-text">Sign in</a>
                                 </p>
                             </div>
                         </form>
@@ -126,6 +134,13 @@
             $('#id__email').removeAttr('placeholder');
             $("option[value='']").attr("disabled", "selected");
         });
+
+        // polyfill for RegExp.escape
+        if(!RegExp.escape) {
+            RegExp.escape = function(s) {
+            return String(s).replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
+            };
+        }
         
     </script>
 {% endblock %}
