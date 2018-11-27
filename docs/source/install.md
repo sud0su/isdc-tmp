@@ -50,16 +50,26 @@ The following is a quick guide to integrate all packages that exist in iSDC
 
 __install django-geonode-client__
 ```
-pip install git+git://github.com/sud0su/isdc-geonode-client.git
+    pip install isdc-geonode-client
+```
+__install isdc-geopanel__
+```
+    pip install isdc-geopanel
 ```
 __install isdc-geobaseline__
 ```
-pip install git+git://github.com/sud0su/isdc-geobaseline.git@master#egg=isdc-geobaseline
+    pip install isdc-geobaseline
 ```
 __install isdc-geoaccessibility__
 ```
-pip install git+git://github.com/sud0su/isdc-geoaccessibility.git@master#egg=isdc-geoaccessibility
+    pip install isdc-geoaccessibility
 ```
+__install isdc-geoavalanche__
+```
+    pip install isdc-geoavalanche
+```
+
+
 
 ### Local Package
 #### OS X
