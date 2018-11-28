@@ -416,28 +416,6 @@ INSTALLED_APPS = (
     'allauth.account',
     'allauth.socialaccount',
 
-    # ISDC requirements
-    'mathfilters',
-    'graphos',
-
-    # isdc
-    'uploadpdf',
-    'matrix',
-    'dashboard',
-    'geodb',
-    'securitydb',
-    'flood',
-    'avalanche',
-    'accessibility',
-    'earthquake',
-    'landslide',
-    'drought',
-    'securityincident',
-    'userstatistics',
-    'naturaldisaster',
-    'weather',
-
-    'widget_tweaks',
 ) + GEONODE_APPS
 
 MONITORING_ENABLED = False
@@ -1480,66 +1458,6 @@ THUMBNAIL_GENERATOR = "geonode.layers.utils.create_gs_thumbnail_geonode"
 ACCOUNT_SIGNUP_FORM_CLASS = 'customallauth.forms.NewSingupForm'
 # ACCOUNT_FORMS = {'signup': 'customallauth.forms.NewSingupForm'}
 
-# ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
 # ACCOUNT_ADAPTER = 'customallauth'
-
-# ISDC Settings Start
-
-# modules with stand-alone page in dashboard
-DASHBOARD_PAGE_MODULES = [
-    'flood',
-    # 'avalanche',
-    # 'accessibility',
-    # 'earthquake',
-    # 'landslide',
-    # 'securityincident',
-    # 'naturaldisaster',
-    # 'weather',
-    # 'drought',
-]
-
-# modules with components for geodb.geoapi.getRiskExecuteExternal() 
-GETRISKEXECUTEEXTERNAL_MODULES = [
-    'flood',
-    'avalanche',
-]
-
-# modules with components for geodb.geo_calc.getQuickOverview() 
-QUICKOVERVIEW_MODULES = [
-    'flood',
-    'avalanche',
-    'accessibility',
-    'earthquake',
-    'landslide',
-    'securityincident',
-    'drought',
-]
-
-DATABASE_ROUTERS = [
-    'geonode.dbrouter.defaultdbrouter',
-]
-
-DEFAULTDB = 'default'
-
-# for every app in INSTALLED_APPS use DEFAULTDB database, then update with MAP_APPS_TO_DB_CUSTOM
-MAP_APPS_TO_DB = {app.split('.')[-1]: DEFAULTDB for app in INSTALLED_APPS}
-
-# add here for app using non-default database
-MAP_APPS_TO_DB_CUSTOM = {
-    'geodb': 'geodb',
-    'flood': 'geodb',
-    'avalanche': 'geodb',
-    'earthquake': 'geodb',
-    'drought': 'geodb',
-    'landslide': 'geodb',
-    'accessibility': 'geodb',
-    'securityincident': 'geodb',
-    'securitydb': 'securitydb',
-}
-MAP_APPS_TO_DB.update(MAP_APPS_TO_DB_CUSTOM)
-
-# default map code used for matrix resource usage tracking
-MATRIX_DEFAULT_MAP_CODE = '5'
-
-# ISDC Settings End
