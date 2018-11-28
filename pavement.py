@@ -48,15 +48,7 @@ try:
 except ImportError:
 	from paver.easy import pushd
 
-from geonode.settings import OGC_SERVER, INSTALLED_APPS, DASHBOARD_PAGE_MODULES, STATICFILES_DIRS
-
-# ISDC
-from django.utils.translation import ugettext as _
-from geonode.utils import dict_ext
-
-import django
-import importlib
-import json
+from geonode.settings import OGC_SERVER, INSTALLED_APPS
 
 assert sys.version_info >= (2, 6), \
 	SystemError("GeoNode Build requires python 2.6 or better")
@@ -440,8 +432,7 @@ def package(options):
 @task
 @needs(['start_geoserver',
 		'start_qgis_server',
-		'start_django',
-		'build_dashboard_page_menu'])
+		'start_django'])
 @cmdopts([
 	('bind=', 'b', 'Bind server to provided IP address and port number.'),
 	('java_path=', 'j', 'Full path to java install for Windows'),
@@ -1105,6 +1096,16 @@ def str2bool(v):
 # ISDC
 @task
 def build_dashboard_page_menu():
+
+	from geonode.settings import DASHBOARD_PAGE_MODULES, STATICFILES_DIRS
+
+	# ISDC
+	from django.utils.translation import ugettext as _
+	from geonode.utils import dict_ext
+
+	import django
+	import importlib
+	import json
 
 	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "geonode.settings")
 	django.setup()
