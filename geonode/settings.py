@@ -371,6 +371,7 @@ INSTALLED_APPS = (
     'django.contrib.gis',
 
     # Utility
+    'reset_migrations',
     'dj_pagination',
     'taggit',
     'treebeard',
