@@ -210,7 +210,7 @@ PyYAML==3.12
 #rasterio==0.31.0
 redis==2.10.5
 regex==2016.7.21
-requests==2.18.4
+requests==2.20.0
 requests-oauthlib==0.8.0
 selenium==3.9.0
 #Shapely==1.5.17
