@@ -74,23 +74,29 @@ urlpatterns_isdc = [
     url(r'^documentation/$', TemplateView.as_view(template_name='documentation.html'), name='documentation'),
     
     url(r'^dashboard/', include('dashboard.urls')),
-
-    # optional module api and getOverviewMaps urls
-    url(r'', include('geodb.urls')),
-    url(r'', include('flood.urls')),
-    url(r'', include('avalanche.urls')),
-    url(r'', include('accessibility.urls')),
-    url(r'', include('earthquake.urls')),
-    url(r'', include('landslide.urls')),
-    url(r'', include('securityincident.urls')),
-    url(r'', include('weather.urls')),
-    url(r'', include('climate.urls')),
-    url(r'', include('drought.urls')),
+      
+    # url(r'', include('geodb.urls')),
+    # url(r'', include('flood.urls')),
+    # url(r'', include('avalanche.urls')),
+    # url(r'', include('accessibility.urls')),
+    # url(r'', include('earthquake.urls')),
+    # url(r'', include('landslide.urls')),
+    # url(r'', include('securityincident.urls')),
+    # url(r'', include('weather.urls')),
+    # url(r'', include('climate.urls')),
+    # url(r'', include('drought.urls')),
     
-    url(r'^userstatistics$', 'userstatistics.views.userstatistics', name='userstatistics'),
+    # url(r'^userstatistics$', 'userstatistics.views.userstatistics', name='userstatistics'),
     
     ]
 
+# optional module api and getOverviewMaps urls
+for app in settings.ISDC_BASE_APPS + settings.ISDC_ADDITIONAL_APPS + settings.DASHBOARD_PAGE_MODULES:
+    try:
+        urlpatterns_isdc.append(url(r'', include(app+'.urls')))
+    except Exception as identifier:
+        pass
+  
 urlpatterns = [  # '',
     url(r'^', include(urlpatterns_isdc, namespace=None)),
 
