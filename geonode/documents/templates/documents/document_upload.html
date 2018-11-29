@@ -19,9 +19,12 @@
             <form id="upload_form" method="post" enctype="multipart/form-data" action="{% url "document_upload" %}">
                 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
                 <div style="padding: 0 15px;">
-                    {{ form.non_field_errors }}
-                    {{ form.doc_file.errors }}
-                    {{ form.doc_url.errors }}
+                    
+                    <div class="card-panel red lighten-3">
+                        {{ form.non_field_errors }}
+                        {{ form.doc_file.errors }}
+                        {{ form.doc_url.errors }}
+                    </div>
                 </div>
                 <div class="input-field col s12">
                     {{ form.title }}

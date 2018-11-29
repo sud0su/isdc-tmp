@@ -4,7 +4,7 @@
 {% load widget_tweaks %}
 
 {% block head_title %}{% trans "Create Group" %}{% endblock %}
-{% block body_class %}groups create{% endblock %}
+{% block body_class %}groups create grey lighten-4{% endblock %}
 
 
 {% block group_breadcrumb %} 
@@ -15,63 +15,71 @@
 {% block body %}
 
     <section style="min-height: 64vh;">
-        <div class="" style="padding: 0 15px;">
-            <h4 class="">{% block body_page_title %}{% trans "Create a Group" %}{% endblock %}</h4>
-        </div>
         <div class="row">
             <div class="col s12">
-                <form class="uniForm" id="form" method="POST" action="" enctype="multipart/form-data">
-                    {% csrf_token %}
-
-                    {% block group_form %}
-                        <div class="input-field col s12">
-                            {{ form.title |attr:"aria-required:true"|attr:"required" }}
-                            <label for="id_title">{% trans 'Title' %}</label>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="" style="padding: 0 15px;">
+                            <span class="card-title">{% block body_page_title %}{% trans "Create a Group" %}{% endblock %}</span>
                         </div>
-                        <div class="file-field input-field col s12">
-                            <div class="btn waves-effect waves-light red darken-3">
-                                <span>{% trans 'File' %}</span>
-                                {{ form.logo }}
+                        <div class="row">
+                            <div class="col s12">
+                                <form class="uniForm" id="form" method="POST" action="" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                
+                                    {% block group_form %}
+                                        <div class="input-field col s12">
+                                            {{ form.title |attr:"aria-required:true"|attr:"required" }}
+                                            <label for="id_title">{% trans 'Title' %}</label>
+                                        </div>
+                                        <div class="file-field input-field col s12">
+                                            <div class="btn waves-effect waves-light red darken-3">
+                                                <span>{% trans 'File' %}</span>
+                                                {{ form.logo }}
+                                            </div>
+                                            <div class="file-path-wrapper">
+                                                <input class="file-path validate" type="text" placeholder="{% trans 'Upload Logo' %}">
+                                            </div>
+                                            <span class="helper-text">
+                                                Helper text
+                                            </span>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            {{ form.description |attr:"class:materialize-textarea" }}
+                                            <label for="id_description">{% trans 'Description' %}</label>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            {{ form.email |attr:"class:validate" }}
+                                            <label for="id_email">{% trans 'Email' %}</label>
+                                            <span class="helper-text" data-error="Please use valid email address" data-success="valid">{{ form.email.help_text }}</span>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            {{ form.access }}
+                                            <label for="id_access">{% trans 'Access' %}</label>
+                                            <span class="helper-text">
+                                                {{ form.access.help_text }}
+                                            </span>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            {{ form.keywords }}
+                                            <label for="id_keywords">{% trans 'Keywords' %}</label>
+                                            <span class="helper-text">{{ form.keywords.help_text }}</span>
+                                        </div>
+                                        <div class="input-field col s12">
+                                            {{ form.categories }}
+                                            <label for="id_categories">{% trans 'Categories' %}</label>
+                                        </div>
+                                    {% endblock group_form %}
+                
+                                    <div class="col s12 form_block">
+                                        <input type="hidden" name="action" value="create" />
+                                        <button type="submit" class="btn waves-effect waves-light red darken-3 right"/>{% block form_button %}{% trans 'Create' %}{% endblock %}</button>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="file-path-wrapper">
-                                <input class="file-path validate" type="text" placeholder="{% trans 'Upload Logo' %}">
-                            </div>
-                            <span class="helper-text">
-                                Helper text
-                            </span>
                         </div>
-                        <div class="input-field col s12">
-                            {{ form.description |attr:"class:materialize-textarea" }}
-                            <label for="id_description">{% trans 'Description' %}</label>
-                        </div>
-                        <div class="input-field col s12">
-                            {{ form.email |attr:"class:validate" }}
-                            <label for="id_email">{% trans 'Email' %}</label>
-                            <span class="helper-text" data-error="Please use valid email address" data-success="valid">{{ form.email.help_text }}</span>
-                        </div>
-                        <div class="input-field col s12">
-                            {{ form.access }}
-                            <label for="id_access">{% trans 'Access' %}</label>
-                            <span class="helper-text">
-                                {{ form.access.help_text }}
-                            </span>
-                        </div>
-                        <div class="input-field col s12">
-                            {{ form.keywords }}
-                            <label for="id_keywords">{% trans 'Keywords' %}</label>
-                            <span class="helper-text">{{ form.keywords.help_text }}</span>
-                        </div>
-                        <div class="input-field col s12">
-                            {{ form.categories }}
-                            <label for="id_categories">{% trans 'Categories' %}</label>
-                        </div>
-                    {% endblock group_form %}
-
-                    <div class="form_block">
-                        <input type="hidden" name="action" value="create" />
-                        <button type="submit" class="btn waves-effect waves-light red darken-3"/>{% block form_button %}{% trans 'Create' %}{% endblock %}</button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </section>

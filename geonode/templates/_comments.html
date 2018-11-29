@@ -6,7 +6,7 @@
 
 {% load i18n %}
 <div id="comments_section">
-    <h4>{% comment_count resource %} {% trans 'Comments' %}</h4>
+    <span class="card-title">{% comment_count resource %} {% trans 'Comments' %}</span>
 
     <ul class="collection">
         {% comments resource as comment_list %}

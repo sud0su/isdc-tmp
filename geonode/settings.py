@@ -353,6 +353,7 @@ GEONODE_APPS = GEONODE_CONTRIB_APPS + GEONODE_APPS
 INSTALLED_APPS = (
 
     'modeltranslation',
+    'reset_migrations',
 
     # Boostrap admin theme
     # 'django_admin_bootstrapped.bootstrap3',
