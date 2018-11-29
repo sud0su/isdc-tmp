@@ -128,12 +128,6 @@ invoke==0.22.1
 ipaddress==1.0.18
 ipython==5.5.0
 ipython-genutils==0.2.0
-isdc-avatar==0.1.dev0
-isdc-dashboard==0.1.dev0
-isdc-geodb==0.1.dev2
-isdc-geonode-client==1.0.1.dev1
-isdc-geopanel==1.0.0
-isdc-matrix==0.1.dev0
 isort==4.3.4
 itypes==1.1.0
 jdcal==1.3
