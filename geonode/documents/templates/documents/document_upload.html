@@ -54,8 +54,11 @@
                     <label for="id_links">Link to</label>
                 </div>
 
+                <hr>
+
+                <input id="permissions" name="permissions" type="hidden">
                 <section class="right" style="padding: 0 15px;">
-                    <!-- Modal Trigger -->
+                    
                     <a href="#modal_permission" id="" class="btn-flat modal-trigger waves-effect waves-light red-text text-darken-3" style="border: 1px solid;">{% trans "Change Permissions" %}</a>
                     <button type="submit" id="upload-button" class="btn waves-effect waves-light red darken-3">{% trans "Upload" %}</button>
                 </section>
@@ -83,10 +86,13 @@
         });
         $('#upload_form').submit(function(){
           $('#permissions').val(JSON.stringify(permissionsString($('#permission_form'),'base')));
+        //   console.log(JSON.stringify(permissionsString($('#permission_form'),'base')))
         });
 
         $('#upload-button').click(function(){
-        //   $('#_resource_uploading').modal('toggle');
+          $('#_resource_uploading').modal('toggle');
+            // var tes = $("#upload_form").serialize();
+            // console.log(tes);
         });
 
         // M.toast({html: ''})

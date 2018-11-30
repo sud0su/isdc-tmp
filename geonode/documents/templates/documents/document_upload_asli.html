@@ -17,7 +17,7 @@
         <form id="upload_form" method="post" enctype="multipart/form-data" action="{% url "document_upload" %}">
             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
             {{ form.as_p }}
-            <button type="submit" id="upload-button" class="btn btn-danger">{% trans "Upload" %}</button>
+            <button type="button" id="upload-button" class="btn btn-danger">{% trans "Upload" %}</button>
         </form>
     </div>
 {% endblock %}
@@ -44,12 +44,15 @@
         $("#id_links").select2({
             width: '100%'
         });
-        $('#upload_form').submit(function(){
-          $('#permissions').val(JSON.stringify(permissionsString($('#permission_form'),'base')));
+        $('#upload_form').click(function(){
+        //   $('#permissions').val(JSON.stringify(permissionsString($('#permission_form'),'base')));
+          console.log(JSON.stringify(permissionsString($('#permission_form'),'base')))
         });
 
         $('#upload-button').click(function(){
-          $('#_resource_uploading').modal('toggle');
+        //   $('#_resource_uploading').modal('toggle');
+            var tes = $("#upload_form").serialize();
+            console.log(tes);
         });
     </script>
 {% endblock extra_script %}
