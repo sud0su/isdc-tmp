@@ -1,304 +1,224 @@
 # Getting Started
+## Prerequisite Before Installing iSDC
+Make sure that you already have installed **PostgreSQL v10.5** and **python 2.7** on your local machine<br>
+Please refer to the links below for the installing guidelines.
+>- [PostgreSQL v10.5][1]
+>- [Python 2.7][2]
 
-## Installation
-The following is a quick guide to get iSDC up and running in most common operating systems. This is meant to be run on a fresh machine with no previously installed packages.
+[1]: <https://www.postgresql.org/download/> "PostgreSQL v10.5 Installation Guide"
+[2]: <https://medium.com/@yangnana11/installing-python-2-on-mac-os-x-d0f1c9c4d808> "Python 2.7 Installation Guide"
 
-### OS X
+## Recommendation for Developer
+We used DBngin to make our development easier. We recommend other developer to also used it for development.<br>
+DBngin is a management tool for databases, this tool can manage multiple database servers with multiple versions and ports.
+You can download it from [here][3].
+
+[3]: <https://dbngin.com/release/osx/dbngin_latest> "Downloads DBngin"
+
+## iSDC Installation on OSX
+
+### Preparing Setup
+
+Create vitualenv and activate
 ```
-    virtualenv isdc
-    cd isdc && source bin/activate
-    git clone https://github.com/sud0su/isdc-tmp.git
+    virtualenv ISDC
+    cd ISDC && source bin/activate
+```
+
+Clone the existing iSDC from github
+```
+    git clone https://github.com/sud0su/isdc-tmp.git && cd isdc-tmp
+```
+
+Install dependencies
+```
+    pip install lxml pyproj nose httplib2 shapely pillow paver
+```
+
+Install requirements
+```
     pip install -r requirements.txt
+```
+
+### Create Database
+
+Create iSDC database on postgres with command line below<br>
+```
+    psql -U postgres -c 'create database isdc;'
+    psql -U postgres -c 'create database isdc_data;'
+    psql -U postgres -d isdc_data -c 'CREATE EXTENSION postgis;'
+    psql -U postgres -d isdc_data -c 'GRANT ALL ON geometry_columns TO PUBLIC;'
+    psql -U postgres -d isdc_data -c 'GRANT ALL ON spatial_ref_sys TO PUBLIC;'
+    psql -U postgres -d isdc_data -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO postgres;'
+```
+
+### Install GeoNode
+Install GeoNode Dependency
+```
     pip install -e .
+```
+
+Cleanup old stuff with hard reset
+```
     paver reset_hard
-    rm -Rf geoserver 
+    rm -Rf geoserver
     rm -Rf downloaded/*.*
 ```
 
-rename `local_settings.py.geoserver.sample` to `local_settings.py`
+Edit local_settings.py
+>- Copy `local_settings.py.geoserver.sample` file from `geonode` folder
+>- Rename the file to `local_settings.py` and edit accordingly to your server configuration (modify the user and password)<br>
+```
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'isdc',
+            'USER': 'postgres',
+            'PASSWORD': 'password',
+            'HOST': 'localhost',
+            'PORT': '5432',
+            'CONN_TOUT': 900,
+        },
+        # vector datastore for uploads
+        'datastore': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'isdc_data',
+            'USER': 'postgres',
+            'PASSWORD': 'password',
+            'HOST': 'localhost',
+            'PORT': '5432',
+            'CONN_TOUT': 900,
+        }
+    }
+```
 
-edit database name, user, and password
-Install GDAL and setup ISDC
-
-```  
+Install GDAL
+```
     pip install GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}')
+```
+
+Setup GeoNode
+```
     paver setup
     paver sync
 ```
 
-Fixing error `raise GEOSException('Could not parse version info string "%s"' % ver)`
->- Edit file located at `site-packages/django/contrib/gis/geos/libgeos.py` 
->- Look for the function `geos_version_info`
->- Change `ver = geos_version().decode()` with `ver = geos_version().split(' ')[0]`
-  
-Fixing error `ImportError: cannot import name GeoIP`
-``` 
-    brew install geoip
-``` 
+If you got an error with message `raise GEOSException('Could not parse version info string "%s"' % ver)`<br>
+Please do the following:
+>- Edit file `libgeos.py` in `lib/python2.7/site-packages/django/contrib/gis/geos/libgeos.py`
+>- Look for the function `geos_version_info` at `line 144` 
+>- Change code `geos_version().decode()` with `geos_version().decode().split(' ')[0]`
 
-You can now start ISDC
-``` 
+After fixing the error code above, redo `paver sync`<br>
+When the sync has completed, please **make sure that isdc database has already created tables** in it.<br><br>
+Starts the GeoNode development web server and GeoServer
+
+```
     paver start
-    paver stop
-``` 
-Java JDK needs to be installed for Geoserver to work, download from [here](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
-
-## Integration
-The following is a quick guide to integrate all packages that exist in iSDC
-
-### Geo-Explorer
-
-__install django-geonode-client__
-```
-    pip install isdc-geonode-client
-```
-__install isdc-geopanel__
-```
-    pip install isdc-geopanel
-```
-__install isdc-geobaseline__
-```
-    pip install isdc-geobaseline
-```
-__install isdc-geoaccessibility__
-```
-    pip install isdc-geoaccessibility
-```
-__install isdc-geoavalanche__
-```
-    pip install isdc-geoavalanche
 ```
 
 
-
-### Local Package
-#### OS X
-Add code below at the bottom of file `activate` that located at `{environment}\bin` 
-
+### Install iSDC Base Package
+Install iSDC Package<br>
+Base package for iSDC must be installed before another package, see the following code to install base package<br>
 ```
-    export PYTHONPATH=${VIRTUAL_ENV}/lib/isdc-modules/:${VIRTUAL_ENV}/lib/isdc-modules/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_geodb/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_dashboard/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_matrix/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_pushnotif/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_securitydb/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_userstatistics/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_uploadpdf:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_flood/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_avalanche/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_accessibility/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_earthquake/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_landslide/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_securityincident/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_naturaldisaster/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_climate/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_weather/:\
-    ${VIRTUAL_ENV}/lib/isdc-modules/isdc_drought/
-```
-#### Ubuntu
-To make import module works, add module directory to `PYTHONPATH` 
-
-In terminal, open virtual environment activate script using nano:
-```
-    nano ~/isdc/bin/activate
-```
-Add code below at the bottom of file `activate` that located at `~/isdc/bin/activate` 
-
-```
-    export PYTHONPATH=${PYTHONPATH}:\
-    ${HOME}/isdc/lib/isdc-modules/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_geodb/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_dashboard/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_matrix/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_pushnotif/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_securitydb/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_userstatistics/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_uploadpdf/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_flood/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_avalanche/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_accessibility/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_earthquake/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_landslide/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_securityincident/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_naturaldisaster/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_climate/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_weather/:\
-    ${HOME}/isdc/lib/isdc-modules/isdc_drought/:\
-```
-Restart virtual environment:
-```
-    deactivate;source ../bin/activate
+    pip install isdc-dashboard isdc-geodb  isdc-matrix isdc-avatar
 ```
 
-Create folder `isdc-modules` in `${HOME}/isdc/lib` folder 
-
-Clone ISDC module from `https://github.com/dodiws/` to `${HOME}/lib/isdc-modules/` folder accordingly (see example below)
-
-Base modules:
+After installing the base package, you have to add the code below on the bottom line of your `local_settings.py` 
 ```
-    cd ${HOME}/lib/isdc-modules/
+    # ==================
+    # add by dodi start
 
-    git clone https://github.com/dodiws/isdc_dashboard.git isdc_dashboard
-    git clone https://github.com/dodiws/isdc_geodb.git isdc_geodb
-    git clone https://github.com/dodiws/isdc_dashboard.git isdc_dashboard
-    git clone https://github.com/dodiws/isdc_matrix.git isdc_matrix
-    git clone https://github.com/dodiws/account.git account
-    git clone https://github.com/dodiws/avatar.git avatar
-    git clone https://github.com/dodiws/geonode_formhub.git geonode_formhub
-```
-Optional modules:
-```
-    cd ${VIRTUAL_ENV}/lib/isdc-modules/
-    git clone https://github.com/dodiws/isdc_pushnotif.git isdc_pushnotif
-    git clone https://github.com/dodiws/isdc_securitydb.git isdc_securitydb
-    git clone https://github.com/dodiws/isdc_userstatistics.git isdc_userstatistics
-    git clone https://github.com/dodiws/isdc_uploadpdf.git isdc_uploadpdf
-    git clone https://github.com/dodiws/isdc_flood.git isdc_flood
-    git clone https://github.com/dodiws/isdc_avalanche.git isdc_avalanche
-    git clone https://github.com/dodiws/isdc_accessibility.git isdc_accessibility
-    git clone https://github.com/dodiws/isdc_earthquake.git isdc_earthquake
-    git clone https://github.com/dodiws/isdc_landslide.git isdc_landslide
-    git clone https://github.com/dodiws/isdc_securityincident.git isdc_securityincident
-    git clone https://github.com/dodiws/isdc_naturaldisaster.git isdc_naturaldisaster
-    git clone https://github.com/dodiws/isdc_climate.git isdc_climate
-    git clone https://github.com/dodiws/isdc_weather.git isdc_weather
-    git clone https://github.com/dodiws/isdc_drought.git isdc_drought
-```
+    # ISDC external requirements
+    ISDC_EXTERNAL_REQUIREMENTS = (
+        'mathfilters',
+        'graphos',
+    )
 
+    # ISDC required apps
+    ISDC_BASE_APPS = (
+        'matrix',
+        'geodb',
+        'dashboard',
+    )
 
-## Databases & Extension
+    # ISDC additional apps
+    ISDC_ADDITIONAL_APPS = (
+        
+    )
 
-### Create database
-Create a database with name `geodb` and `securitydb`
+    # modules with stand-alone page in dashboard
+    # these modules must have get_dashboard_meta() function
+    DASHBOARD_PAGE_MODULES = (
+        
+    )
 
-Use SQL query below to make `geodb` database
+    INSTALLED_APPS += ISDC_EXTERNAL_REQUIREMENTS + ISDC_BASE_APPS + ISDC_ADDITIONAL_APPS + DASHBOARD_PAGE_MODULES
 
-```
-CREATE DATABASE geodb
-  WITH OWNER = postgres
-       ENCODING = 'UTF8'
-       TABLESPACE = pg_default
-       LC_COLLATE = 'C'
-       LC_CTYPE = 'C'
-       CONNECTION LIMIT = -1;
-```
+    # modules with components for geodb.geoapi.getRiskExecuteExternal() 
+    GETRISKEXECUTEEXTERNAL_MODULES = [
+        'flood',
+        'avalanche',
+    ]
 
-and query below for `securitydb` database
+    # modules with components for geodb.geo_calc.getQuickOverview() 
+    QUICKOVERVIEW_MODULES = [
+        'flood',
+        'avalanche',
+        'accessibility',
+        'earthquake',
+        'landslide',
+        'securityincident',
+        'drought',
+    ]
 
-```
-CREATE DATABASE security_data
-  WITH OWNER = postgres
-       ENCODING = 'UTF8'
-       TABLESPACE = pg_default
-       LC_COLLATE = 'C'
-       LC_CTYPE = 'C'
-       CONNECTION LIMIT = -1;
-```
+    DATABASE_ROUTERS = [
+        'geonode.dbrouter.defaultdbrouter',
+    ]
 
-### Create Extension
-Create extension for the new db (`geodb` and `securitydb`)
+    DEFAULTDB = 'default'
 
-Add new extension with name `postgis` and `plpgsql` as a superuser to each of the database.
+    # for every app in INSTALLED_APPS use DEFAULTDB database, then update with MAP_APPS_TO_DB_CUSTOM
+    MAP_APPS_TO_DB = {app.split('.')[-1]: DEFAULTDB for app in INSTALLED_APPS}
 
-`plpgsql`
+    # add here for app using non-default database
+    MAP_APPS_TO_DB_CUSTOM = {
+        'geodb': 'geodb',
+        'flood': 'geodb',
+        'avalanche': 'geodb',
+        'earthquake': 'geodb',
+        'securityincident': 'geodb',
+        'drought': 'geodb',
+        'securitydb': 'securitydb',
+    }
+    MAP_APPS_TO_DB.update(MAP_APPS_TO_DB_CUSTOM)
 
-```
- CREATE EXTENSION plpgsql
-  SCHEMA pg_catalog
-  VERSION "1.0";
+    # default map code used for matrix resource usage tracking
+    MATRIX_DEFAULT_MAP_CODE = '5'
+
+    # add by dodi end
+    # ==================
 ```
 
-`postgis`
+After adding the code above, you must create database `geodb` and `security_data`
 ```
- CREATE EXTENSION postgis
-  SCHEMA public
-  VERSION "2.1.8";
-```
-
-from root project install the new `requiruments.txt`
-```
-    pip install -r requirements.txt
+    psql -U postgres -c 'create database geodb;'
+    psql -U postgres -c 'create database security_data;'
 ```
 
-## Other Setup
-### OSX 
-
-Install Manual Package
+After that, you must add new extension as a superuser with name `postgis` and `plpgsql` to each of the database.
 ```
-    pip install scipy
-    pip install git+git://github.com/usgs/neicio.git
-    pip install git+git://github.com/usgs/neicmap.git
-    pip install git+git://github.com/usgs/libcomcat.git@1.0
+    psql -U postgres -d geodb -c 'CREATE EXTENSION postgis;'
+    psql -U postgres -d geodb -c 'CREATE EXTENSION plpgsql;'
+    psql -U postgres -d security_data -c 'CREATE EXTENSION postgis;'
+    psql -U postgres -d security_data -c 'CREATE EXTENSION plpgsql;'
 ```
 
-If `pygdal` already installed
+Add code below into the `DATABASES` array at the **bottom of line** (don’t forget to modify the user and password accordingly):
 ```
-    pip install git+git://github.com/OpenGeoscience/dataqs.git 
-    pip install git+git://github.com/OpenGeoscience/dataqs.git --no-deps
-```
-
-### Ubuntu
-
-Install Binaries
-```
-    sudo apt-get install gdal-bin
-    sudo apt-get install libgdal-dev libgdal1h
-    sudo apt-get install libspatialindex-dev
-```
-Install Python Modules
-```
-    pip install pygdal==$(gdal-config --version)
-    pip install https://github.com/OpenGeoscience/dataqs/archive/master.zip --no-deps
-    pip install rtree
-    pip install rasterio
-    pip install GDAL==$(gdal-config --version) --global-option=build_ext --global-option="-I/usr/include/gdal"
-    pip install pip==10.0.1
-    pip install setuptools==39.0.1
-    pip install Celery==4.1.1
-    pip install django-celery==3.1.17
-    pip install git+git://github.com/usgs/neicio.git
-    pip install git+git://github.com/usgs/neicmap.git
-    pip install git+git://github.com/usgs/libcomcat.git@1.0
-```
-Fixing error `try different versions matplotlib==1.3.1 etc`
-```
-    pip install matplotlib==1.5.3
-```
-If `pygdal` already installed:
-```
-    pip install git+git://github.com/OpenGeoscience/dataqs.git 
-    pip install git+git://github.com/OpenGeoscience/dataqs.git --no-deps
-```
-
-## Settings
-
-### local_settings.py
-
-Add code below to import module used in ISDC
-```
-import geonode_formhub
-```
-Change/Add the code below into the corresponded codes respectively
-```
-    # Import uploaded shapefiles into a GeoGig repository
-    GEOGIG_DATASTORE = True
-    GEOGIG_DATASTORE_NAME = 'geogig-repo'
-```
-
-```
-    # Proxy paramaters for source : services.digitalglobe.com 
-    DGB_UNAME = '*******' 
-    DGB_UPASS = '*********' 
-    DGB_USOURCE = 'services.digitalglobe.com'
-```
-
-
-Add code below into the `DATABASES` array at the bottom of line
-
-```
-'geodb': {
+    'geodb': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        # 'ENGINE': '', # Empty ENGINE name disables
         'NAME': 'geodb',
         'USER': 'postgres',
         'PASSWORD': 'password',
@@ -308,60 +228,68 @@ Add code below into the `DATABASES` array at the bottom of line
     },
     'securitydb' : {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        #'ENGINE': '', # Empty ENGINE name disables
         'NAME': 'security_data',
         'USER' : 'postgres',
         'PASSWORD' : 'password',
-        # 'USER' : 'postgres', # db superuser account needed to install db extension on django-admin migrate
-        # 'PASSWORD' : '12345',
         'HOST' : 'localhost',
         'PORT' : '5432',
         'CONN_TOUT': 900,
     }
 ```
-Migrate the model of ISDC module into database
 
+Before you migrate a new database from base package you must delete the existing migration file from isdc root project and reset django migration with this command line
 ```
-    ./manage.py makemigrations
-    ./manage.py migrate
-```
+    find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+    find . -path "*/migrations/*.pyc"  -delete
 
-If 'people_people' table already in database
-
-Fixing error `... relation "people_profile" already exists`
-
->- Check the people migrate version
-```
-    ./manage.py showmigrations
-```
->- Fixing the broken database
-```
-    ./manage.py migrate people {migrate_version} --fake
-    ./manage.py makemigrations`
-    ./manage.py migrate
+    ./manage.py reset_migrations  account actstream admin agon_ratings announcements auth avatar base contenttypes dialogos documents geodb groups guardian invitations layers maps matrix monitoring oauth2_provider people pinax_notifications qgis_server services sessions sites socialaccount taggit tastypie upload user_messages
 ```
 
-Download package from [here]() and install it one by one by using pip install (see example below)
+Then migrate new database from the base package
 ```
-    pip install {package_location}/isdc-geofloods-1.0.0.tar.gz
+    ./manage.py makemigrations	
+    ./manage.py migrate geodb --database geodb
 ```
 
-For GeoExplorer Setting replace the `iMMAP SETTINGS` with example code below
+Create new Django superuser (You can skip this step if you already have superuser account)
 ```
-    # iMMAP SETTINGS
-    INSTALLED_APPS += (
-        'isdc_geopanel', 
-        'isdc_geobaseline',
-        'isdc_geoaccessibility',
-        'isdc_geofloods',
-        'isdc_geoavalanches',
-        'isdc_geoearthquake'
-        )
+    python manage.py createsuperuser
+```
+
+### Setting GeoExplorer
+Activate geonode-client on iSDC<br>
+>- Open your `local_settings.py` 
+>- Find `GEONODE_CLIENT_HOOKSET = "geonode.client.hooksets.GeoExtHookSet"` and **comment that code**
+>- Please **uncomment** the following code 
+```
+    INSTALLED_APPS += ('geonode-client', )
+    GEONODE_CLIENT_LAYER_PREVIEW_LIBRARY = 'react'  # DEPRECATED use HOOKSET instead
+    GEONODE_CLIENT_HOOKSET = "geonode.client.hooksets.ReactHookSet"
+```
+
+Install iSDC GeoExplorer Package
+```
+    pip install isdc-geonode-client isdc-geopanel
+```
+
+Add iSDC GeoExplorer Settings code below into your `local_settings.py`
+```
+    # ======================
+    # added by razinal start
+
+    PANEL_GEOISDC = (
+        'isdc_geopanel',
+    )
+
+    GEOEXPLORER_ISDC = (
+    )
+
+    INSTALLED_APPS += PANEL_GEOISDC + GEOEXPLORER_ISDC
     IMMAP_LIST_PACKAGE = []
-    ISDC_GEOPANEL_BUTTON = []
+    GEOPANEL_ISDC = []
 
     if 'isdc_geopanel' in INSTALLED_APPS:
-        ISDC_GEOPANEL_BUTTON += [
+        GEOPANEL_ISDC += [
             {
                 'component': 'Statistic',
                 'icon': 'assignment', #material-icon,
@@ -389,113 +317,18 @@ For GeoExplorer Setting replace the `iMMAP SETTINGS` with example code below
                     'package' : 'isdc_geobaseline',
                     'js' : 'addbaseline.js',
                     'bundle': 'baseline.min.js',
-                    # 'api': SITEURL+'/static/isdc_geobaseline/js/baseline.json',
                     'api': SITEURL+'/geoapi/statistic_baseline/',
                     'domID': 'baseline'
                 }
             ]
-        if 'isdc_geoaccessibility' in INSTALLED_APPS:
-            IMMAP_LIST_PACKAGE += [
-                {
-                    'package' : 'isdc_geoaccessibility',
-                    'js' : 'addaccessibility.js',
-                    'bundle': 'accessibility.min.js',
-                    'api': SITEURL+'/geoapi/statistic_accessibility/',
-                    'domID': 'accessibility'
-                }
-            ]
-        if 'isdc_geofloods' in INSTALLED_APPS:
-            IMMAP_LIST_PACKAGE += [
-                {
-                    'package' : 'isdc_geofloods',
-                    'js' : 'addfloods.js',
-                    'bundle': 'floods.min.js',
-                    'api': SITEURL+'/geoapi/statistic_floodrisk/',
-                    'domID': 'floods'
-                }
-            ]
-        if 'isdc_geoavalanches' in INSTALLED_APPS:
-            IMMAP_LIST_PACKAGE += [
-                {
-                    'package' : 'isdc_geoavalanches',
-                    'js' : 'addavalanches.js',
-                    'bundle': 'avalanches.min.js',
-                    'api': SITEURL+'/geoapi/statistic_avalanches/',
-                    'domID': 'avalanches'
-                }
-            ]
-        if 'isdc_geoearthquake' in INSTALLED_APPS:
-            IMMAP_LIST_PACKAGE += [
-                {
-                    'package' : 'isdc_geoearthquake',
-                    'js' : 'addearthquake.js',
-                    'bundle': 'earthquake.min.js',
-                    'api': SITEURL+'/geoapi/statistic_earthquake/',
-                    'domID': 'earthquake'
-                }
-            ]
+        
             
-    IMMAP_PACKAGE = [{'panel_setting': ISDC_GEOPANEL_BUTTON},{'official_package': IMMAP_LIST_PACKAGE}]
+    IMMAP_PACKAGE = [{'panel_setting': GEOPANEL_ISDC},{'official_package': IMMAP_LIST_PACKAGE}]
+    
+    # added by razinal end
+    # ====================
 ```
 
-### settings.py
+You have successfully installed the base function in iSDC on your local machine. Please go to your localhost to check if it has been properly installed.
 
-To install the optional module, add the desired module to each of `INSTALLED_APPS`, `DASHBOARD_PAGE_MODULES`, `QUICKOVERVIEW_MODULES`, `MAP_APPS_TO_DB_CUSTOM` as necessary. See the comments of the example code below for descriptions.
-```
-    # ISDC Settings Start
-
-    # modules with stand-alone page in dashboard
-    DASHBOARD_PAGE_MODULES = [
-        'flood',
-        'avalanche',
-        'accessibility',
-        'earthquake',
-        'landslide',
-        'securityincident',
-        'naturaldisaster',
-        'weather',
-        'drought',
-    ]
-
-    # modules with components for geodb.geoapi.getRiskExecuteExternal() 
-    GETRISKEXECUTEEXTERNAL_MODULES = [
-        'flood',
-        'avalanche',
-    ]
-
-    # modules with components for geodb.geo_calc.getQuickOverview() 
-    QUICKOVERVIEW_MODULES = [
-        'flood',
-        'avalanche',
-        'accessibility',
-        'earthquake',
-        'landslide',
-        'securityincident',
-        # 'drought',
-    ]
-
-    DATABASE_ROUTERS = [
-        'geonode.dbrouter.defaultdbrouter',
-    ]
-
-    DEFAULTDB = 'default'
-
-    # for every app in INSTALLED_APPS use DEFAULTDB database, then update with MAP_APPS_TO_DB_CUSTOM
-    MAP_APPS_TO_DB = {app.split('.')[-1]: DEFAULTDB for app in INSTALLED_APPS}
-
-    # add here for app using non-default database
-    MAP_APPS_TO_DB_CUSTOM = {
-        'geodb': 'geodb',
-        'flood': 'geodb',
-        'avalanche': 'geodb',
-        'earthquake': 'geodb',
-        'securityincident': 'geodb',
-        'securitydb': 'securitydb',
-    }
-    MAP_APPS_TO_DB.update(MAP_APPS_TO_DB_CUSTOM)
-
-    # default map code used for matrix resource usage tracking
-    MATRIX_DEFAULT_MAP_CODE = '5'
-
-    # ISDC Settings End
-```
+### Install Optional Module
