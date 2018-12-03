@@ -1461,3 +1461,8 @@ ACCOUNT_SIGNUP_FORM_CLASS = 'customallauth.forms.NewSingupForm'
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
 # ACCOUNT_ADAPTER = 'customallauth'
+
+# Proxy paramaters for source : services.digitalglobe.com 
+DGB_UNAME = '*******' 
+DGB_UPASS = '*********' 
+DGB_USOURCE = 'services.digitalglobe.com'

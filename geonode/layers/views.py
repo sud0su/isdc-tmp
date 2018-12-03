@@ -513,7 +513,7 @@ def layer_detail(request, layername, template='layers/layer_detail.html'):
         "orglogos": orglogos,
         'resource': layer,
         'group': group,
-        # 'perms_list': get_perms(request.user, layer.get_self_resource()),
+        'perms_list': get_perms(request.user, layer.get_self_resource()),
         "permissions_json": _perms_info_json(layer),
         "documents": get_related_documents(layer),
         "metadata": metadata,

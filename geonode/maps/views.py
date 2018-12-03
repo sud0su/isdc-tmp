@@ -171,7 +171,7 @@ def map_detail(request, mapid, snapshot=None, template='maps/map_detail.html'):
         'resource': map_obj,
         'group': group,
         'layers': layers,
-        # 'perms_list': get_perms(request.user, map_obj.get_self_resource()), # removed in DRR
+        'perms_list': get_perms(request.user, map_obj.get_self_resource()), # removed in DRR
         'permissions_json': _perms_info_json(map_obj),
         "documents": get_related_documents(map_obj),
         'links': links,
