@@ -1423,7 +1423,7 @@ def div_by_zero_is_zero(a, b):
         return a/b
     except ZeroDivisionError:
         return 0
-    
+
 class dict_ext(dict):
 
     '''
@@ -1466,8 +1466,14 @@ class dict_ext(dict):
     def within(self, *keys):
         return dict_ext({k:self[k] for k in keys if k in self})
 
-    def valueslistbykey(self, *keys):
-        return [self[k] for k in keys if k in self]
+    def valueslistbykey(self, keys, addkeyasattr=False):
+        response = []
+        for k in keys:
+            if k in self:
+                if addkeyasattr:
+                    self[k]['key'] = k
+                response.append(self[k])
+        return response
 
 class list_ext(list):
 
