@@ -1037,12 +1037,14 @@ nav .brand-logo img{
 }
 
 .dashboard table>tbody>tr>td, 
-.dashboard table>tbody>tr>th, 
-.dashboard table>tfoot>tr>td, 
+.dashboard table>tbody>tr>th
+/* .dashboard table>tfoot>tr>td, 
 .dashboard table>tfoot>tr>th, 
 .dashboard table>thead>tr>td, 
-.dashboard table>thead>tr>th{
+.dashboard table>thead>tr>th */
+{
     border: 1px solid #ddd;
+    padding: .3rem;
 }
 
 .dashboard table thead>tr>th>i{
@@ -1059,8 +1061,10 @@ nav .brand-logo img{
     border-left: 1px solid #fff;
 }
 
-.dashboard table.table {
-    border-collapse: collapse;
+.dashboard table,
+.dashboard table.dataTable
+ {
+    border-collapse: collapse !important;
     width: 100% !important;
 }
 
@@ -1173,7 +1177,8 @@ th.m8h, td.m8h/*,
 #ffforecast.table>tbody>tr>td,
 #ggfforecast.table>tbody>tr>td,
 #glfforecast.table>tbody>tr>td,
-#gffforecast.table>tbody>tr>td {
+#gffforecast.table>tbody>tr>td
+table.flood-likelihood-color>tbody>tr>td{
     padding: 1px 8px;
     text-align: center;
     vertical-align: middle;
@@ -1183,18 +1188,29 @@ th.m8h, td.m8h/*,
 table#ffforecast td,
 table#ggfforecast td,
 table#glfforecast td,
-table#gffforecast td
+table#gffforecast td,
+table.flood-likelihood-color td
 {
     /*width: 20%;*/
+    text-align: center;
+    vertical-align: middle;
 }
 
-td.ext, td.vhigh, td.high, td.mod, td.low, td.hi, td.med, td.lo{
+td.ext, td.vhigh, td.high, td.mod, td.low, td.hi, td.med, td.lo,
+.flood-likelihood-color tr:nth-child(1) td:nth-child(1),
+.flood-likelihood-color tr:nth-child(4) td:nth-child(1),
+.flood-likelihood-color tr:nth-child(7) td:nth-child(1),
+.flood-likelihood-color tr:nth-child(10) td:nth-child(1),
+.flood-likelihood-color tr:nth-child(13) td:nth-child(1)
+{
     font-weight: bold;
     /*width: 20%;*/
     /*border: 1px solid #fff !important;*/
 }
 
-table#ffforecast, table#ggfforecast, table#glfforecast, table#gffforecast{
+table#ffforecast, table#ggfforecast, table#glfforecast, table#gffforecast,
+.dashboard.floodforecast table>tbody>tr>td,
+.dashboard.floodforecast table>thead>tr>th{
     border: 1px solid #fff !important;
 }
 
@@ -1207,11 +1223,13 @@ th.ext,
 #rfforecast tr td:nth-child(1),
 #rggfoverview tr td:nth-child(2), #rggfoverview tr td:nth-child(3), #rggfoverview tr td:nth-child(12), #rggfoverview tr td:nth-child(13),
 #rglfoverview tr td:nth-child(2), #rglfoverview tr td:nth-child(3), #rglfoverview tr td:nth-child(12), #rglfoverview tr td:nth-child(13),
-#rgffoverview tr td:nth-child(2), #rgffoverview tr td:nth-child(3), #rgffoverview tr td:nth-child(12), #rgffoverview tr td:nth-child(13){
+#rgffoverview tr td:nth-child(2), #rgffoverview tr td:nth-child(3), #rgffoverview tr td:nth-child(12), #rgffoverview tr td:nth-child(13),
+.flood-likelihood-color tr:nth-child(1) td:nth-child(1), .flood-likelihood-color tr:nth-child(1) td:nth-child(2), .flood-likelihood-color tr:nth-child(1) td:nth-child(3){
     /*background-color: rgba(226, 7, 14, 0.5) !important;*/
     background-color: #ff7f80 !important;
     border-top: 1px solid #fff !important;
     border-left: 1px solid #fff !important;
+    border: 1px solid #fff;
 }
 
 td.vhigh, td.vhigh_fill, #ffforecast tr:nth-child(4) td:nth-child(2),
@@ -1223,11 +1241,13 @@ th.vhigh,
 #rfforecast tr td:nth-child(2),
 #rggfoverview tr td:nth-child(4), #rggfoverview tr td:nth-child(5), #rggfoverview tr td:nth-child(14), #rggfoverview tr td:nth-child(15),
 #rglfoverview tr td:nth-child(4), #rglfoverview tr td:nth-child(5), #rglfoverview tr td:nth-child(14), #rglfoverview tr td:nth-child(15),
-#rgffoverview tr td:nth-child(4), #rgffoverview tr td:nth-child(5), #rgffoverview tr td:nth-child(14), #rgffoverview tr td:nth-child(15){
+#rgffoverview tr td:nth-child(4), #rgffoverview tr td:nth-child(5), #rgffoverview tr td:nth-child(14), #rgffoverview tr td:nth-child(15),
+.flood-likelihood-color tr:nth-child(4) td:nth-child(1), .flood-likelihood-color tr:nth-child(4) td:nth-child(2), .flood-likelihood-color tr:nth-child(4) td:nth-child(3){
     /*background-color: rgba(249, 109, 9, 0.5) !important;*/
     background-color: #feb24c !important;
     border-top: 1px solid #fff !important;
     border-left: 1px solid #fff !important;
+    border: 1px solid #fff;
 }
 
 td.high, td.high_fill, #ffforecast tr:nth-child(7) td:nth-child(2),
@@ -1239,11 +1259,13 @@ th.high,
 #rfforecast tr td:nth-child(3),
 #rggfoverview tr td:nth-child(6), #rggfoverview tr td:nth-child(7), #rggfoverview tr td:nth-child(16), #rggfoverview tr td:nth-child(17),
 #rglfoverview tr td:nth-child(6), #rglfoverview tr td:nth-child(7), #rglfoverview tr td:nth-child(16), #rglfoverview tr td:nth-child(17),
-#rgffoverview tr td:nth-child(6), #rgffoverview tr td:nth-child(7), #rgffoverview tr td:nth-child(16), #rgffoverview tr td:nth-child(17){
+#rgffoverview tr td:nth-child(6), #rgffoverview tr td:nth-child(7), #rgffoverview tr td:nth-child(16), #rgffoverview tr td:nth-child(17),
+.flood-likelihood-color tr:nth-child(7) td:nth-child(1), .flood-likelihood-color tr:nth-child(7) td:nth-child(2), .flood-likelihood-color tr:nth-child(7) td:nth-child(3){
     /*background-color: rgba(252, 237, 21, 0.5) !important;*/
     background-color: #fff37f !important; /*fffe7f*/
     border-top: 1px solid #fff !important;
     border-left: 1px solid #fff !important;
+    border: 1px solid #fff;
 }
 
 td.mod, td.mod_fill, #ffforecast tr:nth-child(10) td:nth-child(2),
@@ -1255,11 +1277,13 @@ th.mod,
 #rfforecast tr td:nth-child(4),
 #rggfoverview tr td:nth-child(8), #rggfoverview tr td:nth-child(9), #rggfoverview tr td:nth-child(18), #rggfoverview tr td:nth-child(19),
 #rglfoverview tr td:nth-child(8), #rglfoverview tr td:nth-child(9), #rglfoverview tr td:nth-child(18), #rglfoverview tr td:nth-child(19),
-#rgffoverview tr td:nth-child(8), #rgffoverview tr td:nth-child(9), #rgffoverview tr td:nth-child(18), #rgffoverview tr td:nth-child(19){
+#rgffoverview tr td:nth-child(8), #rgffoverview tr td:nth-child(9), #rgffoverview tr td:nth-child(18), #rgffoverview tr td:nth-child(19),
+.flood-likelihood-color tr:nth-child(10) td:nth-child(1), .flood-likelihood-color tr:nth-child(10) td:nth-child(2), .flood-likelihood-color tr:nth-child(10) td:nth-child(3){
     /*background-color: rgba(15, 200, 123, 0.5) !important;*/
     background-color: #c8eb8f !important;
     border-top: 1px solid #fff !important;
     border-left: 1px solid #fff !important;
+    border: 1px solid #fff;
 }
 
 td.low, td.low_fill, #ffforecast tr:nth-child(13) td:nth-child(2),
@@ -1271,11 +1295,13 @@ th.low,
 #rfforecast tr td:nth-child(5),
 #rggfoverview tr td:nth-child(10), #rggfoverview tr td:nth-child(11), #rggfoverview tr td:nth-child(20), #rggfoverview tr td:nth-child(21),
 #rglfoverview tr td:nth-child(10), #rglfoverview tr td:nth-child(11), #rglfoverview tr td:nth-child(20), #rglfoverview tr td:nth-child(21),
-#rgffoverview tr td:nth-child(10), #rgffoverview tr td:nth-child(11), #rgffoverview tr td:nth-child(20), #rgffoverview tr td:nth-child(21){
+#rgffoverview tr td:nth-child(10), #rgffoverview tr td:nth-child(11), #rgffoverview tr td:nth-child(20), #rgffoverview tr td:nth-child(21),
+.flood-likelihood-color tr:nth-child(13) td:nth-child(1), .flood-likelihood-color tr:nth-child(13) td:nth-child(2), .flood-likelihood-color tr:nth-child(13) td:nth-child(3){
     /*background-color: rgba(146, 231, 253, 0.5) !important;*/
     background-color: #abedfd !important; /*92e7fd*/
     border-top: 1px solid #fff !important;
     border-left: 1px solid #fff !important;
+    border: 1px solid #fff;
 }
 
 td.hi, td.hi_fill, #ffforecast tr:nth-child(1) td:nth-child(4), #ffforecast tr:nth-child(4) td:nth-child(4), #ffforecast tr:nth-child(7) td:nth-child(4), #ffforecast tr:nth-child(10) td:nth-child(4), #ffforecast tr:nth-child(13) td:nth-child(4),

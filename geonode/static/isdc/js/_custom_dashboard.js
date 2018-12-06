@@ -168,6 +168,24 @@ function init_datatable(){
 	$("button").removeClass("dt-button");
 }
 
+var colorFloodLikelihood = 
+	function (value, params) {
+		// console.log(value);
+		// console.log(index);
+		// console.log(params);
+		if (value==fforecast_cat[0]) {
+			return '#00ACC1'
+		}else if (value==fforecast_cat[1]) {
+			return '#71cc24'
+		}else if (value==fforecast_cat[2]) {
+			return '#ffd300'
+		}else if (value==fforecast_cat[3]) {
+			return '#FB8C00'
+		}else if (value==fforecast_cat[4]) {
+			return '#e53935'
+		}   
+	}
+
 // Chart
 function init_chart() {
 	colorBarDefault= ["#CF000F"];
@@ -448,9 +466,468 @@ function init_chart() {
 		$('#chart_pie_frisk_pop').highcharts(Highcharts.merge(chart_pie_frisk_pop_opt, chart_theme));
 		$('#chart_pie_frisk_build').highcharts(Highcharts.merge(chart_pie_frisk_build_opt, chart_theme));
 		$('#chart_pie_frisk_area').highcharts(Highcharts.merge(chart_pie_frisk_area_opt, chart_theme));
+	}else if (getParameterByName('page') == 'floodforecast') {
+		var chart_bar_stack_fforecast_opt = {
+			
+		};
+
+		var chart_bar_stack_ggforecast_opt = {
+			
+		};
+
+		var chart_bar_stack_glforecast_opt = {
+			
+		};
+
+		var chart_bar_stack_gfforecast_opt = {
+			
+		};
+
+		$('#chart_bar_stack_fforecast').highcharts(Highcharts.merge(chart_bar_stack_fforecast_opt, chart_theme));
+		$('#chart_bar_stack_ggforecast').highcharts(Highcharts.merge(chart_bar_stack_ggforecast_opt, chart_theme));
+		$('#chart_bar_stack_glforecast').highcharts(Highcharts.merge(chart_bar_stack_glforecast_opt, chart_theme));
+		$('#chart_bar_stack_gfforecast').highcharts(Highcharts.merge(chart_bar_stack_gfforecast_opt, chart_theme));
 	}
 
 
+}
+
+function init_chart2(){
+	colorBarDefault= ["#CF000F"];
+	colorDonutDefault = ['#b92527', '#ccc'];
+	colorAccessibility=[
+	    '#c0fee5', /*'#99fcff',*/ '#94fdd5', '#75fcc9', /*'#fffb46',*/ '#fff327', /*'#fffc79', */ /*'#ffdd72',*/
+	    /*'#ffd341',*/ '#ffc43b', '#ff9c00', '#ffc9c7', '#ffa8a4', /*'#fdbbac',*/ '#ff9d99' /*'#ffa19a'*/
+	];
+	// colorFloodRiskForecast = ['#abd9e9', '#74add1', '#4575b4'];
+	colorFloodRiskForecast = ['#acd7ff', '#79bfff', '#46a7ff'];
+	colorFloodRisk = ['#ffaaab', '#ff6264', '#d13c3e', '#ddd'];
+	colorMercalli = [
+		// /*'#eeeeee', '#bfccff',*/ '#9999ff', '#88ffff', '#7df894', '#ffff00',
+		// '#ffdd00', '#ff9100', '#ff0000', '#dd0000', '#880000', '#440000'
+
+		'#d4e6f1', '#c2fcf7', '#6dffb6', '#ffff5c',
+		 '#ffe74c', '#ffc600', '#ff5751', '#e84c3d'
+	];
+	colorDefault = ['#ffaaab', '#ff6264', '#d13c3e', '#b92527'];
+
+	var colorTimes =
+  		function(params){
+  			return colorAccessibility[params.dataIndex]
+		}
+
+	colorChart={
+		'colorBar': colorBarDefault,
+		'colorAccess': colorAccessibility,
+		'colorDonut' : colorDonutDefault,
+		'colorFloodRiskForecast' : colorFloodRiskForecast,
+		'colorFloodRisk': colorFloodRisk,
+		'colorEarthquake': colorMercalli,
+		'colorSecurity': colorDefault
+	}
+
+	function pie_label() {
+		if (this.y > 0){
+			// return '<b>' + this.key + '</b> : ' + humanizeFormatter(this.y) + '<br/>(' + Highcharts.numberFormat(this.percentage, 2) + '%)';
+			return humanizeFormatter(this.y) + '<br/>(' + Highcharts.numberFormat(this.percentage, 2) + '%)';
+		}
+	}
+
+
+	Highcharts.theme = {
+		chart: {
+			style: {
+				fontFamily: '"Arial", Verdana, sans-serif'
+			}
+		},
+		title: {
+			text: null,
+			style: {
+				color: '#424242',
+				font: 'bold 13px "Trebuchet MS", Verdana, sans-serif'
+			}
+		},
+		subtitle: {
+			style: {
+				color: '#424242'
+			}
+		},
+		xAxis: {
+			
+		},
+		yAxis: {
+			labels: {
+				overflow: 'justify'
+			},
+			title: {
+				align: 'high',
+				style: {
+					// color: '#A0A0A3'
+				}
+			}
+		},
+		tooltip: {
+			
+		},
+		plotOptions: {
+			series: {
+				// color: '#c62828',
+			},
+			bar: {
+				// color: '#c62828',
+				dataLabels: {
+					enabled: true,
+					formatter: function() {
+						// return humanizeFormatter(this.y);
+					}
+				}
+			},
+			pie: {
+				dataLabels: {
+					enabled: true,
+					softConnector: false,
+					// formatter: function() {
+					// 	if (this.y > 0){
+					// 		return humanizeFormatter(this.y) + '<br/>' + Highcharts.numberFormat(this.percentage, 2) + '%';
+					// 	}
+					// }
+					// formatter: pie_label
+				}
+			}
+		},
+		legend: {
+			enabled: true
+		},
+		credits: {
+			enabled: false
+		},
+		labels: {
+		},
+
+		drilldown: {
+		},
+
+		navigation: {
+		},
+
+		// scroll charts
+		rangeSelector: {
+			
+		},
+
+		navigator: {
+			
+		},
+
+		scrollbar: {
+			
+		}
+
+		// special colors for some of the
+		// legendBackgroundColor: 'rgba(0, 0, 0, 0.5)',
+		// background2: '#505053',
+		// dataLabelsColor: '#B0B0B3',
+		// textColor: '#C0C0C0',
+		// contrastTextColor: '#F0F0F3',
+		// maskColor: 'rgba(255,255,255,0.3)'
+	};
+
+	// Apply the theme
+	Highcharts.setOptions(Highcharts.theme);
+
+	// Object Bar chart
+	function bar_chart(id_val, color_val, data_title, data_val){
+		$(id_val).highcharts({
+			chart: {
+				type: 'bar'
+			},
+			xAxis: {
+				categories: data_title
+			},
+			yAxis: {
+				title: {
+					// text: 'Population'
+				},
+				type: 'logarithmic'
+			},
+			tooltip: {
+				formatter: function() {
+					return '<b>'+ this.x +'</b>: '+ humanizeFormatter(this.y);
+				}
+			},
+			legend:{
+				enabled: false
+			},
+			colors: color_val,
+			series: [{
+				// name: 'Population',
+				data: data_val
+			}]
+		});
+	}
+
+	// Object Pie chart
+	function donut_chart(id_val, color_val, data_val){
+		$(id_val).highcharts({
+			chart: {
+				type: 'pie'
+			},
+			tooltip: {
+				formatter: pie_label
+			},
+			legend:{
+				floating: true,
+				align: 'left',
+				verticalAlign: 'top',
+				layout: 'vertical'
+			},
+			colors: color_val,
+			series: [{
+				// name: 'Flood Risk Population',
+				data: data_val,
+				dataLabels:{
+					formatter: pie_label
+				},
+				size: '70%',
+				innerSize: '65%',
+				showInLegend:true
+			}]
+		});
+	}
+
+	// Object Stacked Bar chart
+	function bar_stacked_col_chart(id_val, color_val, data_title, data_val){
+		$(id_val).highcharts({
+			chart: {
+				type: 'column'
+			},
+			xAxis: {
+				categories: data_title
+			},
+			yAxis: {
+				min: 0,
+				stackLabels:{
+					enabled: true
+				},
+				title: {
+					enabled: false
+					// text: 'Population'
+				}
+			},
+			tooltip: {
+				formatter: function() {
+					return '<b>'+ this.x +'</b>: '+ humanizeFormatter(this.y);
+				}
+			},
+			legend:{
+
+			},
+			plotOptions: {
+				column: {
+					stacking: 'normal',
+					dataLabels: {
+						enabled: true,
+						color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+					}
+				}
+			},
+			colors: color_val,
+			series: data_val
+		});
+	}
+
+	// Object Stacked Bar chart
+	function bar_stacked_chart(id_val, color_val, data_title, data_val){
+		$(id_val).highcharts({
+			chart: {
+				type: 'bar'
+			},
+			xAxis: {
+				categories: data_title
+			},
+			yAxis: {
+				min: 0,
+				stackLabels:{
+					enabled: true
+				},
+				title: {
+					enabled: false
+					// text: 'Population'
+				}
+			},
+			tooltip: {
+				formatter: function() {
+					return '<b>'+ this.x +'</b>: '+ humanizeFormatter(this.y);
+				}
+			},
+			legend:{
+
+			},
+			plotOptions: {
+				column: {
+					stacking: 'normal',
+					dataLabels: {
+						enabled: true,
+						color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+					}
+				}
+			},
+			colors: color_val,
+			series: data_val
+		});
+	}
+
+	// Object Stacked Bar chart
+	function polar_chart(id_val, color_val, data_title, data_val){
+		$(id_val).highcharts({
+			chart: {
+				polar: true
+			},
+			xAxis: {
+				categories: data_title
+			},
+			yAxis: {
+				type: 'logarithmic',
+				tickInterval: 1,
+				title: {
+					enabled: false
+				}
+			},
+			tooltip: {
+				formatter: function() {
+					console.log(this);
+					return '<b>'+ this.x +'</b>: '+ humanizeFormatter(this.y);
+				}
+			},
+			legend:{
+
+			},
+			plotOptions: {
+				
+			},
+			colors: color_val,
+			series: data_val
+			
+		});
+	}
+
+	$('.bar-chart').each(function(){
+		console.log(this.id);
+		var id_chart = '#' + this.id;
+		color_chart = $(id_chart).attr('data-color'); 
+		var data_chart = $(id_chart).data("val");
+		var yAxis_chart = $(id_chart).data("yaxis");
+
+		selected_color = colorChart[color_chart];
+
+		console.log(id_chart);
+		console.log(color_chart);
+		console.log(data_chart);
+		console.log(selected_color);
+		console.log(yAxis_chart);
+
+		bar_chart(id_chart, selected_color, yAxis_chart, data_chart);
+
+	});
+
+	$('.donut-chart').each(function(){
+		console.log(this.id);
+		var id_chart = '#' + this.id;
+		color_chart = $(id_chart).attr('data-color'); 
+		// var color_chart = $(id_chart).data("color");
+		var data_chart = $(id_chart).data("val");
+		// id_chart.attr('data-chart');
+
+		selected_color = colorChart[color_chart];
+
+		console.log(id_chart);
+		console.log(color_chart);
+		console.log(data_chart);
+		console.log(selected_color);
+
+		donut_chart(id_chart, selected_color, data_chart);
+
+	});
+
+	$('.bar-stacked-col-chart').each(function(){
+		console.log(this.id);
+		var id_chart = '#' + this.id;
+		color_chart = $(id_chart).attr('data-color'); 
+		var data_chart = $(id_chart).data("val");
+		var xAxis_chart = $(id_chart).data("xaxis");
+
+		selected_color = colorChart[color_chart];
+
+		console.log(id_chart);
+		console.log(color_chart);
+		console.log(data_chart);
+		console.log(selected_color);
+		console.log(xAxis_chart);
+
+		bar_stacked_col_chart(id_chart, selected_color, xAxis_chart, data_chart);
+
+	});
+
+	$('.bar-stacked-chart').each(function(){
+		console.log(this.id);
+		var id_chart = '#' + this.id;
+		color_chart = $(id_chart).attr('data-color'); 
+		var data_chart = $(id_chart).data("val");
+		var xAxis_chart = $(id_chart).data("xaxis");
+
+		selected_color = colorChart[color_chart];
+
+		console.log(id_chart);
+		console.log(color_chart);
+		console.log(data_chart);
+		console.log(selected_color);
+		console.log(xAxis_chart);
+
+		bar_stacked_chart(id_chart, selected_color, xAxis_chart, data_chart);
+
+	});
+
+	$('.polar-chart').each(function(){
+		console.log(this.id);
+		var id_chart = '#' + this.id;
+		color_chart = $(id_chart).attr('data-color'); 
+		var data_chart = $(id_chart).data("val");
+		var xAxis_chart = $(id_chart).data("xaxis");
+
+		selected_color = colorChart[color_chart];
+
+		console.log(id_chart);
+		console.log(color_chart);
+		console.log(data_chart);
+		console.log(selected_color);
+		console.log(xAxis_chart);
+
+		var isi_fix = [];
+		for (i = 0; i < data_chart.length; i++) { 
+			var isi = {
+				name: data_chart[i].type,
+				type: 'scatter',
+				data: data_chart[i].data.map(function (p) {
+					var radius = Math.log(p)*1.5;
+					return {
+						y: p,
+						marker: {
+							radius: (radius),
+							symbol: 'circle'
+						}
+					}
+				})
+			}
+
+			isi_fix.push(isi);
+		}
+		
+		console.log(isi_fix);
+
+		polar_chart(id_chart, selected_color, xAxis_chart, isi_fix);
+
+	});
+	
 }
 
 // Leaflet
@@ -4980,6 +5457,7 @@ function init_leaflet(){
 $(document).ready(function(){
 	init_select2_region();
 	init_datatable();
-	init_chart();
-	init_leaflet();
+	// init_chart();
+	// init_leaflet();
+	init_chart2();
 });

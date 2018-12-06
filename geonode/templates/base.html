@@ -43,6 +43,7 @@
             
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css" media="screen, projection">
             <link rel="stylesheet" href="{{ STATIC_URL }}isdc/css/select2-materialize.css">
+            <link rel="stylesheet" href="https://unpkg.com/materialize-stepper@3.0.0-beta.1.1.1/dist/css/mstepper.min.css">
 
             <link rel="stylesheet" href="{{ STATIC_URL }}isdc/css/custom.css">
 
@@ -125,7 +126,7 @@
                                         <li>
                                             <form action="{% url 'account_logout' %}" id="logout_form" method="post">
                                                 {% csrf_token %}
-                                                <a href="javascript:{}" class="waves-effect waves-light btn-floating red darken-3" onclick="document.getElementById('logout_form').submit();">
+                                                <a href="javascript:{}" class="waves-effect waves-light btn-floating red darken-3 z-depth-0" onclick="document.getElementById('logout_form').submit();">
                                                     <i class="material-icons left">power_settings_new</i>
                                                     <!-- <span class="hide-on-small-only">{% trans "Sign out" %}</span> -->
                                                 </a>
@@ -168,7 +169,7 @@
                                     <ul>
                                         {% for dash in dashboard_page_menu %}
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page={{dash.name}}{{add_link}}">
+                                            <a class="waves-effect waves-blue" href="{% url 'dashboard_detail' %}dashboard/?page={{dash.name}}{{add_link}}">
                                                 <i class="material-icons {{dash.name}}">swap_horiz</i>{{dash.title}}</a>
                                         </li>
                                         {% endfor %}
@@ -369,19 +370,19 @@
                             </li>
                             {% if USE_NOTIFICATIONS %}
                             <li>
-                                <a href="{#% url 'notification_notice_settings' %}" class="waves-effect waves-blue">
+                                <a href="{#% url 'notification_notice_settings' %}" class="waves-effect waves-light">
                                     <i class="material-icons">settings</i>Settings</a> 
                                     <!-- this field with notification url -->
                             </li>
                             {% endif %}
                             <li>
-                                <a href="{% url 'help' %}" class="waves-effect waves-blue">
+                                <a href="{% url 'help' %}" class="waves-effect waves-light">
                                     <i class="material-icons">help</i>Help</a>
                             </li>
                             <li>
                                 <form action="{% url 'account_logout' %}" id="logout_form" method="post">
                                     {% csrf_token %}
-                                    <a href="javascript:{}" class="waves-effect waves-blue logout" onclick="document.getElementById('logout_form').submit();">
+                                    <a href="javascript:{}" class="waves-effect waves-light logout" onclick="document.getElementById('logout_form').submit();">
                                         <i class="material-icons">power_settings_new</i>{% trans "Logout" %}
                                     </a>
                                 </form>
@@ -539,6 +540,8 @@
 
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+        <script src="https://unpkg.com/materialize-stepper@3.0.0-beta.1.1.1/dist/js/mstepper.min.js">
+        
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
         <script src="{{ STATIC_URL }}isdc/js/usng.js"></script>
         <script src="{{ STATIC_URL }}isdc/js/_custom.js"></script>
