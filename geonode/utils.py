@@ -1454,6 +1454,21 @@ class dict_ext(dict):
             d = d.get(arg, dict_ext({}))
         return d
 
+    '''
+    return copy of self with selected keys removed
+    '''
+    def without(self, *keys):
+        return dict_ext({k:v for k,v in self.items() if k not in keys})
+
+    '''
+    return copy of self with selected keys only
+    '''
+    def within(self, *keys):
+        return dict_ext({k:self[k] for k in keys if k in self})
+
+    def valueslistbykey(self, *keys):
+        return [self[k] for k in keys if k in self]
+
 class list_ext(list):
 
     '''
@@ -1463,7 +1478,7 @@ class list_ext(list):
         return self[idx] if idx < len(self) else defaultval
 
     '''
-    return self with values removed
+    return copy of self with values removed
     '''
     def without(self, values=[]):
         return [i for i in self if i not in values]
