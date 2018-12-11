@@ -502,6 +502,9 @@ function init_chart2(){
 	// colorFloodRiskForecast = ['#abd9e9', '#74add1', '#4575b4'];
 	colorFloodRiskForecast = ['#acd7ff', '#79bfff', '#46a7ff'];
 	colorFloodRisk = ['#ffaaab', '#ff6264', '#d13c3e', '#ddd'];
+	colorAvaRisk = ['#ffaaab', '#ff6264', '#ddd'];
+	colorDrought = [ '#ffef00', '#bdda57' , '#ffca28', '#ef5350', '#212121', '#ccc' ];
+	colorLandslide = [ '#43A047', '#FDD835' , '#FB8C00', '#e84c3d', '#ccc' ];
 	colorMercalli = [
 		// /*'#eeeeee', '#bfccff',*/ '#9999ff', '#88ffff', '#7df894', '#ffff00',
 		// '#ffdd00', '#ff9100', '#ff0000', '#dd0000', '#880000', '#440000'
@@ -522,6 +525,9 @@ function init_chart2(){
 		'colorDonut' : colorDonutDefault,
 		'colorFloodRiskForecast' : colorFloodRiskForecast,
 		'colorFloodRisk': colorFloodRisk,
+		'colorAvaRisk': colorAvaRisk,
+		'colorDrought': colorDrought,
+		'colorLandslide': colorLandslide,
 		'colorEarthquake': colorMercalli,
 		'colorSecurity': colorDefault
 	}
@@ -658,6 +664,17 @@ function init_chart2(){
 			legend:{
 				enabled: false
 			},
+			plotOptions:{
+				bar: {
+					colorByPoint: true,
+					dataLabels: {
+						enabled: true,
+						formatter: function() {
+							return humanizeFormatter(this.y);
+						}
+					}
+				}
+			},
 			colors: color_val,
 			series: [{
 				// name: 'Population',
@@ -737,7 +754,7 @@ function init_chart2(){
 	}
 
 	// Object Stacked Bar chart
-	function bar_stacked_chart(id_val, color_val, data_title, data_val){
+	function bar_stacked_percent_chart(id_val, color_val, data_title, data_val){
 		$(id_val).highcharts({
 			chart: {
 				type: 'bar'
@@ -746,26 +763,24 @@ function init_chart2(){
 				categories: data_title
 			},
 			yAxis: {
+				reversedStacks: false,
 				min: 0,
-				stackLabels:{
-					enabled: true
-				},
 				title: {
-					enabled: false
-					// text: 'Population'
+					text: "Percentage (%)"
 				}
 			},
 			tooltip: {
 				formatter: function() {
-					return '<b>'+ this.x +'</b>: '+ humanizeFormatter(this.y);
+					console.log(this);
+					return '<b>'+ this.x +'</b>: '+ humanizeFormatter(this.y) +' ('+ (this.percentage).toFixed(2) + '%)';
 				}
 			},
 			legend:{
 
 			},
 			plotOptions: {
-				column: {
-					stacking: 'normal',
+				series: {
+					stacking: 'percent',
 					dataLabels: {
 						enabled: true,
 						color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
@@ -868,7 +883,7 @@ function init_chart2(){
 
 	});
 
-	$('.bar-stacked-chart').each(function(){
+	$('.bar-stacked-percent-chart').each(function(){
 		console.log(this.id);
 		var id_chart = '#' + this.id;
 		color_chart = $(id_chart).attr('data-color'); 
@@ -883,7 +898,7 @@ function init_chart2(){
 		console.log(selected_color);
 		console.log(xAxis_chart);
 
-		bar_stacked_chart(id_chart, selected_color, xAxis_chart, data_chart);
+		bar_stacked_percent_chart(id_chart, selected_color, xAxis_chart, data_chart);
 
 	});
 
@@ -1555,9 +1570,9 @@ function init_leaflet(){
 			// console.log(props);
 		    this._div.innerHTML = 
 		    	(props ?
-		        	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 linkPopup right">Go To ' + (props.na_en) +'</a>' + '</span>'
+		        	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light z-depth-0 linkPopup right">Go To ' + (props.na_en) +'</a>' + '</span>'
 		        	// + '<span>' + chosen_label + '</span>'
-		        	+ '<div class="row"><div class="col s12 m4 l3 xl12">'
+		        	+ '<div class="row"><div class="col s12 m4 l3 xl3">'
 		        	+ '<div class="circle_container"><i class="icon-people_affected_population fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.Population) + '</span><span class="circle_title">' + overview_legend[0] + '</span></div>'
 		        	+ '<div class="circle_container"><i class="icon-infrastructure_building fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.Buildings) + '</span><span class="circle_title">' + overview_legend[2] + '</span></div>'
 		        	+ '<div class="circle_container"><i class="fa fa-tree fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.Area) + '</span><span class="circle_title">' + overview_legend[1] + '</span></div>'
@@ -1565,11 +1580,11 @@ function init_leaflet(){
 		        	+ '<div class="circle_container"><i class="fa fa-road fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.road_total) + '</span><span class="circle_title">' + total_category[1] + '</span></div>'
 		        	+ '</div>'
 
-		        	+ '<div style="display:none;" class="col s12 m8 l5 xl7 Population"><div id="chart_map_pop" class="ch-map-size" style="height:280px;"></div></div>'
-		        	+ '<div style="display:none;" class="col s12 m8 l5 xl7 Buildings"><div id="chart_map_build" class="ch-map-size" style="height:280px;"></div></div>'
-		        	+ '<div style="display:none;" class="col s12 m8 l5 xl7 Area"><div id="chart_map_area" class="ch-map-size" style="height:280px;"></div></div>'
-		        	+ '<div style="display:none;" class="col s12 m8 l5 xl7 hlt_total"><div id="chart_map_hlt_fac" class="ch-map-size" style="height:280px;"></div></div>'
-		        	+ '<div style="display:none;" class="col s12 m8 l5 xl7 road_total"><div id="chart_map_road_network" class="ch-map-size" style="height:280px;"></div></div>'
+		        	+ '<div style="display:none;" class="col s12 m8 l5 xl9 Population"><div id="chart_map_pop" class="ch-map-size" style="height:280px;"></div></div>'
+		        	+ '<div style="display:none;" class="col s12 m8 l5 xl9 Buildings"><div id="chart_map_build" class="ch-map-size" style="height:280px;"></div></div>'
+		        	+ '<div style="display:none;" class="col s12 m8 l5 xl9 Area"><div id="chart_map_area" class="ch-map-size" style="height:280px;"></div></div>'
+		        	+ '<div style="display:none;" class="col s12 m8 l5 xl9 hlt_total"><div id="chart_map_hlt_fac" class="ch-map-size" style="height:350px;"></div></div>'
+		        	+ '<div style="display:none;" class="col s12 m8 l5 xl9 road_total"><div id="chart_map_road_network" class="ch-map-size" style="height:280px;"></div></div>'
 
 		        	// + '<table class="table table-bordered table-condensed"><thead><tr><th rowspan="2"></th><th colspan="3">Tier 1</th><th>Tier 2</th><th colspan="2">Tier 3</th><th rowspan="2">Others</th><th rowspan="2">Total</th></tr><tr><th>H1</th><th>H2</th><th>H3</th><th>CHC</th><th>BHC</th><th>SHC</th></tr></thead><tbody><tr><td>Health Facilities</td>'
 		        	// + '<td>' + humanizeFormatter(props.hlt_h1) + '</td>'
@@ -1592,7 +1607,7 @@ function init_leaflet(){
 		        	// + '<td>' + humanizeFormatter(props.road_total) + '</td>'
 		        	// + '</tr></tbody></table>'
 
-		        	+ '<div style="display:none;" class="col s12 l4 xl5 hlt_total"><table class="table table-bordered table-condensed"><tr><th colspan="3">Health Facilities</th></tr><tr><th rowspan="3" class="rotate">Tier 1</th><th>H1</th>'
+		        	+ '<div style="display:none;" class="col s12 l4 xl9 hlt_total"><table class="table table-bordered table-condensed"><tr><th colspan="3">Health Facilities</th></tr><tr><th rowspan="3" class="rotate">Tier 1</th><th>H1</th>'
 		        	+ '<td>' + humanizeFormatter(props.hlt_h1) + '</td></tr><tr><th>H2</th>'
 		        	+ '<td>' + humanizeFormatter(props.hlt_h2) + '</td></tr><tr><th>H3</th>'
 		        	+ '<td>' + humanizeFormatter(props.hlt_h3) + '</td></tr><tr><th class="rotate">Tier 2</th><th>CHC</th>'
@@ -1602,7 +1617,7 @@ function init_leaflet(){
 		        	+ '<td>' + humanizeFormatter(props.hlt_others) + '</td></tr><tr><th colspan="2" style="text-align: right;">Total</th>'
 		        	+ '<td>' + humanizeFormatter(props.hlt_total) + '</td></tr></table></div>'
 
-		        	+ '<div style="display:none;" class="col s12 l4 xl5 road_total"><table class="table table-bordered table-condensed"><tr><th colspan="2">Road Network</th></tr><tr><th>Highway</th>'
+		        	+ '<div style="display:none;" class="col s12 l4 xl9 road_total"><table class="table table-bordered table-condensed"><tr><th colspan="2">Road Network</th></tr><tr><th>Highway</th>'
 		        	+ '<td>' + humanizeFormatter(props.road_highway) + '</td></tr><tr><th>Primary</th>'
 		        	+ '<td>' + humanizeFormatter(props.road_primary) + '</td></tr><tr><th>Secondary</th>'
 		        	+ '<td>' + humanizeFormatter(props.road_secondary) + '</td></tr><tr><th>Tertiary</th>'
@@ -1638,9 +1653,7 @@ function init_leaflet(){
 	                }
 	            },
 	            yAxis: {
-	                title: {
-	                    text: 'Total percent market share'
-	                }
+	                
 	            },
 	            plotOptions: {
 	                pie: {
@@ -1831,9 +1844,9 @@ function init_leaflet(){
 	                }
 	            },
 	            legend: {
-	                align: 'right',
-	                layout: 'vertical',
-	                verticalAlign: 'bottom'
+	                // align: 'right',
+	                // layout: 'vertical',
+	                // verticalAlign: 'bottom'
 	                // x: 40,
 	                // y: 0
 	            },
@@ -1907,7 +1920,7 @@ function init_leaflet(){
         	        }
         	    },
         	    xAxis: {
-        	        categories: panels.road.title,
+        	        categories: panels.charts.road.title,
         	        title: {
         	            text: null
         	        }
@@ -2101,10 +2114,10 @@ function init_leaflet(){
 	    	// console.log(props);
 	        this._div.innerHTML = 
 	        	(props ?
-	            	'<span class="chosen_area">' + props.na_en + '</span>'
+	            	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light z-depth-0 right linkPopup">Go To ' + (props.na_en) +'</a>' + '</span>'
 	            	+ '<div class="row">'
 
-	            	+ '<div style="display:none;" class="col-md-1 col-sm-12 col-xs-12 access_radio_gsm">'
+	            	+ '<div style="display:none;" class="col s12 access_radio_gsm">'
 	            	// + '<div class="circle_container"><i class="icon-people_affected_population fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.Population) + '</span><span class="circle_title">' + 'Population' + '</span></div>'
 	            	// + '<div class="circle_container"><i class="icon-infrastructure_building fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.Buildings) + '</span><span class="circle_title">' + 'Buildings' + '</span></div>'
 	            	// + '<div class="circle_container"><i class="fa fa-tree fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.Area) + '</span><span class="circle_title">' + 'Area' + '</span></div>'
@@ -2114,19 +2127,19 @@ function init_leaflet(){
 	            	+ '<div style="display:none;" class="circle_container area_on_gsm_coverage"><i class="fa fa-tree fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.area_on_gsm_coverage) + '</span><span class="circle_title">' + 'Area on GSM Cov' + '</span></div>'
 	            	+ '</div>'
 
-	            	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 access_checkbox_nAirprt"><div id="chart_map_nAirport" class="ch-map-size" style="height:280px;"></div></div>'
-	            	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 access_checkbox_nHlt1"><div id="chart_map_nHlt1" class="ch-map-size" style="height:280px;"></div></div>'
-	            	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 access_checkbox_nHlt2"><div id="chart_map_nHlt2" class="ch-map-size" style="height:280px;"></div></div>'
-	            	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 access_checkbox_nHlt3"><div id="chart_map_nHlt3" class="ch-map-size" style="height:280px;"></div></div>'
-	            	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 access_checkbox_nHltAll"><div id="chart_map_nHltAll" class="ch-map-size" style="height:280px;"></div></div>'
-	            	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 access_checkbox_nItProvCap"><div id="chart_map_nItProvCap" class="ch-map-size" style="height:280px;"></div></div>'
-	            	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 access_checkbox_nProvCap"><div id="chart_map_nProvCap" class="ch-map-size" style="height:280px;"></div></div>'
-	            	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 access_checkbox_nDistCntr"><div id="chart_map_nDistCntr" class="ch-map-size" style="height:280px;"></div></div>'
-	            	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 pop_on_gsm_coverage"><div id="chart_map_gsmPop" class="ch-map-size" style="height:280px;"></div></div>'
-	            	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12"><div id="chart_map_gsmBuilding" class="ch-map-size" style="height:280px;"></div></div>'
-	            	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 area_on_gsm_coverage"><div id="chart_map_gsmArea" class="ch-map-size" style="height:280px;"></div></div>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nAirprt"><div id="chart_map_nAirport" class="ch-map-size" style="height:280px;"></div></div>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nHlt1"><div id="chart_map_nHlt1" class="ch-map-size" style="height:280px;"></div></div>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nHlt2"><div id="chart_map_nHlt2" class="ch-map-size" style="height:280px;"></div></div>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nHlt3"><div id="chart_map_nHlt3" class="ch-map-size" style="height:280px;"></div></div>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nHltAll"><div id="chart_map_nHltAll" class="ch-map-size" style="height:280px;"></div></div>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nItProvCap"><div id="chart_map_nItProvCap" class="ch-map-size" style="height:280px;"></div></div>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nProvCap"><div id="chart_map_nProvCap" class="ch-map-size" style="height:280px;"></div></div>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nDistCntr"><div id="chart_map_nDistCntr" class="ch-map-size" style="height:280px;"></div></div>'
+	            	+ '<div style="display:none;" class="col s12 pop_on_gsm_coverage"><div id="chart_map_gsmPop" class="ch-map-size" style="height:280px;"></div></div>'
+	            	+ '<div style="display:none;" class="col s12"><div id="chart_map_gsmBuilding" class="ch-map-size" style="height:280px;"></div></div>'
+	            	+ '<div style="display:none;" class="col s12 area_on_gsm_coverage"><div id="chart_map_gsmArea" class="ch-map-size" style="height:280px;"></div></div>'
 
-	            	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 access_checkbox_nAirprt"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest Airport</th></tr><tr>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nAirprt"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest Airport</th></tr><tr>'
 	            	+ '<th class="l1h">' + time_legend[0]
 	            	+ '</th><td class="l1h">' + humanizeFormatter(props.l1_h__near_airp)
 	            	+ '</td></tr><tr><th class="l2h">' + time_legend[1]
@@ -2147,7 +2160,7 @@ function init_leaflet(){
 	            	+ '</th><td class="m8h">' + humanizeFormatter(props.g8_h__near_airp)
 	            	+ '</td></tr></table></div>'
 
-	            	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 access_checkbox_nHlt1"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest Hospital Tier 1</th></tr><tr>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nHlt1"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest Hospital Tier 1</th></tr><tr>'
 	            	+ '<th class="l1h">' + time_legend[0]
 	            	+ '</th><td class="l1h">' + humanizeFormatter(props.l1_h__near_hlt1)
 	            	+ '</td></tr><tr><th class="l2h">' + time_legend[1]
@@ -2168,7 +2181,7 @@ function init_leaflet(){
 	            	+ '</th><td class="m8h">' + humanizeFormatter(props.g8_h__near_hlt1)
 	            	+ '</td></tr></table></div>'
 
-	            	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 access_checkbox_nHlt2"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest Hospital Tier 2</th></tr><tr>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nHlt2"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest Hospital Tier 2</th></tr><tr>'
 	            	+ '<th class="l1h">' + time_legend[0]
 	            	+ '</th><td class="l1h">' + humanizeFormatter(props.l1_h__near_hlt2)
 	            	+ '</td></tr><tr><th class="l2h">' + time_legend[1]
@@ -2189,7 +2202,7 @@ function init_leaflet(){
 	            	+ '</th><td class="m8h">' + humanizeFormatter(props.g8_h__near_hlt2)
 	            	+ '</td></tr></table></div>'
 
-	            	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 access_checkbox_nHlt3"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest Hospital Tier 3</th></tr><tr>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nHlt3"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest Hospital Tier 3</th></tr><tr>'
 	            	+ '<th class="l1h">' + time_legend[0]
 	            	+ '</th><td class="l1h">' + humanizeFormatter(props.l1_h__near_hlt3)
 	            	+ '</td></tr><tr><th class="l2h">' + time_legend[1]
@@ -2210,7 +2223,7 @@ function init_leaflet(){
 	            	+ '</th><td class="m8h">' + humanizeFormatter(props.g8_h__near_hlt3)
 	            	+ '</td></tr></table></div>'
 
-	            	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 access_checkbox_nHltAll"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest Hospital Tier All</th></tr><tr>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nHltAll"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest Hospital Tier All</th></tr><tr>'
 	            	+ '<th class="l1h">' + time_legend[0]
 	            	+ '</th><td class="l1h">' + humanizeFormatter(props.l1_h__near_hltall)
 	            	+ '</td></tr><tr><th class="l2h">' + time_legend[1]
@@ -2231,7 +2244,7 @@ function init_leaflet(){
 	            	+ '</th><td class="m8h">' + humanizeFormatter(props.g8_h__near_hltall)
 	            	+ '</td></tr></table></div>'
 
-	            	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 access_checkbox_nItProvCap"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Its Provincial Capital</th></tr><tr>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nItProvCap"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Its Provincial Capital</th></tr><tr>'
 	            	+ '<th class="l1h">' + time_legend[0]
 	            	+ '</th><td class="l1h">' + humanizeFormatter(props.l1_h__itsx_prov)
 	            	+ '</td></tr><tr><th class="l2h">' + time_legend[1]
@@ -2252,7 +2265,7 @@ function init_leaflet(){
 	            	+ '</th><td class="m8h">' + humanizeFormatter(props.g8_h__itsx_prov)
 	            	+ '</td></tr></table></div>'
 
-	            	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 access_checkbox_nProvCap"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest Provincial Capital</th></tr><tr>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nProvCap"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest Provincial Capital</th></tr><tr>'
 	            	+ '<th class="l1h">' + time_legend[0]
 	            	+ '</th><td class="l1h">' + humanizeFormatter(props.l1_h__near_prov)
 	            	+ '</td></tr><tr><th class="l2h">' + time_legend[1]
@@ -2273,7 +2286,7 @@ function init_leaflet(){
 	            	+ '</th><td class="m8h">' + humanizeFormatter(props.g8_h__near_prov)
 	            	+ '</td></tr></table></div>'
 
-	            	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 access_checkbox_nDistCntr"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest District Center</th></tr><tr>'
+	            	+ '<div style="display:none;" class="col s12 access_checkbox_nDistCntr"><table class="table table-bordered table-condensed"><tr><th>Travel Time</th><th>Nearest District Center</th></tr><tr>'
 	            	+ '<th class="l1h">' + time_legend[0]
 	            	+ '</th><td class="l1h">' + humanizeFormatter(props.l1_h__near_dist)
 	            	+ '</td></tr><tr><th class="l2h">' + time_legend[1]
@@ -2377,8 +2390,7 @@ function init_leaflet(){
 	            	// +'</td><td class="l8h">' + humanizeFormatter(props.l8_h__near_dist)
 	            	// +'</td><td class="m8h">' + humanizeFormatter(props.g8_h__near_dist)
 	            	// +'</td></tr></tbody></table></div>'
-	            	+ '<a class="btn btn-primary linkPopup">Go To ' + (props.na_en) +'</a>'
-	            : '<h4>' + chosen_label + '</h4>' + 'Click on an area to show information');
+	            : '<span class="card-title">' + chosen_label + '</span>' + 'Click on an area to show information');
 			$('a.linkPopup').on('click', function() {
 			    window.document.location="?page=accessibility&code=" + (props.code) ;
 			});
@@ -2438,7 +2450,7 @@ function init_leaflet(){
         	    legend: {
         	        enabled: false
         	    },
-        	    colors: colorList,
+        	    colors: colorAccessibility,
         	    credits: {
         	        enabled: false
         	    },
@@ -2496,7 +2508,7 @@ function init_leaflet(){
         	    legend: {
         	        enabled: false
         	    },
-        	    colors: colorList,
+        	    colors: colorAccessibility,
         	    credits: {
         	        enabled: false
         	    },
@@ -2554,7 +2566,7 @@ function init_leaflet(){
         	    legend: {
         	        enabled: false
         	    },
-        	    colors: colorList,
+        	    colors: colorAccessibility,
         	    credits: {
         	        enabled: false
         	    },
@@ -2612,7 +2624,7 @@ function init_leaflet(){
         	    legend: {
         	        enabled: false
         	    },
-        	    colors: colorList,
+        	    colors: colorAccessibility,
         	    credits: {
         	        enabled: false
         	    },
@@ -2670,7 +2682,7 @@ function init_leaflet(){
         	    legend: {
         	        enabled: false
         	    },
-        	    colors: colorList,
+        	    colors: colorAccessibility,
         	    credits: {
         	        enabled: false
         	    },
@@ -2728,7 +2740,7 @@ function init_leaflet(){
         	    legend: {
         	        enabled: false
         	    },
-        	    colors: colorList,
+        	    colors: colorAccessibility,
         	    credits: {
         	        enabled: false
         	    },
@@ -2786,7 +2798,7 @@ function init_leaflet(){
         	    legend: {
         	        enabled: false
         	    },
-        	    colors: colorList,
+        	    colors: colorAccessibility,
         	    credits: {
         	        enabled: false
         	    },
@@ -2844,7 +2856,7 @@ function init_leaflet(){
         	    legend: {
         	        enabled: false
         	    },
-        	    colors: colorList,
+        	    colors: colorAccessibility,
         	    credits: {
         	        enabled: false
         	    },
@@ -3031,8 +3043,8 @@ function init_leaflet(){
 	    	
 	    });
 
-	    // use jQuery to listen for checkbox change event
-	    $('div#layercontrol .wms_check input[type="checkbox"]').on('change', function() {    
+	    // Change event WMS Layer
+	    $('div#layercontrol .switch input[type="checkbox"]').on('change', function() {    
 	        var checkbox = $(this);
 	        // lyr = checkbox.data().layer;
 	        var lyr = checkbox.attr('data-layer');
@@ -3096,15 +3108,15 @@ function init_leaflet(){
         info.update = function (props) {
             this._div.innerHTML = 
             	(props ?
-                	'<span class="chosen_area">' + props.na_en + '</span>'
+                	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light z-depth-0 right linkPopup">Go To ' + (props.na_en) +'</a>' + '</span>'
                 	+ '<div class="row">'
 
-                	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 fforecast_checkbox_flash_pop"><div id="chart_map_fforecast" class="ch-map-size" style="height:280px;"></div></div>'
-                	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 fforecast_checkbox_river_gg_pop"><div id="chart_map_ggfforecast" class="ch-map-size" style="height:280px;"></div></div>'
-                	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 fforecast_checkbox_river_gl_pop"><div id="chart_map_glfforecast" class="ch-map-size" style="height:280px;"></div></div>'
-                	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 fforecast_checkbox_river_gf_pop"><div id="chart_map_gffforecast" class="ch-map-size" style="height:280px;"></div></div>'
+                	+ '<div style="display:none;" class="col s12 fforecast_checkbox_flash_pop"><div id="chart_map_fforecast" class="ch-map-size" style="height:280px;"></div></div>'
+                	+ '<div style="display:none;" class="col s12 fforecast_checkbox_river_gg_pop"><div id="chart_map_ggfforecast" class="ch-map-size" style="height:280px;"></div></div>'
+                	+ '<div style="display:none;" class="col s12 fforecast_checkbox_river_gl_pop"><div id="chart_map_glfforecast" class="ch-map-size" style="height:280px;"></div></div>'
+                	+ '<div style="display:none;" class="col s12 fforecast_checkbox_river_gf_pop"><div id="chart_map_gffforecast" class="ch-map-size" style="height:280px;"></div></div>'
 
-                	+ '<div style="display: none;" class="col-md-4 col-sm-12 col-xs-12 fforecast_checkbox_flash_pop"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Affected Population</th></tr><tr>'
+                	+ '<div style="display: none;" class="col s12 fforecast_checkbox_flash_pop"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Affected Population</th></tr><tr>'
                 	+ '<th class="low">' + fforecast_cat[0]
                 	+ '</th><td class="low">' + humanizeFormatter(props.flashflood_forecast_low_pop)
                 	+ '</td></tr><tr><th class="mod">' + fforecast_cat[1]
@@ -3117,7 +3129,7 @@ function init_leaflet(){
                 	+ '</th><td class="ext">' + humanizeFormatter(props.flashflood_forecast_extreme_pop)
                 	+ '</td></tr></table></div>'
 
-                	+ '<div style="display: none;" class="col-md-4 col-sm-12 col-xs-12 fforecast_checkbox_river_gg_pop"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Affected Population</th></tr><tr>'
+                	+ '<div style="display: none;" class="col s12 fforecast_checkbox_river_gg_pop"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Affected Population</th></tr><tr>'
                 	+ '<th class="low">' + fforecast_cat[0]
                 	+ '</th><td class="low">' + humanizeFormatter(props.gfms_glofas_riverflood_forecast_low_pop)
                 	+ '</td></tr><tr><th class="mod">' + fforecast_cat[1]
@@ -3130,7 +3142,7 @@ function init_leaflet(){
                 	+ '</th><td class="ext">' + humanizeFormatter(props.gfms_glofas_riverflood_forecast_extreme_pop)
                 	+ '</td></tr></table></div>'
 
-                	+ '<div style="display: none;" class="col-md-4 col-sm-12 col-xs-12 fforecast_checkbox_river_gl_pop"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Affected Population</th></tr><tr>'
+                	+ '<div style="display: none;" class="col s12 fforecast_checkbox_river_gl_pop"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Affected Population</th></tr><tr>'
                 	+ '<th class="low">' + fforecast_cat[0]
                 	+ '</th><td class="low">' + humanizeFormatter(props.glofas_riverflood_forecast_low_pop)
                 	+ '</td></tr><tr><th class="mod">' + fforecast_cat[1]
@@ -3143,7 +3155,7 @@ function init_leaflet(){
                 	+ '</th><td class="ext">' + humanizeFormatter(props.glofas_riverflood_forecast_extreme_pop)
                 	+ '</td></tr></table></div>'
 
-                	+ '<div style="display: none;" class="col-md-4 col-sm-12 col-xs-12 fforecast_checkbox_river_gf_pop"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Affected Population</th></tr><tr>'
+                	+ '<div style="display: none;" class="col s12 fforecast_checkbox_river_gf_pop"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Affected Population</th></tr><tr>'
                 	+ '<th class="low">' + fforecast_cat[0]
                 	+ '</th><td class="low">' + humanizeFormatter(props.riverflood_forecast_low_pop)
                 	+ '</td></tr><tr><th class="mod">' + fforecast_cat[1]
@@ -3157,9 +3169,7 @@ function init_leaflet(){
                 	+ '</td></tr></table></div>'
 
                 	+ '</div>'
-
-                	+ '<a class="btn btn-primary linkPopup">Go To ' + (props.na_en) +'</a>'
-                : '<h4>' + chosen_label + '</h4>' + 'Click on an area to show information');
+                : '<span class="card-title">' + chosen_label + '</span>' + 'Click on an area to show information');
     		$('a.linkPopup').on('click', function() {
     		    window.document.location="?page=floodforecast&code=" + (props.code) ;
     		});
@@ -3406,7 +3416,7 @@ function init_leaflet(){
 	    });
 
 	    // use jQuery to listen for checkbox change event
-	    $('div#layercontrol .wms_check input[type="checkbox"]').on('change', function() {    
+	    $('div#layercontrol .switch input[type="checkbox"]').on('change', function() {    
 	        var checkbox = $(this);
 	        // lyr = checkbox.data().layer;
 	        var lyr = checkbox.attr('data-layer');
@@ -3461,7 +3471,7 @@ function init_leaflet(){
         info.update = function (props) {
             this._div.innerHTML = 
             	(props ?
-		        	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 linkPopup right">Go To ' + (props.na_en) +'</a>' + '</span>'
+		        	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light z-depth-0 linkPopup right">Go To ' + (props.na_en) +'</a>' + '</span>'
 
                 	+ '<div class="row"><div class="col s12 l3"><div class="circle_container"><i class="icon-people_affected_population fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_risk_population) + '</span><span class="circle_title">' + map_category[0] + '</span></div>'
                 	+ '<div class="circle_container"><i class="icon-infrastructure_building fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.settlements_at_risk) + '</span><span class="circle_title">' + map_category[2] + '</span></div>'
@@ -3711,12 +3721,12 @@ function init_leaflet(){
         info.update = function (props) {
             this._div.innerHTML =
             	(props ?
-		        	'<span class="chosen_area">' + props.na_en + '</span>'
+		        	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light z-depth-0 right linkPopup">Go To ' + (props.na_en) +'</a>' + '</span>'
                 	+ '<div class="row">'
 
-                	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 aforecast_checkbox_pop"><div id="chart_map_aforecast" class="ch-map-size" style="height:280px;"></div></div>'
+                	+ '<div style="display:none;" class="col s12 aforecast_checkbox_pop"><div id="chart_map_aforecast" class="ch-map-size" style="height:280px;"></div></div>'
 
-                	+ '<div style="display: none;" class="col-md-3 col-sm-12 col-xs-12 aforecast_checkbox_pop"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Affected Population</th></tr><tr>'
+                	+ '<div style="display: none;" class="col s12 aforecast_checkbox_pop"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Affected Population</th></tr><tr>'
                 	+ '<th>' + aforecast_cat[0]
                 	+ '</th><td>' + humanizeFormatter(props.ava_forecast_low_pop)
                 	+ '</td></tr><tr><th>' + aforecast_cat[1]
@@ -3732,8 +3742,7 @@ function init_leaflet(){
                 	// + '</td></tr><tr><td>Moderate</td><td>' + humanizeFormatter(props.ava_forecast_med_pop)
                 	// + '</td></tr><tr><td>High</td><td>' + humanizeFormatter(props.ava_forecast_high_pop)
                 	// + '</td></tr></table>'
-                	+ '<a class="btn btn-primary linkPopup">Go To ' + (props.na_en) +'</a>'
-                : '<h4>' + chosen_label + '</h4>' + 'Click on an area to show information');
+                : '<span class="card-title">' + chosen_label + '</span>' + 'Click on an area to show information');
     		$('a.linkPopup').on('click', function() {
     		    window.document.location="?page=avalcheforecast&code=" + (props.code) ;
     		});
@@ -3842,7 +3851,7 @@ function init_leaflet(){
 	    });
 
 	    // use jQuery to listen for checkbox change event
-	    $('div#layercontrol .wms_check input[type="checkbox"]').on('change', function() {    
+	    $('div#layercontrol .switch input[type="checkbox"]').on('change', function() {    
 	        var checkbox = $(this);
 	        // lyr = checkbox.data().layer;
 	        var lyr = checkbox.attr('data-layer');
@@ -3907,29 +3916,27 @@ function init_leaflet(){
         info.update = function (props) {
             this._div.innerHTML = 
             	(props ?
-		        	'<span class="chosen_area">' + props.na_en + '</span>'
+		        	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light z-depth-0 right linkPopup">Go To ' + (props.na_en) +'</a>' + '</span>'
                 	+ '<div class="row">'
 
-                	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 arisk_checkbox_pop"><div id="chart_map_ava_risk_pop" class="ch-map-size" style="height:280px;"></div></div>'
-                	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 arisk_checkbox_build"><div id="chart_map_ava_risk_build" class="ch-map-size" style="height:280px;"></div></div>'
-                	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 arisk_checkbox_area"><div id="chart_map_ava_risk_area" class="ch-map-size" style="height:280px;"></div></div>'
+                	+ '<div style="display:none;" class="col s12 arisk_checkbox_pop"><div id="chart_map_ava_risk_pop" class="ch-map-size" style="height:280px;"></div></div>'
+                	+ '<div style="display:none;" class="col s12 arisk_checkbox_build"><div id="chart_map_ava_risk_build" class="ch-map-size" style="height:280px;"></div></div>'
+                	+ '<div style="display:none;" class="col s12 arisk_checkbox_area"><div id="chart_map_ava_risk_area" class="ch-map-size" style="height:280px;"></div></div>'
 
-                	+ '<div style="display: none;" class="col-md-3 col-sm-12 col-xs-12 arisk_checkbox_pop"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Population</th></tr><tr>'
+                	+ '<div style="display: none;" class="col s12 arisk_checkbox_pop"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Population</th></tr><tr>'
                 	+ '<td>Moderate</td><td>' + humanizeFormatter(props.med_ava_population) + '</td></tr><tr>'
                 	+ '<td>High</td><td>' + humanizeFormatter(props.high_ava_population) + '</td></tr></table></div>'
 
-					+ '<div style="display: none;" class="col-md-3 col-sm-12 col-xs-12 arisk_checkbox_build"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Buildings</th></tr><tr>'
+					+ '<div style="display: none;" class="col s12 arisk_checkbox_build"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Buildings</th></tr><tr>'
 					+ '<td>Moderate</td><td>' + humanizeFormatter(props.med_ava_buildings)  + '</td></tr><tr>'
 					+ '<td>High</td><td>' + humanizeFormatter(props.high_ava_buildings) + '</td></tr></table></div>'
 
-					+ '<div style="display: none;" class="col-md-3 col-sm-12 col-xs-12 arisk_checkbox_area"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Area (km<sup>2</sup>)</th></tr><tr>'
+					+ '<div style="display: none;" class="col s12 arisk_checkbox_area"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Area (km<sup>2</sup>)</th></tr><tr>'
 					+ '<td>Moderate</td><td>' + humanizeFormatter(props.med_ava_area) + '</td></tr><tr>'
 					+ '<td>High</td><td>' + humanizeFormatter(props.high_ava_area) + '</td></tr></table></div>'
 
                 	+ '</div>'
-
-                	+ '<a class="btn btn-primary linkPopup">Go To ' + (props.na_en) +'</a>'
-                : '<h4>' + chosen_label + '</h4>' + 'Click on an area to show information');
+                : '<span class="card-title">' + chosen_label + '</span>' + 'Click on an area to show information');
     		$('a.linkPopup').on('click', function() {
     		    window.document.location="?page=avalancherisk&code=" + (props.code) ;
     		});
@@ -4127,7 +4134,7 @@ function init_leaflet(){
 	    });
 
 	    // use jQuery to listen for checkbox change event
-	    $('div#layercontrol .wms_check input[type="checkbox"]').on('change', function() {    
+	    $('div#layercontrol .switch input[type="checkbox"]').on('change', function() {    
 	        var checkbox = $(this);
 	        // lyr = checkbox.data().layer;
 	        var lyr = checkbox.attr('data-layer');
@@ -4212,16 +4219,16 @@ function init_leaflet(){
         info.update = function (props) {
             this._div.innerHTML = 
             	(props ?
-		        	'<span class="chosen_area">' + props.na_en + '</span>'
+		        	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light z-depth-0 right linkPopup">Go To ' + (props.na_en) +'</a>' + '</span>'
 		        	+ '<div class="row">'
 
-		        	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 landslide_checkbox_immap"><div id="chart_map_donut_lsi" class="ch-map-size" style="height:280px;"></div></div>'
-		        	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 landslide_checkbox_ku"><div id="chart_map_donut_ku" class="ch-map-size" style="height:280px;"></div></div>'
-		        	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 landslide_checkbox_s1"><div id="chart_map_donut_s1" class="ch-map-size" style="height:280px;"></div></div>'
-		        	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 landslide_checkbox_s2"><div id="chart_map_donut_s2" class="ch-map-size" style="height:280px;"></div></div>'
-		        	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 landslide_checkbox_s3"><div id="chart_map_donut_s3" class="ch-map-size" style="height:280px;"></div></div>'
+		        	+ '<div style="display:none;" class="col s12 landslide_checkbox_immap"><div id="chart_map_donut_lsi" class="ch-map-size" style="height:280px;"></div></div>'
+		        	+ '<div style="display:none;" class="col s12 landslide_checkbox_ku"><div id="chart_map_donut_ku" class="ch-map-size" style="height:280px;"></div></div>'
+		        	+ '<div style="display:none;" class="col s12 landslide_checkbox_s1"><div id="chart_map_donut_s1" class="ch-map-size" style="height:280px;"></div></div>'
+		        	+ '<div style="display:none;" class="col s12 landslide_checkbox_s2"><div id="chart_map_donut_s2" class="ch-map-size" style="height:280px;"></div></div>'
+		        	+ '<div style="display:none;" class="col s12 landslide_checkbox_s3"><div id="chart_map_donut_s3" class="ch-map-size" style="height:280px;"></div></div>'
 
-                	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 landslide_checkbox_immap"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Landslide Indexes (iMMAP 2017)</th></tr><tr>'
+                	+ '<div style="display:none;" class="col s12 landslide_checkbox_immap"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Landslide Indexes (iMMAP 2017)</th></tr><tr>'
                 	+ '<th class="landslide_vhigh">' + level_risk[3]
                 	+ '</th><td class="landslide_vhigh">' + humanizeFormatter(props.lsi_immap_very_high)
                 	+ '</td></tr><tr><th class="landslide_high">' + level_risk[2]
@@ -4232,7 +4239,7 @@ function init_leaflet(){
                 	+ '</th><td class="landslide_low">' + humanizeFormatter(props.lsi_immap_low)
                 	+ '</td></tr></table></div>'
 
-                	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 landslide_checkbox_ku"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Multi-criteria Susceptibility Index</th></tr><tr>'
+                	+ '<div style="display:none;" class="col s12 landslide_checkbox_ku"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Multi-criteria Susceptibility Index</th></tr><tr>'
                 	+ '<th class="landslide_vhigh">' + level_risk[3]
                 	+ '</th><td class="landslide_vhigh">' + humanizeFormatter(props.lsi_ku_very_high)
                 	+ '</td></tr><tr><th class="landslide_high">' + level_risk[2]
@@ -4243,7 +4250,7 @@ function init_leaflet(){
                 	+ '</th><td class="landslide_low">' + humanizeFormatter(props.lsi_ku_low)
                 	+ '</td></tr></table></div>'
 
-                	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 landslide_checkbox_s1"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Landslide Susceptibility (S1)</th></tr><tr>'
+                	+ '<div style="display:none;" class="col s12 landslide_checkbox_s1"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Landslide Susceptibility (S1)</th></tr><tr>'
                 	+ '<th class="landslide_vhigh">' + level_risk[3]
                 	+ '</th><td class="landslide_vhigh">' + humanizeFormatter(props.ls_s1_wb_very_high)
                 	+ '</td></tr><tr><th class="landslide_high">' + level_risk[2]
@@ -4254,7 +4261,7 @@ function init_leaflet(){
                 	+ '</th><td class="landslide_low">' + humanizeFormatter(props.ls_s1_wb_low)
                 	+ '</td></tr></table></div>'
 
-                	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 landslide_checkbox_s2"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Landslide Susceptibility (S2)</th></tr><tr>'
+                	+ '<div style="display:none;" class="col s12 landslide_checkbox_s2"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Landslide Susceptibility (S2)</th></tr><tr>'
                 	+ '<th class="landslide_vhigh">' + level_risk[3]
                 	+ '</th><td class="landslide_vhigh">' + humanizeFormatter(props.ls_s2_wb_very_high)
                 	+ '</td></tr><tr><th class="landslide_high">' + level_risk[2]
@@ -4265,7 +4272,7 @@ function init_leaflet(){
                 	+ '</th><td class="landslide_low">' + humanizeFormatter(props.ls_s2_wb_low)
                 	+ '</td></tr></table></div>'
 
-                	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 landslide_checkbox_s3"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Landslide Susceptibility (S3)</th></tr><tr>'
+                	+ '<div style="display:none;" class="col s12 landslide_checkbox_s3"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th><th>Landslide Susceptibility (S3)</th></tr><tr>'
                 	+ '<th class="landslide_vhigh">' + level_risk[3]
                 	+ '</th><td class="landslide_vhigh">' + humanizeFormatter(props.ls_s3_wb_very_high)
                 	+ '</td></tr><tr><th class="landslide_high">' + level_risk[2]
@@ -4305,8 +4312,7 @@ function init_leaflet(){
                 	// + '<td class="landslide_mod">' + humanizeFormatter(props.ls_s3_wb_moderate) + '</td>'
                 	// + '<td class="landslide_low">' + humanizeFormatter(props.ls_s3_wb_low) + '</td>'
                 	// + '</tr></tbody></table>'
-                	+ '<a class="btn btn-primary linkPopup">Go To ' + (props.na_en) +'</a>'
-                : '<h4>' + chosen_label + '</h4>' + 'Click on an area to show information');
+                : '<span class="card-title">' + chosen_label + '</span>' + 'Click on an area to show information');
     		$('a.linkPopup').on('click', function() {
     		    window.document.location="?page=landslide&code=" + (props.code) ;
     		});
@@ -4616,8 +4622,8 @@ function init_leaflet(){
 	    	
 	    });
 
-	    // use jQuery to listen for checkbox change event
-	    $('div#layercontrol .wms_check input[type="checkbox"]').on('change', function() {    
+	    // Change event WMS Layer
+	    $('div#layercontrol .switch input[type="checkbox"]').on('change', function() {    
 	        var checkbox = $(this);
 	        // lyr = checkbox.data().layer;
 	        var lyr = checkbox.attr('data-layer');
@@ -4686,14 +4692,14 @@ function init_leaflet(){
 	    info.update = function (props) {
 	        this._div.innerHTML = 
 	            (props ?
-	                '<span class="chosen_area">' + props.na_en + '</span>'
+	                '<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light right linkPopup">Go To ' + (props.na_en) +'</a>' + '</span>'
 	                + '<div class="row">'
 
-	                + '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 drought_checkbox_pop"><div id="chart_map_donut_drought_pop" class="ch-map-size" style="height:280px;"></div></div>'
-	                + '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 drought_checkbox_build"><div id="chart_map_donut_drought_build" class="ch-map-size" style="height:280px;"></div></div>'
-	                + '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 drought_checkbox_area"><div id="chart_map_donut_drought_area" class="ch-map-size" style="height:280px;"></div></div>'
+	                + '<div style="display:none;" class="col s12 drought_checkbox_pop"><div id="chart_map_donut_drought_pop" class="ch-map-size" style="height:280px;"></div></div>'
+	                + '<div style="display:none;" class="col s12 drought_checkbox_build"><div id="chart_map_donut_drought_build" class="ch-map-size" style="height:280px;"></div></div>'
+	                + '<div style="display:none;" class="col s12 drought_checkbox_area"><div id="chart_map_donut_drought_area" class="ch-map-size" style="height:280px;"></div></div>'
 
-	                + '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 drought_checkbox_pop">'
+	                + '<div style="display:none;" class="col s12 drought_checkbox_pop">'
 	                + '<table class="table table-bordered table-condensed"><tr><th>Risk Level</th>'
 	                // + '<th>' + landcover_cat[0] + '</th><th>' 
 	                // + landcover_cat[1] + '</th><th>' 
@@ -4757,7 +4763,7 @@ function init_leaflet(){
 	                + '</th><td class="drought_excptnal">' + humanizeFormatter(props.drought_pop_exceptional)
 	                + '</td></tr></table></div>'
 
-	                + '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 drought_checkbox_build"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th>'
+	                + '<div style="display:none;" class="col s12 drought_checkbox_build"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th>'
 	                + '<th>Building at Risk</th></tr><tr>'
 	                + '<th class="drought_ab_dry">' + level_risk_pie[0]
 	                + '</th><td class="drought_ab_dry">' + humanizeFormatter(props.drought_build_ab_dry)
@@ -4771,7 +4777,7 @@ function init_leaflet(){
 	                + '</th><td class="drought_excptnal">' + humanizeFormatter(props.drought_build_exceptional)
 	                + '</td></tr></table></div>'
 
-	                + '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 drought_checkbox_area"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th>'
+	                + '<div style="display:none;" class="col s12 drought_checkbox_area"><table class="table table-bordered table-condensed"><tr><th>Risk Level</th>'
 	                + '<th>Area at Risk</th></tr><tr>'
 	                + '<th class="drought_ab_dry">' + level_risk_pie[0]
 	                + '</th><td class="drought_ab_dry">' + humanizeFormatter(props.drought_area_ab_dry)
@@ -4786,9 +4792,7 @@ function init_leaflet(){
 	                + '</td></tr></table></div>'
 
 	                + '<div>'
-
-	                + '<a class="btn btn-primary linkPopup">Go To ' + (props.na_en) +'</a>'
-	            : '<h4>' + chosen_label + '</h4>' + 'Click on an area to show information');
+	            : '<span class="card-title">' + chosen_label + '</span>' + 'Click on an area to show information');
 	        $('a.linkPopup').on('click', function() {
 	            jump_url(props.code);
 	        });
@@ -5004,8 +5008,8 @@ function init_leaflet(){
 	        
 	    });
 
-	    // use jQuery to listen for checkbox change event
-	    $('div#layercontrol .wms_check input[type="checkbox"]').on('change', function() {    
+	    // Change event WMS Layer
+	    $('div#layercontrol .switch input[type="checkbox"]').on('change', function() {    
 	        var checkbox = $(this);
 	        // lyr = checkbox.data().layer;
 	        var lyr = checkbox.attr('data-layer');
@@ -5076,16 +5080,16 @@ function init_leaflet(){
         info.update = function (props) {
             this._div.innerHTML =  
             	(props ?
-		        	'<span class="chosen_area">' + props.na_en + '</span>'
+		        	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light z-depth-0 right linkPopup">Go To ' + (props.na_en) +'</a>' + '</span>'
 		        	+ '<div class="row">'
 
-		        	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 erthqk_checkbox_pop"><div id="chart_map_mercall_pop" class="ch-map-size" style="height:280px;"></div></div>'
-		        	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 erthqk_checkbox_settl"><div id="chart_map_mercall_settl" class="ch-map-size" style="height:280px;"></div></div>'
-		        	+ '<div style="display:none;" class="col-md-4 col-sm-12 col-xs-12 erthqk_checkbox_build"><div id="chart_map_mercall_build" class="ch-map-size" style="height:280px;"></div></div>'
+		        	+ '<div style="display:none;" class="col s12 erthqk_checkbox_pop"><div id="chart_map_mercall_pop" class="ch-map-size" style="height:280px;"></div></div>'
+		        	+ '<div style="display:none;" class="col s12 erthqk_checkbox_settl"><div id="chart_map_mercall_settl" class="ch-map-size" style="height:280px;"></div></div>'
+		        	+ '<div style="display:none;" class="col s12 erthqk_checkbox_build"><div id="chart_map_mercall_build" class="ch-map-size" style="height:280px;"></div></div>'
 
-                	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 erthqk_checkbox_pop"><table class="table table-bordered table-condensed"><thead><tr><th>Risk Level</th><th title="Population"><i class="icon-people_affected_population fa-3x"></i></th></tr></thead><tbody>'
+                	+ '<div style="display:none;" class="col s12 erthqk_checkbox_pop"><table class="table table-bordered table-condensed"><thead><tr><th>Risk Level</th><th title="Population"><i class="icon-people_affected_population fa-3x"></i></th></tr></thead><tbody>'
                 	+ '<tr><td class="weak">Weak</td><td class="weak">' + humanizeFormatter(props.pop_shake_weak)
-                	+ '</td></tr><tr><td class="light">Light</td><td class="light">' + humanizeFormatter(props.pop_shake_light)
+                	+ '</td></tr><tr><td class="mlight">Light</td><td class="mlight">' + humanizeFormatter(props.pop_shake_light)
                 	+ '</td></tr><tr><td class="modrt">Moderate</td><td class="modrt">' + humanizeFormatter(props.pop_shake_moderate)
                 	+ '</td></tr><tr><td class="strong">Strong</td><td class="strong">' + humanizeFormatter(props.pop_shake_strong)
                 	+ '</td></tr><tr><td class="vstrong">Very Strong</td><td class="vstrong">' + humanizeFormatter(props.pop_shake_verystrong)
@@ -5096,7 +5100,7 @@ function init_leaflet(){
 
                 	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 erthqk_checkbox_settl"><table class="table table-bordered table-condensed"><thead><tr><th>Risk Level</th><th title="Settlements"><i class="icon-socioeconomic_urban"></i></th></tr></thead><tbody>'
                 	+ '<tr><td class="weak">Weak</td><td class="weak">' + humanizeFormatter(props.settlement_shake_weak)
-                	+ '</td></tr><tr><td class="light">Light</td><td class="light">' + humanizeFormatter(props.settlement_shake_light)
+                	+ '</td></tr><tr><td class="mlight">Light</td><td class="mlight">' + humanizeFormatter(props.settlement_shake_light)
                 	+ '</td></tr><tr><td class="modrt">Moderate</td><td class="modrt">' + humanizeFormatter(props.settlement_shake_moderate)
                 	+ '</td></tr><tr><td class="strong">Strong</td><td class="strong">' + humanizeFormatter(props.settlement_shake_strong)
                 	+ '</td></tr><tr><td class="vstrong">Very Strong</td><td class="vstrong">' + humanizeFormatter(props.settlement_shake_verystrong)
@@ -5107,7 +5111,7 @@ function init_leaflet(){
 
                 	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 erthqk_checkbox_build"><table class="table table-bordered table-condensed"><thead><tr><th>Risk Level</th><th title="Buildings"><i class="icon-infrastructure_building fa-3x"></i></th></tr></thead><tbody>'
                 	+ '<tr><td class="weak">Weak</td><td class="weak">' + humanizeFormatter(props.buildings_shake_weak)
-                	+ '</td></tr><tr><td class="light">Light</td><td class="light">' + humanizeFormatter(props.buildings_shake_light)
+                	+ '</td></tr><tr><td class="mlight">Light</td><td class="mlight">' + humanizeFormatter(props.buildings_shake_light)
                 	+ '</td></tr><tr><td class="modrt">Moderate</td><td class="modrt">' + humanizeFormatter(props.buildings_shake_moderate)
                 	+ '</td></tr><tr><td class="strong">Strong</td><td class="strong">' + humanizeFormatter(props.buildings_shake_strong)
                 	+ '</td></tr><tr><td class="vstrong">Very Strong</td><td class="vstrong">' + humanizeFormatter(props.buildings_shake_verystrong)
@@ -5117,9 +5121,7 @@ function init_leaflet(){
                 	+ '</td></tr></tbody></table></div>'
 
                 	+ '</div>'
-
-                	+ '<a class="btn btn-primary linkPopup">Go To ' + (props.na_en) +'</a>'
-                : '<h4>' + chosen_label + '</h4>' + 'Click on an area to show information');
+                : '<span class="card-title">' + chosen_label + '</span>' + 'Click on an area to show information');
     		$('a.linkPopup').on('click', function() {
     		    window.document.location="?page=earthquake&code=" + (props.code) + erthqk_link ;
     		});
@@ -5350,8 +5352,8 @@ function init_leaflet(){
 	    	
 	    });
 
-	    // use jQuery to listen for checkbox change event
-	    $('div#layercontrol .wms_check input[type="checkbox"]').on('change', function() {    
+	    // Change event WMS Layer
+	    $('div#layercontrol .switch input[type="checkbox"]').on('change', function() {    
 	        var checkbox = $(this);
 	        // lyr = checkbox.data().layer;
 	        var lyr = checkbox.attr('data-layer');
@@ -5389,16 +5391,14 @@ function init_leaflet(){
 	    info.update = function (props) {
 	        this._div.innerHTML = 
 	            (props ?
-		        	'<span class="chosen_area">' + props.na_en + '</span>'
+		        	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light z-depth-0 right linkPopup">Go To ' + (props.na_en) +'</a>' + '</span>'
 		        	+ '<div class="row"><div class="col-md-12 col-sm-12 col-xs-12"><div class="circle_container"><i class="icon-security_attack fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_incident) + '</span><span class="circle_title">' + map_category[0] + '</span></div>'
 		        	+ '<div class="circle_container"><i class="icon-security_murder fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_violent) + '</span><span class="circle_title">' + map_category[1] + '</span></div>'
 		        	+ '<div class="circle_container"><i class="icon-people_injured fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_injured) + '</span><span class="circle_title">' + map_category[2] + '</span></div>'
 		        	+ '<div class="circle_container"><i class="icon-people_dead fa-3x circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_dead) + '</span><span class="circle_title">' + map_category[3] + '</span></div></div>'
 
 		        	+ '</div>'
-
-	                + '<a class="btn btn-primary linkPopup">Go To ' + (props.na_en) +'</a>'
-	            : '<h4>' + chosen_label + '</h4>' + 'Click on an area to show information');
+	            : '<span class="card-title">' + chosen_label + '</span>' + 'Click on an area to show information');
 	            $('a.linkPopup').on('click', function() {
 	            	jump_url(props.code);
 	            });
@@ -5458,6 +5458,6 @@ $(document).ready(function(){
 	init_select2_region();
 	init_datatable();
 	// init_chart();
-	// init_leaflet();
+	init_leaflet();
 	init_chart2();
 });

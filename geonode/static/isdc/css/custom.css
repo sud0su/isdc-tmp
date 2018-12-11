@@ -1091,7 +1091,8 @@ th.drought_ab_dry, th.drought_mod, th.drought_svre, th.drought_extrme, th.drough
 #ggfforecast_overview .table>tbody>tr>td, 
 #glfforecast_overview .table>tbody>tr>td, 
 #gffforecast_overview .table>tbody>tr>td, 
-#erthqk .table>tbody>tr>td{
+#erthqk .table>tbody>tr>td,
+{
     border-top: none;
     border-right: none;
     border-bottom: 1px solid #fff;
@@ -1107,7 +1108,13 @@ th.drought_ab_dry, th.drought_mod, th.drought_svre, th.drought_extrme, th.drough
 }
 
 #access thead {
-    border-bottom: 20px solid #fff !important;
+    /* border-bottom: 20px solid #fff !important; */
+}
+
+.dashboard.accessibility table.color_table.time-travel>tbody>tr>td,
+.dashboard.accessibility table.color_table.time-travel>thead>tr>th
+{
+    border: 1px solid #fff !important;
 }
 
 #nAirport.table>thead>tr>th, #nHealth1.table>thead>tr>th, #nHealth2.table>thead>tr>th, #nHealth3.table>thead>tr>th, #nHealth4.table>thead>tr>th, #ProvC.table>thead>tr>th, #nProv.table>thead>tr>th, #nDist.table>thead>tr>th,
@@ -1120,55 +1127,64 @@ th.drought_ab_dry, th.drought_mod, th.drought_svre, th.drought_extrme, th.drough
 
 }
 
-th.l1h, td.l1h/*,
+th.l1h, td.l1h,
+.color_table.time-travel tr td:nth-child(2)/*,
 #nAirport tr td:nth-child(2), #nHealth1 tr td:nth-child(2), #nHealth2 tr td:nth-child(2), #nHealth3 tr td:nth-child(2), #nHealth4 tr td:nth-child(2), #ProvC tr td:nth-child(2), #nProv tr td:nth-child(2), #nDist tr td:nth-child(2)*/{
     background-color: #c0fee5 !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.l2h, td.l2h/*,
+th.l2h, td.l2h,
+.color_table.time-travel tr td:nth-child(3)/*,
 #nAirport tr td:nth-child(3), #nHealth1 tr td:nth-child(3), #nHealth2 tr td:nth-child(3), #nHealth3 tr td:nth-child(3), #nHealth4 tr td:nth-child(3), #ProvC tr td:nth-child(3), #nProv tr td:nth-child(3), #nDist tr td:nth-child(3)*/{
     background-color: #94fdd5 !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.l3h, td.l3h/*,
+th.l3h, td.l3h,
+.color_table.time-travel tr td:nth-child(4)/*,
 #nAirport tr td:nth-child(4), #nHealth1 tr td:nth-child(4), #nHealth2 tr td:nth-child(4), #nHealth3 tr td:nth-child(4), #nHealth4 tr td:nth-child(4), #ProvC tr td:nth-child(4), #nProv tr td:nth-child(4), #nDist tr td:nth-child(4)*/{
     background-color: #75fcc9 !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.l4h, td.l4h/*,
+th.l4h, td.l4h,
+.color_table.time-travel tr td:nth-child(5)/*,
 #nAirport tr td:nth-child(5), #nHealth1 tr td:nth-child(5), #nHealth2 tr td:nth-child(5), #nHealth3 tr td:nth-child(5), #nHealth4 tr td:nth-child(5), #ProvC tr td:nth-child(5), #nProv tr td:nth-child(5), #nDist tr td:nth-child(5)*/{
     background-color: #fffe7f !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.l5h, td.l5h/*,
+th.l5h, td.l5h,
+.color_table.time-travel tr td:nth-child(6)/*,
 #nAirport tr td:nth-child(6), #nHealth1 tr td:nth-child(6), #nHealth2 tr td:nth-child(6), #nHealth3 tr td:nth-child(6), #nHealth4 tr td:nth-child(6), #ProvC tr td:nth-child(6), #nProv tr td:nth-child(6), #nDist tr td:nth-child(6)*/{
     background-color: #feb24c !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.l6h, td.l6h/*,
+th.l6h, td.l6h,
+.color_table.time-travel tr td:nth-child(7)/*,
 #nAirport tr td:nth-child(7), #nHealth1 tr td:nth-child(7), #nHealth2 tr td:nth-child(7), #nHealth3 tr td:nth-child(7), #nHealth4 tr td:nth-child(7), #ProvC tr td:nth-child(7), #nProv tr td:nth-child(7), #nDist tr td:nth-child(7)*/{
     background-color: #fd8d3c !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.l7h, td.l7h/*,
+th.l7h, td.l7h,
+.color_table.time-travel tr td:nth-child(8)/*,
 #nAirport tr td:nth-child(8), #nHealth1 tr td:nth-child(8), #nHealth2 tr td:nth-child(8), #nHealth3 tr td:nth-child(8), #nHealth4 tr td:nth-child(8), #ProvC tr td:nth-child(8), #nProv tr td:nth-child(8), #nDist tr td:nth-child(8)*/{
     background-color: #ffc9c7 !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.l8h, td.l8h/*,
+th.l8h, td.l8h,
+.color_table.time-travel tr td:nth-child(9)/*,
 #nAirport tr td:nth-child(9), #nHealth1 tr td:nth-child(9), #nHealth2 tr td:nth-child(9), #nHealth3 tr td:nth-child(9), #nHealth4 tr td:nth-child(9), #ProvC tr td:nth-child(9), #nProv tr td:nth-child(9), #nDist tr td:nth-child(9)*/{
     background-color: #ffa8a4 !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.m8h, td.m8h/*,
+th.m8h, td.m8h,
+.color_table.time-travel tr td:nth-child(10)/*,
 #nAirport tr td:nth-child(10), #nHealth1 tr td:nth-child(10), #nHealth2 tr td:nth-child(10), #nHealth3 tr td:nth-child(10), #nHealth4 tr td:nth-child(10), #ProvC tr td:nth-child(10), #nProv tr td:nth-child(10), #nDist tr td:nth-child(10)*/{
     background-color: #ff9d99 !important;
     /*border: 1px solid #fff !important;*/
@@ -1210,7 +1226,8 @@ td.ext, td.vhigh, td.high, td.mod, td.low, td.hi, td.med, td.lo,
 
 table#ffforecast, table#ggfforecast, table#glfforecast, table#gffforecast,
 .dashboard.floodforecast table>tbody>tr>td,
-.dashboard.floodforecast table>thead>tr>th{
+.dashboard.floodforecast table>thead>tr>th,
+.dashboard.floodforecast table>tbody>tr>th{
     border: 1px solid #fff !important;
 }
 
@@ -1224,7 +1241,8 @@ th.ext,
 #rggfoverview tr td:nth-child(2), #rggfoverview tr td:nth-child(3), #rggfoverview tr td:nth-child(12), #rggfoverview tr td:nth-child(13),
 #rglfoverview tr td:nth-child(2), #rglfoverview tr td:nth-child(3), #rglfoverview tr td:nth-child(12), #rglfoverview tr td:nth-child(13),
 #rgffoverview tr td:nth-child(2), #rgffoverview tr td:nth-child(3), #rgffoverview tr td:nth-child(12), #rgffoverview tr td:nth-child(13),
-.flood-likelihood-color tr:nth-child(1) td:nth-child(1), .flood-likelihood-color tr:nth-child(1) td:nth-child(2), .flood-likelihood-color tr:nth-child(1) td:nth-child(3){
+.flood-likelihood-color tr:nth-child(1) td:nth-child(1), .flood-likelihood-color tr:nth-child(1) td:nth-child(2), .flood-likelihood-color tr:nth-child(1) td:nth-child(3),
+.flood-overview-color td:nth-child(2), .flood-overview-color td:nth-child(7){
     /*background-color: rgba(226, 7, 14, 0.5) !important;*/
     background-color: #ff7f80 !important;
     border-top: 1px solid #fff !important;
@@ -1242,7 +1260,8 @@ th.vhigh,
 #rggfoverview tr td:nth-child(4), #rggfoverview tr td:nth-child(5), #rggfoverview tr td:nth-child(14), #rggfoverview tr td:nth-child(15),
 #rglfoverview tr td:nth-child(4), #rglfoverview tr td:nth-child(5), #rglfoverview tr td:nth-child(14), #rglfoverview tr td:nth-child(15),
 #rgffoverview tr td:nth-child(4), #rgffoverview tr td:nth-child(5), #rgffoverview tr td:nth-child(14), #rgffoverview tr td:nth-child(15),
-.flood-likelihood-color tr:nth-child(4) td:nth-child(1), .flood-likelihood-color tr:nth-child(4) td:nth-child(2), .flood-likelihood-color tr:nth-child(4) td:nth-child(3){
+.flood-likelihood-color tr:nth-child(4) td:nth-child(1), .flood-likelihood-color tr:nth-child(4) td:nth-child(2), .flood-likelihood-color tr:nth-child(4) td:nth-child(3),
+.flood-overview-color td:nth-child(3), .flood-overview-color td:nth-child(8){
     /*background-color: rgba(249, 109, 9, 0.5) !important;*/
     background-color: #feb24c !important;
     border-top: 1px solid #fff !important;
@@ -1260,7 +1279,8 @@ th.high,
 #rggfoverview tr td:nth-child(6), #rggfoverview tr td:nth-child(7), #rggfoverview tr td:nth-child(16), #rggfoverview tr td:nth-child(17),
 #rglfoverview tr td:nth-child(6), #rglfoverview tr td:nth-child(7), #rglfoverview tr td:nth-child(16), #rglfoverview tr td:nth-child(17),
 #rgffoverview tr td:nth-child(6), #rgffoverview tr td:nth-child(7), #rgffoverview tr td:nth-child(16), #rgffoverview tr td:nth-child(17),
-.flood-likelihood-color tr:nth-child(7) td:nth-child(1), .flood-likelihood-color tr:nth-child(7) td:nth-child(2), .flood-likelihood-color tr:nth-child(7) td:nth-child(3){
+.flood-likelihood-color tr:nth-child(7) td:nth-child(1), .flood-likelihood-color tr:nth-child(7) td:nth-child(2), .flood-likelihood-color tr:nth-child(7) td:nth-child(3),
+.flood-overview-color td:nth-child(4), .flood-overview-color td:nth-child(9){
     /*background-color: rgba(252, 237, 21, 0.5) !important;*/
     background-color: #fff37f !important; /*fffe7f*/
     border-top: 1px solid #fff !important;
@@ -1278,7 +1298,8 @@ th.mod,
 #rggfoverview tr td:nth-child(8), #rggfoverview tr td:nth-child(9), #rggfoverview tr td:nth-child(18), #rggfoverview tr td:nth-child(19),
 #rglfoverview tr td:nth-child(8), #rglfoverview tr td:nth-child(9), #rglfoverview tr td:nth-child(18), #rglfoverview tr td:nth-child(19),
 #rgffoverview tr td:nth-child(8), #rgffoverview tr td:nth-child(9), #rgffoverview tr td:nth-child(18), #rgffoverview tr td:nth-child(19),
-.flood-likelihood-color tr:nth-child(10) td:nth-child(1), .flood-likelihood-color tr:nth-child(10) td:nth-child(2), .flood-likelihood-color tr:nth-child(10) td:nth-child(3){
+.flood-likelihood-color tr:nth-child(10) td:nth-child(1), .flood-likelihood-color tr:nth-child(10) td:nth-child(2), .flood-likelihood-color tr:nth-child(10) td:nth-child(3),
+.flood-overview-color td:nth-child(5), .flood-overview-color td:nth-child(10){
     /*background-color: rgba(15, 200, 123, 0.5) !important;*/
     background-color: #c8eb8f !important;
     border-top: 1px solid #fff !important;
@@ -1296,7 +1317,8 @@ th.low,
 #rggfoverview tr td:nth-child(10), #rggfoverview tr td:nth-child(11), #rggfoverview tr td:nth-child(20), #rggfoverview tr td:nth-child(21),
 #rglfoverview tr td:nth-child(10), #rglfoverview tr td:nth-child(11), #rglfoverview tr td:nth-child(20), #rglfoverview tr td:nth-child(21),
 #rgffoverview tr td:nth-child(10), #rgffoverview tr td:nth-child(11), #rgffoverview tr td:nth-child(20), #rgffoverview tr td:nth-child(21),
-.flood-likelihood-color tr:nth-child(13) td:nth-child(1), .flood-likelihood-color tr:nth-child(13) td:nth-child(2), .flood-likelihood-color tr:nth-child(13) td:nth-child(3){
+.flood-likelihood-color tr:nth-child(13) td:nth-child(1), .flood-likelihood-color tr:nth-child(13) td:nth-child(2), .flood-likelihood-color tr:nth-child(13) td:nth-child(3),
+.flood-overview-color td:nth-child(6), .flood-overview-color td:nth-child(11){
     /*background-color: rgba(146, 231, 253, 0.5) !important;*/
     background-color: #abedfd !important; /*92e7fd*/
     border-top: 1px solid #fff !important;
@@ -1337,90 +1359,111 @@ th.lo
     border: 1px solid #fff !important;
 }
 
-th.landslide_vhigh, td.landslide_vhigh {
+.dashboard.landslide table>tbody>tr>td,
+.dashboard.landslide table>thead>tr>th,
+.dashboard.landslide table>tbody>tr>th{
+    border: 1px solid #fff !important;
+}
+
+th.landslide_vhigh, td.landslide_vhigh,
+.landslide-color td:nth-child(2) {
     background-color: #e84c3d !important;
-    /*border: 1px solid #fff !important;*/
+    border: 1px solid #fff !important;
 }
 
-th.landslide_high, td.landslide_high {
+th.landslide_high, td.landslide_high,
+.landslide-color td:nth-child(3) {
     background-color: #FB8C00 !important;
-    /*border: 1px solid #fff !important;*/
+    border: 1px solid #fff !important;
 }
 
-th.landslide_mod, td.landslide_mod {
+th.landslide_mod, td.landslide_mod,
+.landslide-color td:nth-child(4) {
     background-color: #FDD835 !important;
-    /*border: 1px solid #fff !important;*/
+    border: 1px solid #fff !important;
 }
 
-th.landslide_low, td.landslide_low {
+th.landslide_low, td.landslide_low,
+.landslide-color td:nth-child(5) {
     background-color: #43A047 !important;
-    /*border: 1px solid #fff !important;*/
+    border: 1px solid #fff !important;
 }
 
-th.weak, td.weak/*,
-#erthqkTable tr td:nth-child(2), #erthqkTable tr td:nth-child(3)*/ {
+.dashboard.earthquake table>tbody>tr>td,
+.dashboard.earthquake table>thead>tr>th
+{
+    border: 1px solid #fff !important;
+}
+
+th.weak, td.weak,
+.mercalli-color tr td:nth-child(2), .mercalli-color tr td:nth-child(3) {
     background-color: #d4e6f1 !important;
     /*border: 1px solid #fff !important;*/
 }
-th.light, td.light/*,
-#erthqkTable tr td:nth-child(4), #erthqkTable tr td:nth-child(5)*/ {
+th.mlight, td.mlight,
+.mercalli-color tr td:nth-child(4), .mercalli-color tr td:nth-child(5) {
     background-color: #c2fcf7 !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.modrt, td.modrt/*,
-#erthqkTable tr td:nth-child(6), #erthqkTable tr td:nth-child(7)*/{
+th.modrt, td.modrt,
+.mercalli-color tr td:nth-child(6), .mercalli-color tr td:nth-child(7){
     background-color: #6dffb6 !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.strong, td.strong/*,
-#erthqkTable tr td:nth-child(8), #erthqkTable tr td:nth-child(9)*/{
+th.strong, td.strong,
+.mercalli-color tr td:nth-child(8), .mercalli-color tr td:nth-child(9){
     background-color: #ffff5c !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.vstrong, td.vstrong/*,
-#erthqkTable tr td:nth-child(10), #erthqkTable tr td:nth-child(11)*/{
+th.vstrong, td.vstrong,
+.mercalli-color tr td:nth-child(10), .mercalli-color tr td:nth-child(11){
     background-color: #ffe74c !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.severe, td.severe/*,
-#erthqkTable tr td:nth-child(12), #erthqkTable tr td:nth-child(13)*/{
+th.severe, td.severe,
+.mercalli-color tr td:nth-child(12), .mercalli-color tr td:nth-child(13){
     background-color: #ffc600 !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.violent, td.violent/*,
-#erthqkTable tr td:nth-child(14), #erthqkTable tr td:nth-child(15)*/{
+th.violent, td.violent,
+.mercalli-color tr td:nth-child(14), .mercalli-color tr td:nth-child(15){
     background-color: #ff5751 !important;
     /*border: 1px solid #fff !important;*/
 }
 
-th.extrme, td.extrme/*,
-#erthqkTable tr td:nth-child(16), #erthqkTable tr td:nth-child(17)*/{
+th.extrme, td.extrme,
+.mercalli-color tr td:nth-child(16), .mercalli-color tr td:nth-child(17){
     background-color: #e84c3d !important;
     /*border: 1px solid #fff !important;*/
 }
 
-.drought_ab_dry{
+.drought_ab_dry,
+.drought td:nth-child(2), .drought td:nth-child(3), .drought td:nth-child(4) {
     background-color: #fffe7f !important;
 }
 
-.drought_mod{
+.drought_mod,
+.drought td:nth-child(5), .drought td:nth-child(6), .drought td:nth-child(7){
     background-color: #d5e25a !important;
 }
 
-.drought_svre{
+.drought_svre,
+.drought td:nth-child(8), .drought td:nth-child(9), .drought td:nth-child(10){
     background-color: #ffca28 !important;
 }
 
-.drought_extrme{
+.drought_extrme,
+.drought td:nth-child(11), .drought td:nth-child(12), .drought td:nth-child(13){
     background-color: #ef5350 !important;
 }
 
-.drought_excptnal{
+.drought_excptnal,
+.drought td:nth-child(14), .drought td:nth-child(15), .drought td:nth-child(16){
     background-color: #212121 !important;
     color: #fff !important;
 }
