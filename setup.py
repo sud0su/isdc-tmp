@@ -175,7 +175,7 @@ setup(name='GeoNode',
             # Contribs
             "et-xmlfile<=1.0.1",  # python-et-xmlfile (1.0.1 in our ppa)
             "unicodecsv<=0.14.1",  # python-unicodecsv (0.14.1 in our ppa)
-            "urllib3<=1.22",
+            "urllib3<=1.23",
             "vine<=1.1.4",  # (1.1.4 in our ppa)
             "xlrd<=1.1.0",  # (1.1.0 in ppa)
             "xlwt<=1.3.0",  # (1.3.0 in our ppa)
