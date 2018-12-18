@@ -4,44 +4,64 @@
 {% load i18n %}
 {% block title %} {% trans "Announcements" %} - {{ block.super }} {% endblock %}
 
-{% block body_class %}announcements{% endblock %}
+{% block body_class %}announcements grey lighten-4{% endblock %}
+
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="{% url 'profile_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "People" %}</a>
+                <a href="{% url 'announcements_list' %}" class="breadcrumb">{% trans "Announcements" %}</a>
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}
 
 {% block body_outer %}
-<div class="page-header">
-  <a href="{% url "announcements_create" %}" class="btn btn-primary pull-right">{% trans "New Announcement" %}</a>
-  <h2>{% trans "Announcements" %}</h2>
-</div>
-
-<div class="row" id="contain-slider">
-  <div class="tab-content col-md-12 paginate paginate-auto" id="search-content">
-    <table class="table table-striped">
-      <thead>
-        <th>{% trans "Title" %}</th>
-        <th>{% trans "Level" %}</th>
-        <th>{% trans "Announcement" %}</th>
-        <th>{% trans "Published From" %}</th>
-      </thead>
-      {% for announcement in announcement_list %}
-      <tr>
-        <td>
-          <a href="{% url "announcements_update" pk=announcement.pk %}">{{ announcement.title|truncatewords:50  }}</a>
-        </td>
-        <td>
-          {{ announcement.level_label }}
-        </td>
-        <td>
-          {{ announcement.content|truncatewords:8 }}
-        </td>
-        <td>
-          {% if announcement.publish_start or announcement.publish_end %}
-          {% blocktrans with publish_start=announcement.publish_start|date:"F j, Y" publish_end=announcement.publish_end|date:"F j, Y"|default:"(no end date)" %}
-          Published from <b>{{ publish_start }}</b> to <b>{{ publish_end }}</b>.
-          {% endblocktrans %}
-          {% endif %}
-        </td>
-      </tr>
-      {% endfor %}
-    </table>
-  </div>
-</div>
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <a href="{% url "announcements_create" %}" class="btn waves-effect waves-light red darken-3 right">{% trans "New Announcement" %}</a>
+                        <span class="card-title">{% trans "Announcements" %}</span>
+                        <br>
+                        <div class="row" id="contain-slider">
+                            <div class="col s12 paginate paginate-auto" id="search-content">
+                                <table class="striped">
+                                    <thead class="grey white-text">
+                                        <th class="center">{% trans "Title" %}</th>
+                                        <th class="center">{% trans "Level" %}</th>
+                                        <th class="center">{% trans "Announcement" %}</th>
+                                        <th class="center">{% trans "Published From" %}</th>
+                                    </thead>
+                                    {% for announcement in announcement_list %}
+                                        <tr>
+                                            <td>
+                                                <a href="{% url "announcements_update" pk=announcement.pk %}">{{ announcement.title|truncatewords:50  }}</a>
+                                            </td>
+                                            <td>
+                                                {{ announcement.level_label }}
+                                            </td>
+                                            <td>
+                                                {{ announcement.content|truncatewords:8 }}
+                                            </td>
+                                            <td>
+                                                {% if announcement.publish_start or announcement.publish_end %}
+                                                    {% blocktrans with publish_start=announcement.publish_start|date:"F j, Y" publish_end=announcement.publish_end|date:"F j, Y"|default:"(no end date)" %}
+                                                        Published from <b>{{ publish_start }}</b> to <b>{{ publish_end }}</b>.
+                                                    {% endblocktrans %}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

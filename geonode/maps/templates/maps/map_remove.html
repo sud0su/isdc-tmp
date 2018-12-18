@@ -5,24 +5,35 @@
 
 {% block title %}{% trans "Deleting" %} {{ map.title }} — {{ block.super }}{% endblock %}
 
+{% block body_class %}grey lighten-4{% endblock body_class %}
+
+{% block map_breadcrumb %}
+    <a href="{{ map.get_absolute_url }}" class="breadcrumb">{{ map.title }}</a>
+    <a href="{% url 'map_remove' map.id %}" class="breadcrumb">{% trans "Remove Map" %}</a>
+{% endblock map_breadcrumb %}
+
 {% block body %}
-<div class="page-header">
-  <h2 class="page-title">{% trans "Remove Map" %}</h2>
-</div>
-<div class="row">
-  <div class="col-md-8">
-    <p class="lead">
-        {% blocktrans with map.title as map_title %}
-          Are you sure you want to remove <a href="{{ map.get_absolute_url }}">{{ map_title }}</a>?
-        {% endblocktrans %}
-      </p>
-    <form action="{% url "map_remove" map.id %}" method="POST">
-      {% csrf_token %}
-      <div class="form-actions">
-        <input type="submit" value="{% trans "Yes, I am sure" %}" class="btn btn-danger" />
-        <a href="{{ map.get_absolute_url }}" class="btn btn-default">{% trans "No, don't remove it" %}</a>
-      </div>
-    </form>
-  </div>
-</div>
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">{% trans "Remove Layer" %}</span>
+                        <p class="">
+                            {% blocktrans with map.title as map_title %}
+                                Are you sure you want to remove <a href="{{ map.get_absolute_url }}">{{ map_title }}</a>?
+                            {% endblocktrans %}
+                        </p>
+                        <form action="{% url "map_remove" map.id %}" method="POST">
+                            {% csrf_token %}
+                            <div class="right-align">
+                                <a href="{{ map.get_absolute_url }}" class="btn-flat waves-effect waves-light">{% trans "No, don't remove it" %}</a>
+                                <button class="btn waves-effect waves-light red darken-3" type="submit" name="action">{% trans "Yes, Remove it" %}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

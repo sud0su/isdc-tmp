@@ -1,17 +1,24 @@
-{% extends "geonode_base.html" %}
+{% extends "announcements/base.html" %}
 {% load i18n %}
 
 {% block title %} {% blocktrans %}Announcements : {{ announcement }}{% endblocktrans %} {{ block.super }} {% endblock %}
 
-{% block body %}
-<div class="page-header">
-  <h2>{{ announcement.title }} ({{ announcement.level_label }})</h2>
-</div>
-<p>{{ announcement.creation_date }}</p>
-<div class="col-md-10">
-  <blockquote>
-    <p>{{ announcement.content }}</p>
-    <small>{{ announcement.creator }}</small>
-  </blockquote>
-</div>
+{% block announcement %}
+    <a href="{{ announcement.get_absolute_url }}" class="breadcrumb">{{ announcement.title }}</a>
+{% endblock announcement %}
+
+{% block body_outer %}
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">{{ announcement.title }} ({{ announcement.level_label }})</span>
+                        <small class="right">{{ announcement.creator }}, {{ announcement.creation_date }}</small>
+                        <p>{{ announcement.content }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

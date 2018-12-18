@@ -1,33 +1,31 @@
 {% load i18n %}
-<li>
-  <div class="activity-item">
-    <p>
-      <span class="icon-activity {{ activity_class|default:'activity' }}"></span>
-      {% if object %}
-      <span class="thumb-activity"><img src="{{ object.thumbnail_url }}"></span>
-      {% endif %}
-      <a href="{{ actor.get_absolute_url }}">{{ username }}</a>
 
-      {{ verb|safe }}
-
-      {% if object %}
-        {% if object.get_absolute_url %}<a href="{{ object.get_absolute_url }}">{{ object }}</a>
-        {% else %}
-          {{ object_name }}
+    <li class="collection-item avatar">
+        {% if object %}
+            <img src="{{ object.thumbnail_url }}" alt="" class="circle">
         {% endif %}
-      {% elif object_name %}
-        {{ object_name }}
-      {% endif %}
+        <span class="title">
+            <a href="{{ actor.get_absolute_url }}">{{ username }}</a> {{ verb|safe }}
+            {% if object %}
+                {% if object.get_absolute_url %}<a href="{{ object.get_absolute_url }}">{{ object }}</a>
+                {% else %}
+                    {{ object_name }}
+                {% endif %}
+            {% elif object_name %}
+                {{ object_name }}
+            {% endif %}
 
-      {% if target %}
-        {{ preposition|default:"to" }}
-        {% if fragment %}
-          <a href="{{ target.get_absolute_url }}#{{ fragment }}">{{ target }}</a>
-        {% else %}
-          <a href="{{ target.get_absolute_url }}">{{ target }}</a>
-        {% endif %}
-      {% endif %}
-    </p>
-    <p class="activity-timestamp">{{ timestamp|timesince }} {% trans "ago" %}</p>
-  </div>
-</li>
+            {% if target %}
+                {{ preposition|default:"to" }}
+                {% if fragment %}
+                    <a href="{{ target.get_absolute_url }}#{{ fragment }}">{{ target }}</a>
+                {% else %}
+                    <a href="{{ target.get_absolute_url }}">{{ target }}</a>
+                {% endif %}
+            {% endif %}
+        </span>
+        <p>
+            {{ timestamp|timesince }} {% trans "ago" %}
+        </p>
+        <a href="#!" class="secondary-content"><i class="icon-activity {{ activity_class|default:'activity' }}"></i></a>
+    </li>

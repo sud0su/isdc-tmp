@@ -1,0 +1,58 @@
+{% load i18n %}
+{% load base_tags %}
+
+<li>
+    <div class="collapsible-header red darken-3 white-text"><i class="material-icons">terrain</i>Provinces/District</div>
+    <div class="collapsible-body">
+        <ul class="collapsible expandable" style="max-height: 240px; overflow-y: scroll;">
+            {% verbatim %}
+            <div ng-repeat="region in regions" ng-if="region.children.length > 0">
+                <li ng-repeat="item in region.children" ng-if="item.count > 0 || item.children.length > 0">
+                    <div class="collapsible-header collapsible-prov">
+                        <div>
+                            <label>
+                                <input type="checkbox" class="filled-in" data-value="{{ item.name }}" data-filter="regions__name__in" ng-click="multiple_choice_listener($event)"/>
+                                <span>{{ item.name }}</span>
+                                <span class="badge">{{item.count }}</span>
+                            </label>
+                        </div>
+                        <i class="material-icons">expand_more</i>
+                    </div>
+                    <div class="collapsible-body">
+                        <div style="padding: 15px;" ng-show="item.show" ng-if="item.children.length > 0">
+                            <div ng-repeat="entity in item.children" ng-if="entity.count > 0">
+                                <label>
+                                    <input type="checkbox" class="filled-in" data-value="{{ entity.name }}" data-filter="regions__name__in" ng-click="multiple_choice_listener($event)"/>
+                                    <span>{{ entity.name }}</span>
+                                    <span class="badge">{{ entity.count }}</span>
+                                </label>
+                            </div>
+                            <!-- <div>
+                                <label>
+                                    <input type="checkbox" class="filled-in" checked />
+                                    <span>Provincial</span>
+                                    <span class="badge">7</span>
+                                </label>
+                            </div> -->
+                        </div>
+                    </div>
+                </li>
+            </div>
+            {% endverbatim %}
+            <li>
+                <div class="collapsible-header">Drought</div>
+                <div class="collapsible-body">
+                    <div style="padding: 15px;">
+                        <div>
+                            <label>
+                                <input type="checkbox" class="filled-in" />
+                                <span>Forecast</span>
+                                <span class="badge">4</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</li>

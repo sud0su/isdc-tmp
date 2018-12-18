@@ -68,16 +68,16 @@
       $('#profileCompleteness .not-completed').toggle(completeness !== 1);
       var mandatoryMissing =  $('#mandatory').find('.input-empty:not([id^=autocomlete])').length > 0;
       var advancedMissing = $('#advanced').find('.input-empty').length > 0;
-      $('#completeness-hints .mandatory-hint')
-        .toggleClass('progress-bar-danger', mandatoryMissing)
-        .toggleClass('progress-bar-success', !mandatoryMissing)
-        .attr('title', mandatoryMissing ? "some schema mandatory fields are missing" : "Metadata Schema mandatory fields completed" )
-        .tooltip('fixTitle');
-      $('#completeness-hints .advanced-hint')
-        .toggleClass('progress-bar-danger', advancedMissing)
-        .toggleClass('progress-bar-success', !advancedMissing)
-        .attr('title', advancedMissing ? "some schema mandatory fields are missing" : "Metadata Schema mandatory fields completed" )
-        .tooltip('fixTitle');
+    //   $('#completeness-hints .mandatory-hint')
+    //     .toggleClass('progress-bar-danger', mandatoryMissing)
+    //     .toggleClass('progress-bar-success', !mandatoryMissing)
+    //     .attr('title', mandatoryMissing ? "some schema mandatory fields are missing" : "Metadata Schema mandatory fields completed" )
+    //     .tooltip('fixTitle');
+    //   $('#completeness-hints .advanced-hint')
+    //     .toggleClass('progress-bar-danger', advancedMissing)
+    //     .toggleClass('progress-bar-success', !advancedMissing)
+    //     .attr('title', advancedMissing ? "some schema mandatory fields are missing" : "Metadata Schema mandatory fields completed" )
+    //     .tooltip('fixTitle');
 
         //done button tooltip
         if(completeness === 1 && $('.metadata-edit-done').css('opacity')+"" === "0" && !tooltipShown && !gotIt) {
@@ -139,7 +139,7 @@
               }
           };
 
-          /*
+          /* 
             $('#id_resource-date_picker').datetimepicker(options=pickerOptions);
             $('#id_resource-temporal_extent_start_picker').datetimepicker(pickerOptions);
             $('#id_resource-temporal_extent_end_picker').datetimepicker(pickerOptions);
@@ -324,7 +324,7 @@
                 try {
                     var perc = (totalNum <= 0 ? 0 : (totalNum-empty)/totalNum);
                         perc = (perc <= 1 ? perc : 1);
-                    updateCompleteness(perc);
+                    // updateCompleteness(perc);
                 } catch(err) {
                     // Log error
                 }

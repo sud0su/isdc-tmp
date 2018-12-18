@@ -2,7 +2,11 @@
 {% load i18n %}
 
 {% with 40 as avatar_size %}
-    <a href="{% url 'profile_detail' profile.username %}">{% autoescape off %}{% avatar profile avatar_size %}{% endautoescape %}</a>
+    <a href="{% url 'profile_detail' profile.username %}">
+        <!-- <div class="circle"> -->
+            {% autoescape off %}{% avatar profile avatar_size %}{% endautoescape %}
+        <!-- </div> -->
+    </a>
 {% endwith %}
 <span class="title">{{ profile.username }}</span>{{ username }}
 <p>

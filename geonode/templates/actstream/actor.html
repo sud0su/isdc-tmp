@@ -2,32 +2,50 @@
 {% load activity_tags social_tags i18n %}
 
 {% block extra_head %}
-{{ block.super }}{% endblock %}
+    {{ block.super }}
+{% endblock %}
 
 {% block title %}{% ifequal request.user actor %}{% trans "My Activity feed" %}{% else %}{{ actor }}'s {% trans "Activity Feed" %}{% endifequal %}{% endblock %}
 {% block content_title %}{% ifequal request.user actor %}{%  trans "My Activity feed" %}{% else %}{{ actor }}'s {% trans "Activity Feed" %}{% endifequal %}{% endblock %}
 
 {% comment %}
-{% block navlinks %}
-<li><a href="{% url "actstream_object_feed" content_type_id=ctype.pk  object_id=actor.pk %}">RSS</a></li>
-<li><a href="{% url "actstream_object_feed_atom" content_type_id=ctype.pk  object_id=actor.pk %}">ATOM</a></li>
-{% endblock %}
+    {% block navlinks %}
+        <li><a href="{% url "actstream_object_feed" content_type_id=ctype.pk  object_id=actor.pk %}">RSS</a></li>
+        <li><a href="{% url "actstream_object_feed_atom" content_type_id=ctype.pk  object_id=actor.pk %}">ATOM</a></li>
+    {% endblock %}
 {% endcomment %}
 
-{% block body %}
-<div class="page-header">
-  <h2>{%  trans "Activity Feed for"  %} {{ actor }}</h2>
-</div>
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="{% url 'profile_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "People" %}</a>
+                <a href="{% url 'profile_detail' user.username %}" class="breadcrumb">{{ user.username }}</a>
+                <a href="" class="breadcrumb">{% trans "My Activity" %}</a>
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}
 
-<div class="row">
-  <div class="col-md-12">
-    <ul class="no-style-list">
-      {% for action in action_list %}
-      {% activity_item action %}
-      {% empty %}
-      <p>{% trans "No actions yet" %}</p>
-      {% endfor %}
-    </ul>
-  </div>
-</div>
+{% block body_outer %}
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">{%  trans "Activity Feed for"  %} {{ actor }}</span>
+                        <ul class="collection">
+                            {% for action in action_list %}
+                                {% activity_item action %}
+                                {% empty %}
+                                <p>{% trans "No actions yet" %}</p>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+            
 {% endblock %}

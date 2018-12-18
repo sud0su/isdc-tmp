@@ -456,6 +456,9 @@
         }
       }
 
+      console.log(element);
+        //   if element active put checked="checked" in the element
+
       // If the element is active active then deactivate it
       if(element.hasClass('active')){
         // clear the active class from it
@@ -578,16 +581,22 @@
     });
 
     $scope.feature_select = function($event){
-      var element = $(event.currentTarget);
-      var article = $(element.parents('article')[0]);
-      if (article.hasClass('resource_selected')){
-        element.html('Select');
-        article.removeClass('resource_selected');
-      }
-      else{
-        element.html('Deselect');
-        article.addClass('resource_selected');
-      }
+        var element = $(event.currentTarget);
+        var article = $(element.parents('.card')[0]);
+        if (article.hasClass('resource_selected')){
+            article.removeClass('resource_selected');
+            // Added by Finka
+            element.children("i").html('check');
+            element.removeClass('red darken-3');
+            element.addClass('grey lighten-2');
+        }
+        else{
+            article.addClass('resource_selected');
+            // Added by Finka
+            element.children("i").html('clear');
+            element.removeClass('grey lighten-2');
+            element.addClass('red darken-3');
+        }
     };
 
     /*

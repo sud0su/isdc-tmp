@@ -2,15 +2,55 @@
 {% load i18n avatar_tags %}
 {% load bootstrap_tags %}
 
-{% block body %}
-	<a href="{% url "profile_edit" user.username %}">{% trans "Back to edit your profile information" %}</a>
-	<p>{% trans "Your current avatar: " %}</p>
-    {% autoescape off %}{% avatar user %}{% endautoescape %}
-    {% if not avatars %}
-        <p>{% trans "You haven't uploaded an avatar yet. Please upload one now." %}</p>
-    {% endif %}
-    <form enctype="multipart/form-data" method="POST" action="{% url 'avatar_add' %}">
-        {{ upload_avatar_form.as_p }}
-        <p>{% csrf_token %}<input type="submit" value="{% trans "Upload New Image" %}" /></p>
-    </form>
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="{% url 'profile_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "People" %}</a>
+                <a href="{% url 'profile_detail' user.username %}" class="breadcrumb">{{ user.username }}</a>
+                <a href="{% url 'avatar_change' %}" class="breadcrumb">{% trans "Add Avatar" %}</a>
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}
+
+{% block body_outer %}
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <a href="{% url "profile_edit" user.username %}" class="btn-flat btn-flat-border red-text text-darken-4 waves-effect waves-light right">{% trans "Back to edit your profile information" %}</a>
+                        <span class="card-title">{% trans "Add Avatar" %}</span>
+                        
+                        <div class="row">
+                            <div class="col s12 xl9">{% trans "Your current avatar: " %}</div>
+                            <div class="col s12 xl3">
+                                {% autoescape off %}{% avatar user %}{% endautoescape %}
+                            </div>
+                        </div>
+                        {% if not avatars %}
+                            <p>{% trans "You haven't uploaded an avatar yet. Please upload one now." %}</p>
+                        {% endif %}
+                        <form enctype="multipart/form-data" method="POST" action="{% url 'avatar_add' %}">
+                            <div class="file-field input-field">
+                                <div class="btn waves-effect waves-light red darken-3">
+                                    <span>File</span>
+                                    {{ upload_avatar_form.avatar }}
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text">
+                                </div>
+                            </div>
+                            {% csrf_token %}
+                            <div class="right-align">
+                                <button class="btn waves-effect waves-light red darken-3" type="submit" name="action">{% trans "Upload New Image" %}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

@@ -25,7 +25,7 @@
     {{ block.super }}
 {% endblock %}
 
-{% block body_class %}layers{% endblock %}
+{% block body_class %}layers grey lighten-4{% endblock %}
     
 {% block layer_breadcrumb %}
     <a href="#" class="breadcrumb">{{ resource.title|default:resource.alternate }}</a>
@@ -36,7 +36,7 @@
         <div class="col s12">
             <div class="card">
                 <div class="card-content">
-                    <h4>{{ resource.title|default:resource.alternate }}</h4>
+                    <span class="card-title card-title-detail">{{ resource.title|default:resource.alternate }}</span>
                     {% include "base/_resourcebase_contact_snippet.html" %}
                     {% if storeType == 'remoteStore' %}<em><i class="fa fa-power-off {% if online %}text-success{% else %}text-danger{% endif %}"></i> {% trans "Service is" %} {% if online %}{% trans "online" %}{% else %}{% trans "offline" %}{% endif %} </em>{% endif %}
                 </div>
@@ -390,7 +390,7 @@
                         {% if "change_resourcebase_permissions" in perms_list %}
                             <span class="card-title">
                                 {% trans "Permissions" %}
-                                <a href="#_permissions" id="" class="btn-flat modal-trigger waves-effect waves-circle waves-light right">
+                                <a href="#_permissions" id="" class="btn-floating z-depth-0 transparent modal-trigger waves-effect waves-circle waves-grey right">
                                     <i class="material-icons red-text text-darken-3">group_add</i>
                                 </a>
                             </span>
@@ -406,7 +406,7 @@
                 <div class="card-content">
                     <span class="card-title">
                         {% trans "Create a map using this layer" %}
-                        <a href="{% url "new_map" %}?layer={{resource.service_typename}}" class="waves-effect waves-circle waves-light btn-flat right">
+                        <a href="{% url "new_map" %}?layer={{resource.service_typename}}" class="waves-effect waves-circle waves-grey btn-floating z-depth-0 transparent right">
                             <i class="material-icons red-text text-darken-3">note_add</i>
                         </a>
                     </span>
@@ -418,7 +418,7 @@
 
                 {% if maps %}
                 <div class="card-content">
-                    <!-- <h5>{% trans "Add the layer to an existing map" %}</h5> -->
+                    <span class="card-title">{% trans "Add layer to existing map" %}</span>
                     <div class="row">
                         <form action="{% url "add_layer" %}" method="GET">
                             {% csrf_token %}
@@ -428,7 +428,7 @@
                                         <option value="{{ map.id }}">{{ map.title|truncatechars:40 }}</option>
                                     {% endfor %}
                                 </select>
-                                <label>Add Layer to Map</label>
+                                <!-- <label>Add Layer to Map</label> -->
                             </div>
                             <input type="hidden" name="layer_name" value="{{ resource.alternate }}">
                             <button type="submit" class="waves-effect waves-light btn-flat btn-flat-border red-text text-darken-3 right">{% trans "Add to Map" %}</button>
@@ -949,4 +949,10 @@
     {% if GEONODE_SECURITY_ENABLED %}
         {% include "_permissions_form_js.html" %}
     {% endif %}
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.layers .collection-item.avatar a img').addClass('circle');
+        });
+    </script>
 {% endblock extra_script %}

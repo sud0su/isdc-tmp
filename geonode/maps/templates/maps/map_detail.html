@@ -20,10 +20,9 @@
     {{ block.super }}
 {% endblock %}
 
-{% block body_class %}maps{% endblock %}
+{% block body_class %}maps grey lighten-4{% endblock %}
 
 {% block map_breadcrumb %}
-    <a href="{% url 'maps_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Maps" %}</a>
     <a href="#" class="breadcrumb">{{ resource.title }}</a>
 {% endblock map_breadcrumb %}
 
@@ -32,7 +31,7 @@
         <div class="col s12">
             <div class="card">
                 <div class="card-content">
-                    <h4>{{ resource.title }}</h4>
+                    <span class="card-title card-title-detail">{{ resource.title }}</span>
                     {% include "base/_resourcebase_contact_snippet.html" %}
                 </div>
             </div>
@@ -154,7 +153,7 @@
                     {% if "change_resourcebase_permissions" in perms_list %}
                         <span class="card-title">
                             {% trans "Permissions" %}
-                            <a href="#_permissions" id="" class="btn-flat modal-trigger waves-effect waves-circle waves-light right">
+                            <a href="#_permissions" id="" class="btn-floating z-depth-0 transparent modal-trigger waves-effect waves-circle waves-grey right">
                                 <i class="material-icons red-text text-darken-3">group_add</i>
                             </a>
                         </span>
@@ -169,7 +168,7 @@
                 <div class="card-content">
                     <span class="card-title">
                         {% trans "Copy this map" %}
-                        <a href="{% url "new_map" %}?copy={{ resource.id }}" class="waves-effect waves-circle waves-light btn-flat right">
+                        <a href="{% url "new_map" %}?copy={{ resource.id }}" class="waves-effect waves-circle waves-grey btn-floating z-depth-0 transparent right">
                             <i class="material-icons red-text text-darken-3">note_add</i>
                         </a>
                     </span>
@@ -207,7 +206,7 @@
                     <span class="card-title">
                         {% trans "Map WMS" %}
                         {% if "change_resourcebase" in perms_list %}
-                            <a id="layer-group" href="{%url "map_wms" resource.id %}" class="waves-effect waves-circle waves-light btn-flat right tooltipped" data-position="left" data-tooltip="{% trans "Publish Map WMS" %}" >
+                            <a id="layer-group" href="{%url "map_wms" resource.id %}" class="waves-effect waves-circle waves-grey btn-floating z-depth-0 transparent right tooltipped" data-position="left" data-tooltip="{% trans "Publish Map WMS" %}" >
                                 <i class="material-icons red-text text-darken-3">open_in_browser</i>
                             </a>
                         {% endif %}
@@ -457,6 +456,12 @@
             else if ($(this).attr('id') === 'embed-widget-link') {
                 $('#embed-widget').modal('toggle');
             }
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.maps .collection-item.avatar a img').addClass('circle');
         });
     </script>
 {% endblock %}

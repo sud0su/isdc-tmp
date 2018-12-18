@@ -77,8 +77,9 @@
                                     </a>
                                     <a href="{% url 'home' %}" class="brand-logo">
                                         <!-- <img src="http://afghanistanavalanches.org/img/iMMAP.png"> -->
+                                        <!-- <img src="{{ STATIC_URL }}isdc/img/partner/usaid.png" alt="usaid_logo"> -->
                                         <img src="{{ STATIC_URL }}isdc/img/immap_logo/immap_full_color.png" alt="immap_logo">
-                                        <!-- <span>Spatial Data Center</span> -->
+                                        <!-- <span class="grey-text text-darken-2">Spatial Data Center</span> -->
                                         <!-- <img src="{{ STATIC_URL }}isdc/img/immap_white.png" alt="immap_logo"> -->
                                     </a>
                                     <ul id="nav-mobile" class="right">
@@ -91,7 +92,7 @@
                                                     <input id="search_input" type="search" placeholder="Search" name="title__icontains"> 
                                                     {% endif %}
                                                     <label class="label-icon" for="search_input">
-                                                        <i class="material-icons grey-text">search</i>
+                                                        <i class="material-icons grey-text text-darken-2">search</i>
                                                     </label>
                                                     <i class="material-icons search-close hide">close</i>
                                                 </div>
@@ -170,7 +171,7 @@
                                         {% for dash in dashboard_page_menu %}
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'dashboard_detail' %}dashboard/?page={{dash.name}}{{add_link}}">
-                                                <i class="material-icons {{dash.name}}">swap_horiz</i>{{dash.title}}</a>
+                                                <i class="dashboard {{dash.name}}"></i>{{dash.title}}</a>
                                         </li>
                                         {% endfor %}
                                         <!-- <li>
@@ -179,7 +180,7 @@
                                         </li>
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=baseline{{add_link}}">
-                                                <i class="material-icons">swap_horiz</i>Baseline</a>
+                                                <i class="material-icons">vpn_lock</i>Baseline</a>
                                         </li>
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=accessibility{{add_link}}">
@@ -249,7 +250,7 @@
                                     <ul>
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'documentation' %}">
-                                                <i class="material-icons">swap_horiz</i>Documentation &amp; Videos</a>
+                                                <i class="material-icons">video_library</i>Documentation &amp; Videos</a>
                                         </li>
                                         <li>
                                             <a href="http://afghanistanavalanches.org/" target="_blank" class="waves-effect waves-blue">
@@ -265,22 +266,22 @@
                                         </li>
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'training' %}">
-                                                <i class="material-icons">swap_horiz</i>Training</a>
+                                                <i class="icon-activity_training"></i>Training</a>
                                         </li>
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'partners' %}">
-                                                <i class="material-icons">fullscreen</i>Partner</a>
+                                                <i class="icon-activity_partnership"></i>Partner</a>
                                         </li>
                                         <li>
                                             <div class="divider"></div>
                                         </li>
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'about' %}">
-                                                <i class="material-icons">swap_horiz</i>About</a>
+                                                <i class="material-icons">new_releases</i>About</a>
                                         </li>
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'disclaimer' %}">
-                                                <i class="material-icons">swap_horiz</i>Disclaimer</a>
+                                                <i class="material-icons">warning</i>Disclaimer</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -295,54 +296,54 @@
                             </li>
                             <li>
                                 <a class="collapsible-header waves-effect waves-blue">
-                                    <i class="material-icons">person</i>User
+                                    <i class="material-icons">supervisor_account</i>User
                                     <i class="material-icons right" style="margin-right:0;">expand_more</i>
                                 </a>
                                 <div class="collapsible-body">
                                     <ul>
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'profile_browse' %}">
-                                                <i class="material-icons">fullscreen</i>{% trans "Profile" %}</a>
+                                                <i class="material-icons">person</i>{% trans "Profile" %}</a>
                                         </li>
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'messages_inbox' %}">
-                                                <i class="material-icons">swap_horiz</i>{% trans "Inbox" %}</a>
+                                                <i class="material-icons">chat</i>{% trans "Inbox" %}</a>
                                         </li>
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'recent-activity' %}">
-                                                <i class="material-icons">swap_horiz</i>{% trans "Recent Activity" %}</a>
+                                                <i class="material-icons">access_time</i>{% trans "Recent Activity" %}</a>
                                         </li>
                                         {% if 'geonode.geoserver' in INSTALLED_APPS %}
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'proxy' %}?url={{ GEOSERVER_LOCAL_URL }}web">
-                                                <i class="material-icons">swap_horiz</i>{% trans "Geoserver" %}</a>
+                                                <i class="material-icons">apps</i>{% trans "Geoserver" %}</a>
                                         </li>
                                         {% endif %}
                                         {% if user.is_staff %}
                                         <li>
                                             <a class="waves-effect waves-blue" href="#">
-                                                <i class="material-icons">swap_horiz</i>{% trans "User Statistic" %}</a>
+                                                <i class="material-icons">bar_chart</i>{% trans "User Statistic" %}</a>
                                         </li>
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'admin:index' %}">
-                                                <i class="material-icons">swap_horiz</i>{% trans "Admin" %}</a>
+                                                <i class="material-icons">how_to_reg</i>{% trans "Admin" %}</a>
                                         </li>
                                         {% endif %}
                                         {% if perms.announcements.can_manage %}
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'announcements_list' %}">
-                                                <i class="material-icons">swap_horiz</i>{% trans "Anouncements" %}</a>
+                                                <i class="material-icons">announcement</i>{% trans "Anouncements" %}</a>
                                         </li>
                                         {% endif %}
                                         {% if user.is_superuser %}
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'services' %}?limit={{ CLIENT_RESULTS_LIMIT }}">
-                                                <i class="material-icons">swap_horiz</i>{% trans "Remote Service" %}</a>
+                                                <i class="material-icons">vpn_lock</i>{% trans "Remote Service" %}</a>
                                         </li>
                                         {% endif %}
                                         <li>
                                             <a class="waves-effect waves-blue" href="{% url 'geonode.invitations:geonode-send-invite' %}">
-                                                <i class="material-icons">swap_horiz</i>{% trans "Invite User" %}</a>
+                                                <i class="material-icons">person_add</i>{% trans "Invite User" %}</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -356,11 +357,11 @@
                                     <ul>
                                         <li>
                                             <a class="waves-effect waves-blue" href="#">
-                                                <i class="material-icons">fullscreen</i>Settings</a>
+                                                <i class="material-icons">settings_applications</i>Settings</a>
                                         </li>
                                         <li>
                                             <a class="waves-effect waves-blue" href="#">
-                                                <i class="material-icons">swap_horiz</i>Report</a>
+                                                <i class="material-icons">pageview</i>Report</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -370,7 +371,7 @@
                             </li>
                             {% if USE_NOTIFICATIONS %}
                             <li>
-                                <a href="{#% url 'notification_notice_settings' %}" class="waves-effect waves-light">
+                                <a href="{% url 'notice_settings' %}" class="waves-effect waves-light">
                                     <i class="material-icons">settings</i>Settings</a> 
                                     <!-- this field with notification url -->
                             </li>
@@ -445,7 +446,6 @@
                 <div class="container">
                     {% include "_status_message.html" %}
                     {% include "_announcements.html" %}
-                    {% include "_messages.html" %}
                     {% block body_outer %}
                     <!-- <div class="row">
                         <div class="col s8">
@@ -545,9 +545,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
         <script src="{{ STATIC_URL }}isdc/js/usng.js"></script>
         <script src="{{ STATIC_URL }}isdc/js/_custom.js"></script>
-
+        
+        {% include "_messages.html" %}
         {% include 'autocomplete_light/static.html' %}
-        <script type="text/javascript" src="{% url "javascript-catalog" %}"></script>
+        <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
         {% block extra_script %}{% endblock extra_script %}
         <script type="text/javascript">
             var autocomplete = $('#search_input').yourlabsAutocomplete({

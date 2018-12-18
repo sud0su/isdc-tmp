@@ -4,75 +4,93 @@
 {% block title %}{% trans "Recent activity" %}{% endblock %}
 
 {% comment %}
-{% block subnav %}
-<li><a href="{% url "actstream_object_feed" content_type_id=ctype.pk  object_id=actor.pk %}">RSS</a></li>
-<li><a href="{% url "actstream_object_feed_atom" content_type_id=ctype.pk  object_id=actor.pk %}">ATOM</a></li>
-{% endblock %}
+    {% block subnav %}
+        <li><a href="{% url "actstream_object_feed" content_type_id=ctype.pk  object_id=actor.pk %}">RSS</a></li>
+        <li><a href="{% url "actstream_object_feed_atom" content_type_id=ctype.pk  object_id=actor.pk %}">ATOM</a></li>
+    {% endblock %}
 {% endcomment %}
 
-{% block body %}
-<div class="page-title">
-  <h2>{% trans "Recent activity" %}</h2>
-</div>
-<div class="row">
-  <div class="col-md-12">
-    <ul class="nav nav-tabs">
-      <li class="active"><a href="#all" data-toggle="tab"><i class=""></i>{% trans "All" %}</a></li>
-      <li><a href="#layers" data-toggle="tab"><i class="fa fa-square-o rotate-45"></i> {% trans "Layers" %}</a></li>
-      <li><a href="#maps" data-toggle="tab"><i class="fa fa-map-marker"></i> {% trans "Maps" %}</a></li>
-      <li><a href="#comments" data-toggle="tab"><i class="fa fa-comment-o"></i> {% trans "Comments" %}</a></li>
-    </ul>
-    <div class="tab-content">
-      <article id="all" class="tab-pane active">
-        <ul class="no-style-list">
-        {% for action in action_list %}
-          {% activity_item action %}
-          {% empty %}
-          <p>{% trans "No actions yet" %}</p>
-        {% endfor %}
-        </ul>
-      </article>
-      <article id="layers" class="tab-pane">
-        <ul class="no-style-list">
-        {% for action in action_list_layers %}
-          {% activity_item action %}
-          {% empty %}
-          <p>{% trans "No actions yet" %}</p>
-        {% endfor %}
-        </ul>
-      </article>
-      <article id="maps" class="tab-pane">
-        <ul class="no-style-list">
-        {% for action in action_list_maps %}
-          {% activity_item action %}
-          {% empty %}
-          <p>{% trans "No actions yet" %}</p>
-        {% endfor %}
-        </ul>
-      </article>
-      <article id="comments" class="tab-pane">
-        <ul class="no-style-list">
-        {% for action in action_list_comments %}
-          {% activity_item action %}
-          {% empty %}
-          <p>{% trans "No actions yet" %}</p>
-        {% endfor %}
-        </ul>
-      </article>
-    </div>
-  </div>
-</div>
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="{% url 'profile_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "People" %}</a>
+                <a href="" class="breadcrumb">{% trans "Recent Activity" %}</a>
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}
+
+{% block isi %}
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content grey darken-3 white-text">
+                        <span class="card-title">{% trans "Recent activity" %}</span>
+                    </div>
+                    <div class="card-tabs">
+                        <ul id="tabs_swipe_details_content" class="tabs red darken-3 tabs-fixed-width tabs-transparent">
+                            <li class="tab"><a href="#all" class="white-text">{% trans "All" %}</a></li>
+                            <li class="tab"><a href="#layers" class="white-text">{% trans "Layers" %}</a></li>
+                            <li class="tab"><a href="#maps" class="white-text">{% trans "Maps" %}</a></li>
+                            <li class="tab"><a href="#comments" class="white-text">{% trans "Comments" %}</a></li>
+                        </ul>
+                    </div>
+                    <div class="card-content row" style="">
+                        <div id="all" class="col s12">
+                            <ul class="collection">
+                                {% for action in action_list %}
+                                    {% activity_item action %}
+                                    {% empty %}
+                                    <p>{% trans "No actions yet" %}</p>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div id="layers" class="col s12">
+                            <ul class="collection">
+                                {% for action in action_list_layers %}
+                                    {% activity_item action %}
+                                    {% empty %}
+                                    <p>{% trans "No actions yet" %}</p>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div id="maps" class="col s12">
+                            <ul class="collection">
+                                {% for action in action_list_maps %}
+                                    {% activity_item action %}
+                                    {% empty %}
+                                    <p>{% trans "No actions yet" %}</p>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div id="comments" class="col s12">
+                            <ul class="collection">
+                                {% for action in action_list_comments %}
+                                    {% activity_item action %}
+                                    {% empty %}
+                                    <p>{% trans "No actions yet" %}</p>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
 
 {% block extra_script %}
-{{ block.super }}
-<script>
-$(function () {
-    $("#follow_button, #unfollow_button").click(function () {
-        $.post($(this).attr("href"), {});
-        $(this).parent().find("#follow_button, #unfollow_button").toggle();
-        return false
-    });
-});
-</script>
+    {{ block.super }}
+    <script>
+        $(function () {
+            $("#follow_button, #unfollow_button").click(function () {
+                $.post($(this).attr("href"), {});
+                $(this).parent().find("#follow_button, #unfollow_button").toggle();
+                return false
+            });
+        });
+    </script>
 {% endblock %}

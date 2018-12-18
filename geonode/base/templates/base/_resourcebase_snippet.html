@@ -1,21 +1,58 @@
 {% load i18n %}
-<div class="">
+<div class="resource-list">
     <div class="row">
         {% verbatim %} <!-- use verbatim if angular tag -->
         <div class="col s12 m6 xl3 ng-cloak" ng-repeat="item in results" resource_id="{{ item.id }}" ng-cloak>
             <div class="card hoverable">
-                <div class="card-image">
+                {% endverbatim %}
+                    {% if request.user.is_authenticated %}
+                        <button class="btn-floating btn-flat btn-flat-border waves-effect waves-light grey lighten-2" style="position:absolute; margin: 3px;" ng-click="feature_select($event)"><i class="material-icons">check</i></button>
+                    {% endif %}
+                {% verbatim %}
+                <div class="card-image valign-wrapper" style="">
                     <button class="btn-floating btn-flat btn-flat-border waves-effect waves-light grey lighten-2" style="position:absolute; margin: 3px;" ng-if="cart" ng-click="cart.toggleItem(item)"><i class="material-icons">check</i></button>
-                    <a href="{{ item.detail_url }}">
+
+                    <a ng-if="item.detail_url.indexOf('/maps/') > -1" href="{{item.id}}/view">
                         <img ng-src="{{ item.thumbnail_url }}">
                     </a>
-                    <a href="{% endverbatim %}{% url "new_map" %}?layer={% verbatim %}{{ item.detail_url.substring(8) }}" ng-if="item.detail_url.indexOf('/layers/') > -1" {% endverbatim %} class="btn-floating halfway-fab waves-effect waves-light red" style="right: 72px;"><i class="material-icons">create</i></a>
-                    <a href="{% verbatim %}/maps/{{item.id}}/view" class="btn-floating halfway-fab waves-effect waves-light red"  ng-if="item.detail_url.indexOf('/maps/') > -1" {% endverbatim %} style="right: 72px;"><i class="material-icons">map</i></a>
-                    <a class="btn-floating halfway-fab waves-effect waves-light red activator"><i class="material-icons">info</i></a>
+                    <a ng-if="item.detail_url.indexOf('/documents/') > -1" href="{{ item.detail_url }}">
+                        <img ng-src="{{ item.thumbnail_url }}">
+                    </a>
+                    <a ng-if="item.detail_url.indexOf('/layers/') > -1" href="{{ item.detail_url }}">
+                        <img ng-src="{{ item.thumbnail_url }}">
+                        <div class="source_logo" ng-if="item.orglogos">
+                            <img ng-repeat="filename in item.orglogos" src="{% endverbatim %}{{ STATIC_URL }}{% verbatim %}isdc/img/layer_logo/{{filename}}">
+                        </div>
+                    </a>
+
+                    <a href="{% endverbatim %}{% url "new_map" %}?layer={% verbatim %}{{ item.detail_url.substring(8) }}" ng-if="item.detail_url.indexOf('/layers/') > -1" {% endverbatim %} class="btn-floating halfway-fab tooltipped waves-effect waves-light red" style="right: 72px;" data-position="bottom" data-tooltip="{% trans 'Create New Map' %}"><i class="material-icons">create</i></a>
+                    <a href="{% verbatim %}/maps/{{item.id}}" class="btn-floating halfway-fab tooltipped waves-effect waves-light red"  ng-if="item.detail_url.indexOf('/maps/') > -1" {% endverbatim %} style="right: 72px;"><i class="material-icons">map</i></a>
+                    <a class="btn-floating halfway-fab tooltipped waves-effect waves-light red activator" data-position="bottom" data-tooltip="{% trans 'Summary' %}"><i class="material-icons">info</i></a>
+
                 </div>
                 <div class="card-content">
                     {% verbatim %}
-                    <a href="{{ item.detail_url }}">
+                    <a ng-if="item.detail_url.indexOf('/maps/') > -1" href="{{ item.detail_url }}/view"">
+                        <span class="card-title">{{ item.title }}</span>
+                        <div class="rating">
+                            <!-- The '|| 0' would prevent an undefined or null value on the Rating property -->
+                            <div class="full-star" style="width: {{item.rating * 20 || 0}}%;">
+                            </div>
+                            <div class="empty-star">
+                            </div>
+                        </div>
+                    </a>
+                    <a ng-if="item.detail_url.indexOf('/documents/') > -1" href="{{ item.detail_url }}">
+                        <span class="card-title">{{ item.title }}</span>
+                        <div class="rating">
+                            <!-- The '|| 0' would prevent an undefined or null value on the Rating property -->
+                            <div class="full-star" style="width: {{item.rating * 20 || 0}}%;">
+                            </div>
+                            <div class="empty-star">
+                            </div>
+                        </div>
+                    </a>
+                    <a ng-if="item.detail_url.indexOf('/layers/') > -1" href="{{ item.detail_url }}">
                         <span class="card-title">{{ item.title }}</span>
                         <div class="rating">
                             <!-- The '|| 0' would prevent an undefined or null value on the Rating property -->

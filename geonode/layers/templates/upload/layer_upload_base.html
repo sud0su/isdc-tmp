@@ -165,6 +165,19 @@
 {% block title %} {{ block.super }} {% endblock %} 
 {% block body_class %}data{% endblock %}
 
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="{% url 'layer_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Layers" %}</a>
+                {% block layer_upload_breadcrumb %} 
+                {% endblock layer_upload_breadcrumb %}
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}
+
 {% block body_outer %}
     <div class="page-header">
         <a href="{% url "layer_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="btn btn-primary pull-right">{% trans "Explore Layers" %}</a>

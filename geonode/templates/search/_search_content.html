@@ -38,71 +38,8 @@
                 {% if SEARCH_FILTERS.TYPE_ENABLED and include_type_filter == 'true' %}
                     {% include "search/_type_filters.html" %}
                 {% endif %}
-                <li>
-                    <div class="collapsible-header red darken-3 white-text"><i class="material-icons">filter_drama</i>Regions</div>
-                    <div class="collapsible-body">
-                        <div style="padding: 0 15px;">
-                            <div>
-                                <label>
-                                    <input type="checkbox" class="filled-in" />
-                                    <span>Afghanistan</span>
-                                    <span class="badge">7</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="collapsible-header red darken-3 white-text"><i class="material-icons">filter_drama</i>Provinces/District</div>
-                    <div class="collapsible-body">
-                        <ul class="collapsible expandable" style="max-height: 240px; overflow-y: scroll;">
-                            <li>
-                                <div class="collapsible-header collapsible-prov">
-                                    <div>
-                                        <label>
-                                            <input type="checkbox" class="filled-in" />
-                                            <span>Badakhshan</span>
-                                            <span class="badge">40</span>
-                                        </label>
-                                    </div>
-                                    <i class="material-icons">expand_more</i>
-                                </div>
-                                <div class="collapsible-body">
-                                    <div style="padding: 15px;">
-                                        <div>
-                                            <label>
-                                                <input type="checkbox" class="filled-in" />
-                                                <span>Nationwide</span>
-                                                <span class="badge">4</span>
-                                            </label>
-                                        </div>
-                                        <div>
-                                            <label>
-                                                <input type="checkbox" class="filled-in" checked />
-                                                <span>Provincial</span>
-                                                <span class="badge">7</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="collapsible-header">Drought</div>
-                                <div class="collapsible-body">
-                                    <div style="padding: 15px;">
-                                        <div>
-                                            <label>
-                                                <input type="checkbox" class="filled-in" />
-                                                <span>Forecast</span>
-                                                <span class="badge">4</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+                {% include "search/_region_filter.html" %}
+                {% include "search/_province_filter.html" %}
                 {% include "search/_general_filters.html" %}
                 {% if SEARCH_FILTERS.EXTENT_ENABLED %}
                     {% include "search/_extent_filter.html" %}

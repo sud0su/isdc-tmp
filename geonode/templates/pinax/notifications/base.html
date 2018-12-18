@@ -1,3 +1,17 @@
 {% extends "geonode_base.html" %}
+{% load i18n %}
 
-{% block body_class %}notices{% endblock %}
+{% block body_class %}notices grey lighten-4{% endblock %}
+
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="{% url 'profile_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "People" %}</a>
+                <a href="{% url 'profile_detail' user.username %}" class="breadcrumb">{{ user.username }}</a>
+                {% block settings %}{% endblock settings %}
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}

@@ -1,24 +1,37 @@
 {% extends "announcements/base.html" %}
-
 {% load i18n %}
-{% load bootstrap_tags %}
 
-{% block body_class %}announcements{% endblock %}
+{% block body_class %}announcements grey lighten-4{% endblock %}
 
-{% block body %}
-    <h1>{% trans "Delete Announcement?" %}</h1>
-    {% url "announcements_delete" pk=announcement.pk as post_url %}
-    <p class="lead">
-        {% trans "Are you sure you want to delete this announcement?" %}
-    </p>
-    <p><b>{{ announcement.title }}</b></p>
-    <p><em>{{ announcement.content }}</em></p>
+{% block announcement %}
+    <a href="{{ announcement.get_absolute_url }}" class="breadcrumb">{{ announcement.title }}</a>
+{% endblock announcement %}
 
-    <form action="{{ post_url }}" method="POST" class="form form-horizontal">
-        {% csrf_token %}
-        <div class="form-actions">
-            <a href="{% url "announcements_list" %}" class="btn btn-default">{% trans "Cancel" %}</a>
-            <button type="submit" class="btn btn-danger">{% trans "Delete" %}</button>
+{% block body_outer %}
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">{% trans "Delete Announcement?" %}</span>
+                        {% url "announcements_delete" pk=announcement.pk as post_url %}
+                        <p class="">
+                            {% trans "Are you sure you want to delete this announcement?" %}
+                        </p>
+                        <div class="card-panel z-depth-0 grey white-text">
+                            <p><b>{{ announcement.title }}</b></p>
+                            <p><em>{{ announcement.content }}</em></p>
+                        </div>
+                        <form action="{{ post_url }}" method="POST" class="">
+                            {% csrf_token %}
+                            <div class="center">
+                                <a href="{% url "announcements_list" %}" class="btn-flat waves-effect waves-light">{% trans "Cancel" %}</a>
+                                <button type="submit" class="btn waves-effect waves-light red darken-3">{% trans "Delete" %}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-    </form>
+    </section>
 {% endblock %}

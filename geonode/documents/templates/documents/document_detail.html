@@ -22,7 +22,6 @@
 {% block body_class %}documents grey lighten-4{% endblock %}
 
 {% block document_breadcrumb %}
-    <a href="{% url 'document_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Documents" %}</a>
     <a href="#" class="breadcrumb">{{ resource.title }}</a>
 {% endblock document_breadcrumb %}
 
@@ -31,7 +30,7 @@
         <div class="col s12">
             <div class="card">
                 <div class="card-content">
-                    <h4>{{ resource.title }}</h4>
+                    <span class="card-title card-title-detail">{{ resource.title }}</span>
                     {% include "base/_resourcebase_contact_snippet.html" %}
                 </div>
             </div>
@@ -156,7 +155,7 @@
                     {% if "change_resourcebase_permissions" in perms_list %}
                         <span class="card-title">
                             {% trans "Permissions" %}
-                            <a href="#_permissions" id="" class="btn-flat modal-trigger waves-effect waves-circle waves-light right">
+                            <a href="#_permissions" id="" class="btn-floating z-depth-0 transparent modal-trigger waves-effect waves-circle waves-grey right">
                                 <i class="material-icons red-text text-darken-3">group_add</i>
                             </a>
                         </span>
@@ -269,4 +268,10 @@
         {% endif %}
     </script>
     {% include "_permissions_form_js.html" %}
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.documents .collection-item.avatar a img').addClass('circle');
+        });
+    </script>
 {% endblock extra_script %}

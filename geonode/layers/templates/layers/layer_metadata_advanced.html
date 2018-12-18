@@ -7,15 +7,20 @@
 
 {% block title %}{{ layer.alternate }} — {{ block.super }}{% endblock %}
 
-{% block body_class %}data{% endblock %}
+{% block extra_head %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+    {{ block.super }}
+{% endblock %}
 
-{% block layer_breadcrumb %}
+{% block body_class %}data grey lighten-4{% endblock %}
+
+{% block metadata_breadcrumb %}
     <a href="{% url 'layer_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Layers" %}</a>
     {% if not layer.metadata_uploaded_preserve %}
         <a href="{% url 'layer_detail' layername=resource.alternate %}" class="breadcrumb">{{ layer.title }}</a>
     {% endif %}
     <a href="#" class="breadcrumb">{% trans "Edit Metadata" %}</a>
-{% endblock layer_breadcrumb %}
+{% endblock metadata_breadcrumb %}
 
 {% block body_outer %}
     {{ block.super }}
@@ -49,9 +54,9 @@
                 <form id="metadata_update" class="" action="{% url "layer_metadata" layer.service_typename %}" method="POST">
                     {% csrf_token %}
                     <div class="input-field col s12">
+                        <span class="helper-text">{% trans "Owner" %}</span>
                         {{ layer_form.owner |attr:"class:"|attr:"placeholder:" }}
                         <!-- <label for="id_resource-owner-autocomplete">{% trans "Owner" %}</label> -->
-                        <span class="helper-text">{% trans "Owner" %}</span>
                     </div>
                     <div class="input-field col s12">
                         {{ layer_form.title |attr:"class:"|attr:"placeholder:"|attr:"data-content:" }}
@@ -98,7 +103,7 @@
                         <span class="helper-text">{% trans "formalised word(s) or phrase(s) from a fixed thesaurus used to describe the subject (space or comma-separated" %}</span>
                     </div>
                     <div class="input-field col s12">
-                        {{ layer_form.regions }}
+                        {{ layer_form.regions |attr:"class:browser-default hide" }}
                         <label for="id_resource-regions">{% trans "Regions" %}</label>
                         <span class="helper-text">{% trans "aaa" %}</span>
                     </div>
@@ -226,19 +231,19 @@
                         <!-- <span class="helper-text">{% trans "aaa" %}</span> -->
                     </div>
                     <div class="input-field col s12">
+                        <span class="helper-text">{% trans "Free-text Keywords" %}</span>
                         {{ layer_form.keywords }}
-                        <label for="id_resource-keywords">{% trans "Free-text Keywords" %}</label>
-                        <span class="helper-text">{% trans "aaa" %}</span>
+                        <!-- <label for="id_resource-keywords-tokenfield">{% trans "Free-text Keywords" %}</label> -->
                     </div>
                     <div class="input-field col s12">
+                        <span class="helper-text">{% trans "Point of Contact" %}</span>
                         {{ layer_form.poc |attr:"class:"|attr:"placeholder:" }}
                         <!-- <label for="resource-poc-autocomplete">{% trans "Point of Contact" %}</label> -->
-                        <span class="helper-text">{% trans "Point of Contact" %}</span>
                     </div>
                     <div class="input-field col s12">
+                        <span class="helper-text">{% trans "Metadata Author" %}</span>
                         {{ layer_form.metadata_author |attr:"placeholder:" }}
                         <!-- <label for="id_resource-metadata_author-autocomplete">{% trans "Metadata Author" %}</label> -->
-                        <span class="helper-text">{% trans "Metadata Author" %}</span>
                     </div>
                     
                     <div id="category_form" class="row">
@@ -322,10 +327,19 @@
             </div>
         </div>
     </div>
+{% endblock %}
 
+{% block extra_script %}
+    {{ block.super }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script>
         $("#id_resource-owner").remove();
         $("#id_resource-poc").remove();
         $("#id_resource-metadata_author").remove();
+        
+        $(document).ready(function() {
+
+            $("#id_resource-poc").addClass("browser-default");
+        });
     </script>
-{% endblock %}
+{% endblock extra_script %}

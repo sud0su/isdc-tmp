@@ -4,6 +4,7 @@
 {% load avatar_tags %}
 {% load activity_tags %}
 {% load pagination_tags %}
+{% load social_tags %}
 
 {% block title %} {% trans "Profile of " %}{{ profile.first_name|default:profile.username }}{% endblock %}
 
@@ -58,15 +59,15 @@
                         </div>
                         <div class="col s12 m2 center-align">
                             <h4 class="card-title grey-text text-darken-4">10+</h4>
-                            <p class="grey-text">Work Experience</p>
+                            <p class="grey-text">{% trans "Layers" %}</p>
                         </div>
                         <div class="col s12 m2 center-align">
                             <h4 class="card-title grey-text text-darken-4">6</h4>
-                            <p class="grey-text">Completed Projects</p>
+                            <p class="grey-text">{% trans "Maps" %}</p>
                         </div>
                         <div class="col s12 m2 center-align">
-                            <h4 class="card-title grey-text text-darken-4">$ 1,253,000</h4>
-                            <p class="grey-text">Busness Profit</p>
+                            <h4 class="card-title grey-text text-darken-4">300</h4>
+                            <p class="grey-text">{% trans "Static Maps" %}</p>
                         </div>
                         <div class="col s12 m1 right-align">
                             <a class="btn-floating activator waves-effect waves-light rec accent-2 right">
@@ -170,13 +171,12 @@
                     </div>
                     <div id="activity" class="">
                         <ul class="collection">
-                            <li class="collection-item avatar">
-                                <img src="https://pixinvent.com/materialize-material-design-admin-template/images/avatar/avatar-7.png" alt="" class="circle">
-                                <span class="title">Title</span>
-                                <p>First Line <br>
-                                    Second Line
-                                </p>
-                            </li>
+                            {% for action in action_list %}
+                                {% activity_item action %}
+                                {% empty %}
+                                <p>{% trans "No actions yet" %}</p>
+                            {% endfor %}
+                            <!-- {#% include "actstream/actor.html" %} -->
                         </ul>
                     </div>
                 </div>

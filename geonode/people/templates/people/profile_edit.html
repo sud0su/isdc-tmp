@@ -1,34 +1,144 @@
 {% extends "people/profile_base.html" %}
 {% load i18n avatar_tags %}
-{% load bootstrap_tags %}
+{% load widget_tweaks %}
 
-{% block body_class %}edit people{% endblock %}
+{% block body_class %}edit people grey lighten-4{% endblock %}
+
+{% block profile_breadcrumb %}
+    <a href="{% url 'profile_detail' profile.username %}" class="breadcrumb">{{ profile.username }}</a>
+    <a href="{% url 'profile_edit' %}" class="breadcrumb">{% trans "Edit Profile" %}</a>
+{% endblock profile_breadcrumb %}
 
 {% block body %}
-<div class="page-header">
-  {% if user == profile %}
-    <h2 class="page-title">{% trans "Edit Your Profile" %}</h2>
-  {% else %}
-    <h2 class="page-title">{% trans "Edit Profile for" %} {{ profile.username }}</h2>
-  {% endif %}
-</div>
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        {% if user == profile %}
+                            <span class="card-title">{% trans "Edit Your Profile" %}</span>
+                        {% else %}
+                            <span class="card-title">{% trans "Edit Profile for" %} {{ profile.username }}</span>
+                        {% endif %}
 
-<div class="col-xs-3 col-md-2 profile-image">
-  {% autoescape off %}{% avatar profile.username 240 %}{% endautoescape %}
-  {% if user == profile %}
-  <p><a class="btn btn-primary btn-block" href="{% url 'avatar_change' %}">{% trans "Change your avatar" %}</a></p>
-  {% endif %}
-</div>
+                        <div class="row">
+                            <div class="col s12 xl3">
+                                {% autoescape off %}{% avatar profile.username 240 %}{% endautoescape %}
+                                {% if user == profile %}
+                                    <div class="center">
+                                        <a class="btn waves-effect waves-light red darken-3 btn-block" href="{% url 'avatar_change' %}">{% trans "Change your avatar" %}</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col s12 xl9">
+                                <div>
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+                                        <div class="input-field">
+                                            {{ form.first_name }}
+                                            <label for="id_first_name">{% trans "First Name" %}</label>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.last_name }}
+                                            <label for="id_last_name">{% trans "Last Name" %}</label>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.email }}
+                                            <label for="id_email">{% trans "Email Address" %}</label>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.organization }}
+                                            <label for="id_organization">{% trans "Organization Name" %}</label>
+                                            <span class="helper-text">{% trans "name of the responsible organization" %}</span>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.profile |attr:"class:materialize-textarea" }}
+                                            <label for="id_profile">{% trans "Profile" %}</label>
+                                            <span class="helper-text">{% trans "introduce yourself" %}</span>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.position }}
+                                            <label for="id_position">{% trans "Position Name" %}</label>
+                                            <span class="helper-text">{% trans "role or position of the responsible person" %}</span>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.voice }}
+                                            <label for="id_voice">{% trans "Voice" %}</label>
+                                            <span class="helper-text">{% trans "telephone number by which individuals can speak to the responsible organization or individual" %}</span>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.fax }}
+                                            <label for="id_fax">{% trans "Facsimile" %}</label>
+                                            <span class="helper-text">{% trans "telephone number of a facsimile machine for the responsible organization or individual" %}</span>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.delivery }}
+                                            <label for="id_delivery">{% trans "Delivery Point" %}</label>
+                                            <span class="helper-text">{% trans "physical and email address at which the organization or individual may be contacted" %}</span>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.city }}
+                                            <label for="id_city">{% trans "City" %}</label>
+                                            <span class="helper-text">{% trans "city of the location" %}</span>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.area }}
+                                            <label for="id_area">{% trans "Administrative Area" %}</label>
+                                            <span class="helper-text">{% trans "state, province of the location" %}</span>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.zipcode }}
+                                            <label for="id_zipcode">{% trans "Postal Code" %}</label>
+                                            <span class="helper-text">{% trans "ZIP or other postal code" %}</span>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.country }}
+                                            <label for="id_country">{% trans "Country" %}</label>
+                                            <span class="helper-text">{% trans "country of the physical address" %}</span>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.language }}
+                                            <label for="id_language">{% trans "Language" %}</label>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.timezone }}
+                                            <label for="id_timezone">{% trans "Timezone" %}</label>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.title }}
+                                            <label for="id_title">{% trans "Title" %}</label>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.org_acronym }}
+                                            <label for="id_org_acronym">{% trans "Organization Acronym" %}</label>
+                                            <span class="helper-text">{% trans "Organisation acronym" %}</span>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.org_type }}
+                                            <label for="id_org_type">{% trans "Organization Type" %}</label>
+                                            <span class="helper-text">{% trans "Organisation Type" %}</span>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.org_name_status }}
+                                            <label for="id_org_name_status">{% trans "Organization Name Status" %}</label>
+                                            <span class="helper-text">{% trans "Organization Name Status" %}</span>
+                                        </div>
+                                        <div class="input-field">
+                                            {{ form.keywords }}
+                                            <label for="id_keywords">{% trans "Keywords" %}</label>
+                                            <span class="helper-text">{% trans "A space or comma-separated list of keywords" %}</span>
+                                        </div>
+                                        <div class="right-align">
+                                            <button class="btn waves-effect waves-light red darken-3" type="submit" name="action">{% trans "Update profile" %}</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
-<div class="col-xs-9 col-md-7">
-  <form action="" method="post">
-    {% csrf_token %}
-    <div class="form-controls">
-      {{ form|as_bootstrap }}
-    </div>
-    <div class="form-actions">
-      <input type="submit" class="btn btn-primary" value="{% trans "Update profile" %}" />
-    </div>
-  </form>
-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

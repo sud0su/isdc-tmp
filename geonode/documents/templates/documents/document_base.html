@@ -9,6 +9,7 @@
     <nav class="red darken-3 breadcrumb-universal">
         <div class="nav-wrapper">
             <div class="col s12">
+                <a href="{% url 'document_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Static Maps" %}</a>
                 {% block document_breadcrumb %} 
                 {% endblock document_breadcrumb %}
             </div>

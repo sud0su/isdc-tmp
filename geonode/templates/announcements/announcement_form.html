@@ -1,29 +1,84 @@
 {% extends "geonode_base.html" %}
-
 {% load i18n %}
-{% load bootstrap_tags %}
+{% load widget_tweaks %}
 
-{% block body_class %}announcements{% endblock %}
+{% block body_class %}announcements grey lighten-4{% endblock %}
 
-{% block body %}
-<div class="page-header">
-  <h2>{% if announcement %}{% trans "Edit Announcement" %}{% else %}{% trans "Create Announcement" %}{% endif %}</h2>
-</div>
-{% if announcement %}
-  {% url "announcements_update" pk=announcement.pk as post_url %}
-{% else %}
-  {% url "announcements_create" as post_url %}
-{% endif %}
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="{% url 'profile_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "People" %}</a>
+                <a href="{% url 'announcements_list' %}" class="breadcrumb">{% trans "Announcements" %}</a>
+                <a href="{% url 'announcements_create' %}" class="breadcrumb">{% if announcement %}{% trans "Edit Announcement" %}{% else %}{% trans "Create Announcement" %}{% endif %}</a>
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}
 
-<form action="{{ post_url }}" method="POST" class="form form-horizontal">
-  {% csrf_token %}
-  {{ form|as_bootstrap }}
-  <div class="form-actions">
-    <a href="{% url "announcements_list" %}" class="btn btn-default">{% trans "Cancel" %}</a>
-    {% if announcement %}
-    <a href="{% url "announcements_delete" pk=announcement.pk %}" class="btn btn-danger">{% trans "Delete" %}</a>
-    {% endif %}
-    <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-  </div>
-</form>
+{% block body_outer %}
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">{% if announcement %}{% trans "Edit Announcement" %}{% else %}{% trans "Create Announcement" %}{% endif %}</span>
+                        {% if announcement %}
+                            {% url "announcements_update" pk=announcement.pk as post_url %}
+                        {% else %}
+                            {% url "announcements_create" as post_url %}
+                        {% endif %}
+
+                        <form action="{{ post_url }}" method="POST" class="">
+                            {% csrf_token %}
+                            <div class="input-field">
+                                {{ form.title }}
+                                <label for="id_title">{% trans "Title" %}</label>
+                            </div>
+                            <div class="input-field">
+                                {{ form.level }}
+                                <label for="id_level">{% trans "Level" %}</label>
+                            </div>
+                            <div class="input-field">
+                                {{ form.content |attr:"class:materialize-textarea" }}
+                                <label for="id_content">{% trans "Content" %}</label>
+                            </div>
+                            <div class="">
+                                <label>
+                                    {{ form.site_wide |attr:"class:filled-in" }}
+                                    <span>{% trans "Site wide" %}</span>
+                                </label>
+                            </div>
+                            <div class="">
+                                <label>
+                                    {{ form.members_only |attr:"class:filled-in" }}
+                                    <span>{% trans "Members Only" %}</span>
+                                </label>
+                            </div>
+                            <div class="input-field">
+                                {{ form.dismissal_type }}
+                                <label for="id_dismissal_type">{% trans "Dismissal Type" %}</label>
+                            </div>
+                            <div class="input-field">
+                                {{ form.publish_start }}
+                                <label for="id_publish_start">{% trans "Publish Start" %}</label>
+                            </div>
+                            <div class="input-field">
+                                {{ form.publish_end }}
+                                <label for="id_publish_end">{% trans "Publish End" %}</label>
+                            </div>
+                            <div class="right-align">
+                                <a href="{% url "announcements_list" %}" class="btn-flat waves-effect waves-light">{% trans "Cancel" %}</a>
+                                {% if announcement %}
+                                    <a href="{% url "announcements_delete" pk=announcement.pk %}" class="btn-flat btn-flat-border waves-effect waves-light red-text text-darken-3">{% trans "Delete" %}</a>
+                                {% endif %}
+                                <button type="submit" class="btn waves-effect waves-light red darken-3">{% trans "Save" %}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

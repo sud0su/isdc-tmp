@@ -3,7 +3,7 @@
 
 {% block title %}{{ layer.alternate }} — {{ block.super }}{% endblock %}
 
-{% block body_class %}layers{% endblock %}
+{% block body_class %}layers grey lighten-4{% endblock %}
 
 {% block layer_breadcrumb %}
     <a href="{% url 'layer_detail' layername=layer.alternate %}" class="breadcrumb">{{ layer.title }}</a>

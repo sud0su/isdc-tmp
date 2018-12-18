@@ -2,30 +2,50 @@
 {% load i18n %}
 
 {% block title %} Services -- {{ block.super }} {% endblock %}
+{% block body_class %}grey lighten-4{% endblock %}
+
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="{% url 'profile_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "People" %}</a>
+                <a href="{% url 'services' %}" class="breadcrumb">{% trans "Remote Services" %}</a>
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}
 
 {% block body_outer %}
-<div class="page-header">
-  <a href="{% url "register_service" %}" class="btn btn-primary pull-right">{% trans "Register a new Service" %}</a>
-  <h2>{% trans "Remote Services" %}</h2>
-</div>
-<div class="twocol">
-{% if services %}
-<table class="table table-striped">
-  <thead>
-  	<th>Title</th>
-  	<th>URL</th>
-    <th>Type</th>
-  </thead>
-  {% for service in services %}
-  <tr>
-	<td><a href='{% url "service_detail" service.id %}'>{{ service.title }} <span class="badge">{{ service.layer_set.count }}</span></a></td>
-	<td><a href='{{ service.base_url }}' target="_blank" rel="noopener noreferrer">{{ service.base_url }}</a></td>
-    <td>{{ service.type }}</td>
-  </tr>
-  {% endfor %}
-</table>
-{% else %}
-<h4>No services registered</h4>
-{% endif %}
-</div>
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <a href="{% url "register_service" %}" class="btn waves-effect waves-light red darken-4 right">{% trans "Register a new Service" %}</a>
+                        <span class="card-title">{% trans "Remote Services" %}</span>
+                        <br>
+                        {% if services %}
+                            <table class="striped">
+                                <thead class="grey white-text">
+                                    <th>Title</th>
+                                    <th>URL</th>
+                                    <th>Type</th>
+                                </thead>
+                                {% for service in services %}
+                                    <tr>
+                                        <td><a href='{% url "service_detail" service.id %}'>{{ service.title }} <span class="badge">{{ service.layer_set.count }}</span></a></td>
+                                        <td><a href='{{ service.base_url }}' target="_blank" rel="noopener noreferrer">{{ service.base_url }}</a></td>
+                                        <td>{{ service.type }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            <p>No services registered</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

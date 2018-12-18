@@ -2,7 +2,7 @@
 
 {% if SEARCH_FILTERS.CATEGORIES_ENABLED %}
     <li ng-cloak>
-        <div class="collapsible-header red darken-3 white-text"><i class="material-icons">filter_drama</i>{% trans "Categories" %}</div>
+        <div class="collapsible-header red darken-3 white-text"><i class="material-icons">category</i>{% trans "Categories" %}</div>
         <div class="collapsible-body">
             <ul class="collapsible expandable" style="max-height: 240px; overflow-y: scroll;">
                 <li ng-repeat="category in categories" ng-if="category.count > 0">
@@ -60,7 +60,7 @@
 
 {% if SEARCH_FILTERS.H_KEYWORDS_ENABLED %}
     <li>
-        <div class="collapsible-header red darken-3 white-text"><i class="material-icons">filter_drama</i>{% trans "Keywords" %}</div>
+        <div class="collapsible-header red darken-3 white-text"><i class="material-icons">edit_location</i>{% trans "Keywords" %}</div>
         <div class="collapsible-body">
             <div style="padding: 0 15px;">
                 <div ng-repeat="keyword in keywords" ng-if="keyword.count > 0">

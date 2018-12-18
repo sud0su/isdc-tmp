@@ -10,7 +10,7 @@
         <div class="nav-wrapper">
             <div class="col s12">
                 {% if resource.class_name == "Document" %}
-                    <a href="{% url 'document_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Documents" %}</a>
+                    <a href="{% url 'document_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Static Maps" %}</a>
                     <a href="{% url 'document_detail' docid=resource.id %}" class="breadcrumb">{{ resource.title }}</a>
                 {% elif resource.class_name == "Layer" %}
                     <a href="{% url 'layer_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Layers" %}</a>

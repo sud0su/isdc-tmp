@@ -5,7 +5,7 @@
 
 {% block title %} {% trans "Upload Document" %} - {{ block.super }} {% endblock %}
 
-{% block body_class %}documents upload{% endblock body_class %}
+{% block body_class %}documents upload grey lighten-4{% endblock body_class %}
 
 {% block head %}
     {% include "geoext/ext_header.html" %}
@@ -18,14 +18,15 @@
         <div class="row">
             <form id="upload_form" method="post" enctype="multipart/form-data" action="{% url "document_upload" %}">
                 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+                {% if form.non_field_errors or form.doc_file.errors or form.doc_url.errors %}
                 <div style="padding: 0 15px;">
-                    
                     <div class="card-panel red lighten-3">
                         {{ form.non_field_errors }}
                         {{ form.doc_file.errors }}
                         {{ form.doc_url.errors }}
                     </div>
                 </div>
+                {% endif %}
                 <div class="input-field col s12">
                     {{ form.title }}
                     <label for="id_title">Title</label>
@@ -53,8 +54,6 @@
                     {{ form.links }}
                     <label for="id_links">Link to</label>
                 </div>
-
-                <hr>
 
                 <input id="permissions" name="permissions" type="hidden">
                 <section class="right" style="padding: 0 15px;">
@@ -84,9 +83,11 @@
         $("#id_links").select2({
             width: '100%'
         });
+        // console.log($('#permissions').val(JSON.stringify(permissionsString($('#permission_form'),'base'))));
+
         $('#upload_form').submit(function(){
-          $('#permissions').val(JSON.stringify(permissionsString($('#permission_form'),'base')));
-        //   console.log(JSON.stringify(permissionsString($('#permission_form'),'base')))
+            $('#permissions').val(JSON.stringify(permissionsString($('#permission_form'),'base')));
+            // console.log($('#permissions').val(JSON.stringify(permissionsString($('#permission_form'),'base'))));
         });
 
         $('#upload-button').click(function(){

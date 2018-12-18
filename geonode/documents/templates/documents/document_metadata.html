@@ -1,87 +1,66 @@
 {% extends "metadata_base.html" %}
 {% load i18n %}
-{% load bootstrap_tags %}
 {% load base_tags %}
 {% load guardian_tags %}
 {% load floppyforms %}
 
 {% block title %}{{ document.title }} — {{ block.super }}{% endblock %}
 
-{% block body_class %}data{% endblock body_class %}
+{% block body_class %}data grey lighten-4{% endblock body_class %}
+
+{% block metadata_breadcrumb %}
+    <a href="{% url 'document_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Static Maps" %}</a>
+    <a href="{{ document.get_absolute_url }}" class="breadcrumb">{{ resource.title }}</a>
+    <a href="{% url "document_metadata" document.id %}" class="breadcrumb">{% trans "Edit Metadata" %}</a>
+{% endblock metadata_breadcrumb %}
 
 {% block body_outer %}
-
-    {{ block.super }}
-
-    <div class="container-fluid page-header" style="position: relative;">
-        <h2 class="page-title">{% trans "Metadata" %}&nbsp;{% blocktrans with document.title as document_title %}for {{ document_title }}{% endblocktrans %}</h2>
-        <div id="profileCompleteness" class="alert alert-info" style="position: absolute; right: 0; top: 0; padding: 4px;">
-            <strong>Completeness</strong>
-            <div style="padding: 2px;">
-                <small class="completed text-success" style="display: none; "><i class="fa fa-check"></i>Metadata Schema mandatory fields completed</small>
-                <small class="not-completed text-danger" style="display: none; "><i class="fa fa-remove"></i>Check Schema mandatory fields</small>
-            </div>
-            <div class="progress" style="margin-bottom:2px;">
-                <div class="progress-bar progress-bar-striped" role="progress-bar" >70%</div>
-            </div>
-        </div>
-        <!-- </h2> -->
-    </div>
-
-    <form id="metadata_update" class="form-horizontal" action="{% url "document_metadata" document.id %}" method="POST">
-        {% if document_form.errors or category_form.errors or author_form.errors or poc.errors %}
-            <p class="bg-danger">{% blocktrans %}Error updating metadata.  Please check the following fields: {% endblocktrans %}</p>
-            <ul class="bg-danger">
-            {% if author_form.errors %}
-              <li>{% trans "Metadata Author" %}</li>
-              {{ author_form.errors }}
-            {% endif %}
-            {% if poc_form.errors %}
-              <li>{% trans "Point of Contact" %}</li>
-              {{ poc_form.errors }}
-            {% endif %}
-            {% for field in document_form %}
-                {% if field.errors %}
-                    <li>{{ field.label }}</li>
-                {% endif %}
-            {% endfor %}
-
-            {% if category_form.errors %}
-                <li>{{ category_form.errors.as_ul }}</li>
-            {% endif %}
-            </ul>
-        {% endif %}
-
-        {% csrf_token %}
-        <div id="mdeditor_form" class="col-md-12 form-controls">
-          {% form document_form using "layouts/doc_panels.html" %}
-          {# document_form|as_bootstrap #}
-        </div>
-
+    <section style="min-height: 64vh;">
         <div class="row">
-            <div class="col-md-12 grid-spacer">
-              <fieldset class="form-controls modal-forms modal hide fade" id="poc_form" >
-                <h2>{% trans "Point of Contact" %}</h2>
-                {{ poc_form|as_bootstrap }}
-                <button type='button' class="modal-cloose-btn btn btn-primary">Done</button>
-              </fieldset>
-              <fieldset class="form-controls modal-forms modal hide fade" id="metadata_form">
-                <h2>{% trans "Metadata Provider" %}</h2>
-                  {{ author_form|as_bootstrap }}
-                <button type='button' class="modal-cloose-btn btn btn-primary">Done</button>
-              </fieldset>
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <a class="waves-effect waves-light btn red darken-3 modal-trigger right" href="#settings">Settings</a>
+                        <span class="card-title">{% trans "Metadata" %}&nbsp;{% blocktrans with document.title as document_title %}for {{ document_title }}{% endblocktrans %}</span>
+                        <form id="metadata_update" class="form-horizontal" action="{% url "document_metadata" document.id %}" method="POST">
+                            {% if document_form.errors or category_form.errors or author_form.errors or poc.errors %}
+                                <p class="">{% blocktrans %}Error updating metadata.  Please check the following fields: {% endblocktrans %}</p>
+                                <div class="card-panel red lighten-3">
+                                    <ul class="">
+                                        {% if author_form.errors %}
+                                            <li>{% trans "Metadata Author" %}</li>
+                                            {{ author_form.errors }}
+                                        {% endif %}
+                                        {% if poc_form.errors %}
+                                            <li>{% trans "Point of Contact" %}</li>
+                                            {{ poc_form.errors }}
+                                        {% endif %}
+                                        {% for field in document_form %}
+                                            {% if field.errors %}
+                                                <li>{{ field.label }}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if category_form.errors %}
+                                            <li>{{ category_form.errors.as_ul }}</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            {% endif %}
 
-                <div class="form-actions">
-                  <input type="button" id="btn_back_dwn" class="btn btn-primary" style="display: none" value="{% trans "<< Back" %}"/>
-                  <input type="submit" id="btn_upd_md_dwn" class="btn btn-primary" value="{% trans "Update" %}"/>
-                  <input type="button" id="btn_next_dwn" class="btn btn-primary" value="{% trans "Next >>" %}"/>
+                            {% csrf_token %}
+                            <div id="mdeditor_form" class="">
+                                {% form document_form using "layouts/doc_panels.html" %}
+                                {# document_form #}
+                            </div>
+                            <button id="btn_upd_md_dwn" class="btn red darken-3 waves-effect waves-light" type="submit" name="action">{% trans "Update" %}</button>
+                            <!-- <input type="submit" id="btn_upd_md_dwn" class="btn red darken-3" value="{% trans "Update" %}"/> -->
+                        </form>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </form>
-
-      </div>
-    </div>
+    </section>
 {% endblock body_outer %}
 
 {% block extra_script %}
@@ -91,6 +70,12 @@
             placeholder: "Select an option",
             allowClear: true
         });
+
+        var stepper = document.querySelector('.stepper');
+        var stepperInstace = new MStepper(stepper, {
+            // options
+            firstActive: 0 // this is the default
+        })
     </script>
     <style>
         #s2id_id_resource-links {

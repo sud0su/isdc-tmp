@@ -1,36 +1,73 @@
 {% extends "geonode_base.html" %}
 {% load i18n avatar_tags %}
-{% load bootstrap_tags %}
 
-{% block body %}
-    <h4 class="page-header"><a href="{% url "profile_edit" user.username %}">{% trans "Back to edit your profile information" %}</a></h4>
-    <h5>{% trans "Your current avatar: " %}</h5>
-    {% autoescape off %}{% avatar user %}{% endautoescape %}
-    {% if not avatars %}
-        <p>{% trans "You haven't uploaded an avatar yet. Please upload one now." %}</p>
-    {% else %}
-        <form method="POST" action="{% url 'avatar_change' %}">
-            <ul>
-                {{ primary_avatar_form.as_ul }}
-            </ul>
-            <p>{% csrf_token %}<input type="submit" class="btn btn-primary" value="{% trans "Choose new Default" %}" /></p>
-        </form>
-    {% endif %}
-    <form enctype="multipart/form-data" method="POST" action="{% url 'avatar_add' %}">
-        {{ upload_avatar_form.as_p }}
-        <p>{% csrf_token %}<input id="avatar-file" type="submit" class="btn btn-primary" style="visibility: hidden" value="{% trans "Upload New Image" %}" /></p>
-    </form>
-    <a class="btn btn-primary btn-danger" href="{% url 'avatar_delete' %}" id="delete_avatar" style="visibility: hidden">{% trans "Delete Your Avatar" %}</a>
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="{% url 'profile_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "People" %}</a>
+                <a href="{% url 'profile_detail' user.username %}" class="breadcrumb">{{ user.username }}</a>
+                <a href="{% url 'avatar_change' %}" class="breadcrumb">{% trans "Change Avatar" %}</a>
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}
+
+{% block body_outer %}
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                            <a href="{% url "profile_edit" user.username %}" class="btn-flat btn-flat-border red-text text-darken-4 waves-effect waves-light right">{% trans "Back to edit your profile information" %}</a>
+                        <span class="card-title">{% trans "Change Avatar" %}</span>
+                        
+                        <div class="row">
+                            <div class="col s12 xl9">{% trans "Your current avatar: " %}</div>
+                            <div class="col s12 xl3">
+                                {% autoescape off %}{% avatar user %}{% endautoescape %}
+                            </div>
+                        </div>
+                        {% if not avatars %}
+                            <p>{% trans "You haven't uploaded an avatar yet. Please upload one now." %}</p>
+                        {% else %}
+                            <form method="POST" action="{% url 'avatar_change' %}">
+                                <ul>
+                                    {{ primary_avatar_form.as_ul }}
+                                </ul>
+                                <p>{% csrf_token %}<input type="submit" class="btn waves-effect waves-light red darken-4" value="{% trans "Choose new Default" %}" /></p>
+                            </form>
+                        {% endif %}
+                        <form enctype="multipart/form-data" method="POST" action="{% url 'avatar_add' %}">
+                            <div class="file-field input-field">
+                                <div class="btn waves-effect waves-light red darken-3">
+                                    <span>File</span>
+                                    {{ upload_avatar_form.avatar }}
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text">
+                                </div>
+                            </div>
+                            {% csrf_token %}
+                            <button id="avatar-file" class="btn waves-effect waves-light red darken-3 right" type="submit" name="action" style="visibility: hidden">{% trans "Upload New Image" %}</button>
+                        </form>
+                        <a class="btn waves-effect waves-light red darken-3" href="{% url 'avatar_delete' %}" id="delete_avatar" style="visibility: hidden">{% trans "Delete Your Avatar" %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
 
 {% block extra_script %}
-{{ block.super }}
-<script type="text/javascript">
-    $('#id_avatar').change(function() {
-        $('#avatar-file').css('visibility', 'visible');
-    });
-    {% if avatars %}
-    $('#delete_avatar').css('visibility', 'visible');
-    {% endif %}
-</script>
+    {{ block.super }}
+    <script type="text/javascript">
+        $('#id_avatar').change(function() {
+            $('#avatar-file').css('visibility', 'visible');
+        });
+        {% if avatars %}
+            $('#delete_avatar').css('visibility', 'visible');
+        {% endif %}
+    </script>
 {% endblock %}
