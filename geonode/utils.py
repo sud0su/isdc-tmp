@@ -1528,3 +1528,8 @@ class linenum():
         except:
             frame = sys.exc_info()[2].tb_frame.f_back
             return '%s:%s:%s %s'%(os.path.basename(frame.f_code.co_filename), frame.f_code.co_name, frame.f_lineno, '\n')
+
+def wktsql(polylist):
+    wkts = ['ST_GeomFromText(\'%s\',4326)'%(i) for i in polylist]
+    return 'ST_Union(ARRAY[%s])'%(','.join(wkts)) if wkts else ''
+    
