@@ -28,6 +28,7 @@ $(document).ready(function () {
         }
     });
 
+    // $('.materialize-select').formSelect();
     $('select').formSelect();
     $('.sidenav-left').sidenav();
     $('.collapsible').collapsible();
@@ -65,6 +66,7 @@ $(document).ready(function () {
 
     $('.dropdown-trigger').dropdown();
     $('.tooltipped').tooltip();
+    M.updateTextFields();
 
     $('#id_resource-time').timepicker({
         onCloseEnd : function(){

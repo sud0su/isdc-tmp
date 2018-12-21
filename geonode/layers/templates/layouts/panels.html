@@ -87,6 +87,27 @@
             <div class="step-content">
                 <!-- Your step content goes here (like inputs or so) -->
                 <div id="basicDescriptiveInfo" class="row">
+                    <div class="col s12">
+                        <span><label for="{{ layer_form.thumbnail_url|id }}">{% trans "Thumbnail" %}</label></span>
+                        <div id="embedded_map" class="mrg-btm" style="height:250px;width: 250px;">
+                            <div id="preview_map" style="height: 90%;width: 100%;">
+                            </div>
+                            <div id="preview_image" style="height: 90%;width: 100%;">
+                                <img id="preview_image_src" src="{{ layer_form.thumbnail_url.value }}" height="100%" width="100%"/>
+                            </div>
+                            <div>
+                                <span class="btn-group btn-group-xs btn-group-justified">
+                                    <a class="btn btn-default" href="#" id="set_thumbnail">{% trans "Save" %}</a>
+                                    <!-- span class="input-group-addon">
+                                        <form id="form1" runat="server">
+                                            <input type='file' id="imgInp" />
+                                        </form>
+                                    </span -->
+                                    <a class="btn btn-default" href="#" id="change_thumbnail">{% trans "Edit" %}</a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="input-field col s12">
                         {{ layer_form.title |attr:"class:" }}
                         <label for="{{ layer_form.title|id }}">{{ layer_form.title.label }}</label>

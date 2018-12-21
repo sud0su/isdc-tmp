@@ -1,0 +1,225 @@
+{% extends "layouts/panels.html" %}
+{% load floppyforms %}
+{% load i18n %}
+
+{% block body_outer %}
+    <div id="settings" class="modal">
+        <div class="modal-content">
+            <h4>Publishing</h4>
+            <div>
+                <label for="{{ map_form.metadata_uploaded_preserve|id }}">
+                    {{ map_form.metadata_uploaded_preserve |attr:"class:filled-in" }}
+                    <span>{{ map_form.metadata_uploaded_preserve.label }}</span>
+                </label>
+            </div>
+            <div>
+                <label for="{{ map_form.is_approved|id }}">
+                    {{ map_form.is_approved |attr:"class:filled-in" }}
+                    <span>{{ map_form.is_approved.label }}</span>
+                </label>
+            </div>
+            <div>
+                <label for="{{ map_form.is_published|id }}">
+                    {{ map_form.is_published |attr:"class:filled-in" }}
+                    <span>{{ map_form.is_published.label }}</span>
+                </label>
+            </div>
+            <div>
+                <label for="{{ map_form.featured|id }}">
+                    {{ map_form.featured |attr:"class:filled-in" }}
+                    <span>{{ map_form.featured.label }}</span>
+                </label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-light btn-flat">Close</a>
+        </div>
+    </div>
+
+    <ul class="stepper linear">
+        <li class="step active">
+            <div class="step-title waves-effect">Basic Metadata</div>
+            <div class="step-content">
+                <!-- Your step content goes here (like inputs or so) -->
+                <div id="basicDescriptiveInfo" class="row">
+                    <div class="col s12">
+                        <span><label for="{{ map_form.thumbnail_url|id }}">{% trans "Thumbnail" %}</label></span>
+                        <div id="embedded_map" class="mrg-btm" style="height:250px;width: 250px;">
+                            <div id="preview_map" style="height: 85%;width: 100%;">
+                            </div>
+                            <div id="preview_image" style="height: 90%;width: 100%;">
+                                <img id="preview_image_src" src="{{ map_form.thumbnail_url.value }}" height="100%" width="100%"/>
+                            </div>
+                            <div>
+                                <span class="btn-group btn-group-xs btn-group-justified">
+                                    <a class="btn btn-default" href="#" id="set_thumbnail">{% trans "Save" %}</a>
+                                    <!-- span class="input-group-addon">
+                                        <form id="form1" runat="server">
+                                            <input type='file' id="imgInp" />
+                                        </form>
+                                    </span -->
+                                    <a class="btn btn-default" href="#" id="change_thumbnail">{% trans "Edit" %}</a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.title |attr:"class:" }}
+                        <label for="{{ map_form.title|id }}">{{ map_form.title.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.abstract |attr:"class:materialize-textarea" }}
+                        <label for="{{ map_form.abstract|id }}">{{ map_form.abstract.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <span class="helper-text">{{ map_form.keywords.label }}</span>
+                        {{ map_form.keywords |attr:"class:" }}
+                    </div>
+                    <div class="input-field col s12">
+                        {{ tkeywords_form }}
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.date_type |attr:"class:" }}
+                        <label for="{{ map_form.date_type|id }}">{{ map_form.date_type.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.date |attr:"class:" }}
+                        <label for="{{ map_form.date|id }}">{{ map_form.date.label }}</label>
+                    </div>
+                    <div id="basicCategoryInfo" class="input-field col s12">
+                        <select
+                            data-live-search="true"
+                            data-size="5"
+                            name="category_choice_field"
+                            id="category_form"
+                            class=""
+                            >
+                            <option {% if not category_form.initial %} selected="selected" {% endif %} value="">---</option>
+                            {% for choice in category_form.category_choice_field.field.choices %}
+                                <option
+                                {% ifequal category_form.initial choice.0 %} selected="selected" {% endifequal %}
+                                value="{{ choice.0 }}"
+                                data-content="<span class='has-popover' data-container='body' data-toggle='popover' data-placement='top'  data-content=' {{ choice.2.description }}' rigger='hover'><i class='fa {{choice.2.fa_class}}'></i> {{ choice.2.gn_description }}<span>"
+                                >{{ choice.2.gn_description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div id="basicGroupInfo" class="input-field col s12">
+                        <!-- <span><label for="id_resource-group" class="control-label required-field">{% trans "Group" %}</label></span> -->
+                        <select
+                            title="Choose one of the following..."
+                            data-live-search="true"
+                            data-size="5"
+                            name="resource-group"
+                            id="id_resource-group"
+                            class=""
+                            >
+                            <option {% if not group %} selected="selected" {% endif %} value="">---</option>
+                            {% for group in metadata_author_groups %}
+                                <option
+                                    value="{{ group.group.id }}"
+                                    {% ifequal resource.group group.group %} selected="selected" {% endifequal %}
+                                    >
+                                    {{ group.title }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="step-actions hide">
+                    <!-- Here goes your actions buttons -->
+                    <button class="waves-effect waves-dark btn red darken-3 next-step">CONTINUE</button>
+                </div>
+            </div>
+        </li>
+        <li class="step">
+            <div class="step-title waves-effect waves-dark">Location and Licenses</div>
+            <div class="step-content">
+                <div id="mdinfo" class="row">
+                    <div class="input-field col s12">
+                        {{ map_form.language }}
+                        <label for="{{ map_form.language|id }}">{{ map_form.language.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.license }}
+                        <label for="{{ map_form.license|id }}">{{ map_form.license.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.regions }}
+                        <label for="{{ map_form.regions|id }}">{{ map_form.regions.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.data_quality_statement |attr:"class:materialize-textarea" }}
+                        <label for="{{ map_form.data_quality_statement|id }}">{{ map_form.data_quality_statement.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.restriction_code_type }}
+                        <label for="{{ map_form.restriction_code_type|id }}">{{ map_form.restriction_code_type.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.constraints_other |attr:"class:materialize-textarea" }}
+                        <label for="{{ map_form.constraints_other|id }}">{{ map_form.constraints_other.label }}</label>
+                    </div>
+                </div>
+                <div class="step-actions hide">
+                    <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
+                    <button class="waves-effect waves-dark btn red darken-3 next-step">CONTINUE</button>
+                </div>
+            </div>
+        </li>
+        <li class="step">
+            <div class="step-title waves-effect waves-dark">Optional Metadata</div>
+            <div class="step-content">
+                <div class="row">
+                    <div class="input-field col s12">
+                        {{ map_form.edition |attr:"class:" }}
+                        <label for="{{ map_form.edition|id }}">{{ map_form.edition.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.purpose |attr:"class:materialize-textarea" }}
+                        <label for="{{ map_form.purpose|id }}">{{ map_form.purpose.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.supplemental_information |attr:"class:materialize-textarea" }}
+                        <label for="{{ map_form.supplemental_information|id }}">{{ map_form.supplemental_information.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.temporal_extent_start |attr:"class:" }}
+                        <label for="{{ map_form.temporal_extent_start|id }}">{{ map_form.temporal_extent_start.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.temporal_extent_end |attr:"class:" }}
+                        <label for="{{ map_form.temporal_extent_end|id }}">{{ map_form.temporal_extent_end.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.maintenance_frequency |attr:"class:" }}
+                        <label for="{{ map_form.maintenance_frequency|id }}">{{ map_form.maintenance_frequency.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.spatial_representation_type |attr:"class:" }}
+                        <label for="{{ map_form.spatial_representation_type|id }}">{{ map_form.spatial_representation_type.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.poc |attr:"class:" }}
+                        <label for="{{ map_form.poc|id }}">{{ map_form.poc.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.owner |attr:"class:" }}
+                        <label for="{{ map_form.owner|id }}">{{ map_form.owner.label }}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.metadata_author |attr:"class:" }}
+                        <label for="{{ map_form.metadata_author|id }}">{{ map_form.metadata_author.label }}</label>
+                    </div>
+                </div>
+                <div class="step-actions hide">
+                    <button class="waves-effect waves-dark btn-flat previous-step">BACK</button>
+                    <button class="waves-effect waves-dark btn red darken-3 next-step">CONTINUE</button>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    {% if GEONODE_SECURITY_ENABLED %}
+    {% endif %}
+{% endblock %}

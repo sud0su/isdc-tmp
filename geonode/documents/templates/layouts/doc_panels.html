@@ -86,7 +86,7 @@
                             data-size="5"
                             name="category_choice_field"
                             id="category_form"
-                            class="selectpicker browser-default"
+                            class=""
                             >
                             <option {% if not category_form.initial %} selected="selected" {% endif %} value="">---</option>
                             {% for choice in category_form.category_choice_field.field.choices %}
@@ -106,7 +106,7 @@
                             data-size="5"
                             name="resource-group"
                             id="id_resource-group"
-                            class="selectpicker browser-default"
+                            class=""
                             >
                             <option {% if not group %} selected="selected" {% endif %} value="">---</option>
                             {% for group in metadata_author_groups %}

@@ -6,7 +6,7 @@
 
 {% block title %}{{ map.title }} — {{ block.super }}{% endblock %}
 
-{% block body_class %}data{% endblock %}
+{% block body_class %}data grey lighten-4{% endblock %}
 
 {% block metadata_breadcrumb %}
     <a href="{% url 'maps_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Interactive Maps" %}</a>
@@ -53,13 +53,166 @@
             <div class="row">
                 <form id="metadata_update" class="" action="{{ map.get_absolute_url }}/metadata" method="POST">
                     {% csrf_token %}
-                    
+                    <div class="input-field col s12">
+                        <span class="helper-text">{% trans "Owner" %}</span>
+                        {{ map_form.owner |attr:"class:"|attr:"placeholder:" }}
+                        <!-- <label for="id_resource-owner-autocomplete">{% trans "Owner" %}</label> -->
+                    </div>
                     <div class="input-field col s12">
                         {{ map_form.title |attr:"class:"|attr:"placeholder:"|attr:"data-content:" }}
                         <label for="id_resource-title">{% trans "Title" %}</label>
                         <span class="helper-text">{% trans "name by which the cited resource is known" %}</span>
                     </div>
-                    
+                    <div class="input-field col s12">
+                        {{ map_form.alternate |attr:"class:"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-alternate">{% trans "Alternate" %}</label>
+                        <span class="helper-text"></span>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <input type="text" class="datepicker hide" id="id_resource-date_first">
+                        <input type="text" class="timepicker hide" id="id_resource-time">
+                        <!-- <input type="text" class="" id="id_resource-date" value=""> -->
+                        {{ map_form.date |attr:"class:datepicker" }}
+                        <label for="id_resource-date">{% trans "Date" %}</label>
+                        <span class="helper-text">{% trans "Date" %}</span>
+                    </div>
+
+                    <div class="input-field col s12">
+                        {{ map_form.date_type }}
+                        <label for="id_resource-date_type">{% trans "Date Type" %}</label>
+                        <span class="helper-text">{% trans "..." %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.edition |attr:"class:"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-edition">{% trans "Edition" %}</label>
+                        <span class="helper-text">{% trans "version of the cited resource" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.abstract |attr:"class:materialize-textarea"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-abstract">{% trans "Abstract" %}</label>
+                        <span class="helper-text">{% trans "brief narrative summary of the content of the resource(s)" %}</span>
+                    </div>
+
+                    <div class="input-field col s12">
+                        {{ map_form.purpose |attr:"class:materialize-textarea"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-purpose">{% trans "Purpose" %}</label>
+                        <span class="helper-text">{% trans "summary of the intentions with which the resource(s) was developed" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.maintenance_frequency |attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-maintenance_frequency">{% trans "Maintenance Frequency" %}</label>
+                        <span class="helper-text">{% trans "frequency with which modifications and deletions are made to the data after it is first produced" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.tkeywords |attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-tkeywords">{% trans "TKeywords" %}</label>
+                        <span class="helper-text">{% trans "formalised word(s) or phrase(s) from a fixed thesaurus used to describe the subject (space or comma-separated" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.regions |attr:"class:browser-default hide" }}
+                        <label for="id_resource-regions">{% trans "Regions" %}</label>
+                        <span class="helper-text">{% trans "aaa" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.restriction_code_type |attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-restriction_code_type">{% trans "Restrictions" %}</label>
+                        <span class="helper-text">{% trans "limitation(s) placed upon the access or use of the data." %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.constraints_other |attr:"class:materialize-textarea"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-constraints_other">{% trans "Restrictions Other" %}</label>
+                        <span class="helper-text">{% trans "other restrictions and legal prerequisites for accessing and using the resource or metadata" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.license |attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-license">{% trans "License" %}</label>
+                        <span class="helper-text">{% trans "license of the dataset" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.language |attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-language">{% trans "Language" %}</label>
+                        <span class="helper-text">{% trans "language used within the dataset" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.spatial_representation_type |attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-spatial_representation_type">{% trans "Spatial Representation Type" %}</label>
+                        <span class="helper-text">{% trans "method used to represent geographic information in the dataset." %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.temporal_extent_start }}
+                        <label for="id_resource-temporal_extent_start">{% trans "Temporal Extent Start" %}</label>
+                        <span class="helper-text">{% trans "aaa" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.temporal_extent_end }}
+                        <label for="id_resource-temporal_extent_end">{% trans "Temporal Extent End" %}</label>
+                        <span class="helper-text">{% trans "aaa" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.supplemental_information |attr:"class:materialize-textarea"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-supplemental_information">{% trans "Supplemental Information" %}</label>
+                        <span class="helper-text">{% trans "any other descriptive information about the dataset" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.data_quality_statement |attr:"class:materialize-textarea"|attr:"placeholder:"|attr:"data-content:" }}
+                        <label for="id_resource-data_quality_statement">{% trans "Data Quality Statement" %}</label>
+                        <span class="helper-text">{% trans "general explanation of the data producer's knowledge about the lineage of a dataset" %}</span>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.group }}
+                        <label for="id_resource-group">{% trans "Group" %}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <p>
+                            <label>
+                                {{ map_form.metadata_uploaded_preserve |attr:"class:filled-in red darken-4" }}
+                                <span style="">{% trans "Metadata Uploaded Preserve" %}</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="input-field col s12">
+                        <p>
+                            <label>
+                                {{ map_form.featured |attr:"class:filled-in red darken-4" }}
+                                <span style="">{% trans "Featured" %}</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="input-field col s12">
+                        <p>
+                            <label>
+                                {{ map_form.is_published |attr:"class:filled-in red darken-4" }}
+                                <span style="">{% trans "Is Published" %}</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="input-field col s12">
+                        <p>
+                            <label>
+                                {{ map_form.is_approved |attr:"class:filled-in red darken-4" }}
+                                <span style="">{% trans "Approved" %}</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.thumbnail_url |attr:"class:materialize-textarea" }}
+                        <label for="id_resource-thumbnail_url">{% trans "Thumbnail URL" %}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        {{ map_form.urlsuffix |attr:"class:materialize-textarea" }}
+                        <label for="id_resource-urlsuffix">{% trans "Site URL" %}</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <span class="helper-text">{% trans "Point of Contact" %}</span>
+                        {{ map_form.poc |attr:"class:"|attr:"placeholder:" }}
+                        <!-- <label for="resource-poc-autocomplete">{% trans "Point of Contact" %}</label> -->
+                    </div>
+                    <div class="input-field col s12">
+                        <span class="helper-text">{% trans "Metadata Author" %}</span>
+                        {{ map_form.metadata_author |attr:"placeholder:" }}
+                        <!-- <label for="id_resource-metadata_author-autocomplete">{% trans "Metadata Author" %}</label> -->
+                    </div>
                     
                     <div id="category_form" class="row">
                         <p class="col s12">{% trans "Category" %}</p>
@@ -106,3 +259,12 @@
         </div>
     </div>
 {% endblock %}
+
+{% block extra_script %}
+    {{ block.super }}
+    <script>
+        $("#id_resource-owner").remove();
+        $("#id_resource-poc").remove();
+        $("#id_resource-metadata_author").remove();
+    </script>
+{% endblock extra_script %}

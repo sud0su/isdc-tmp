@@ -136,23 +136,23 @@ function init_datatable(){
 		buttons: [
 			{
 				extend: "copy",
-				className: "btn-sm"
+				className: "btn-flat waves-effect waves-light"
 			},
 			{
 				extend: "csv",
-				className: "btn-sm"
+				className: "btn-flat waves-effect waves-light"
 			},
 			{
 				extend: "excel",
-				className: "btn-sm"
+				className: "btn-flat waves-effect waves-light"
 			},
 			{
 				extend: "print",
-				className: "btn-sm"
+				className: "btn-flat waves-effect waves-light"
 			},
 			// {
 			//   extend: "colvis"
-			//   className: "btn-sm"
+			//   className: "btn-flat waves-effect waves-light"
 			// }
 		],
 
@@ -494,6 +494,7 @@ function init_chart() {
 
 function init_chart2(){
 	colorBarDefault= ["#CF000F"];
+	colorBarOther= ['#b40002', '#f1000f', '#ff5c3c', '#ffb89c', '#ffe4d7' ];
 	colorDonutDefault = ['#b92527', '#ccc'];
 	colorAccessibility=[
 	    '#c0fee5', /*'#99fcff',*/ '#94fdd5', '#75fcc9', /*'#fffb46',*/ '#fff327', /*'#fffc79', */ /*'#ffdd72',*/
@@ -520,6 +521,7 @@ function init_chart2(){
 		}
 
 	colorChart={
+		'colorDefault': colorBarOther,
 		'colorBar': colorBarDefault,
 		'colorAccess': colorAccessibility,
 		'colorDonut' : colorDonutDefault,
@@ -642,17 +644,17 @@ function init_chart2(){
 	Highcharts.setOptions(Highcharts.theme);
 
 	// Object Bar chart
-	function bar_chart(id_val, color_val, data_title, data_val){
+	function bar_chart(id_val, color_val, colorPoint_val, legend_val, y_title, x_title, data_val){
 		$(id_val).highcharts({
 			chart: {
 				type: 'bar'
 			},
 			xAxis: {
-				categories: data_title
+				categories: y_title
 			},
 			yAxis: {
 				title: {
-					// text: 'Population'
+					text: x_title
 				},
 				type: 'logarithmic'
 			},
@@ -662,11 +664,11 @@ function init_chart2(){
 				}
 			},
 			legend:{
-				enabled: false
+				enabled: legend_val
 			},
 			plotOptions:{
 				bar: {
-					colorByPoint: true,
+					colorByPoint: colorPoint_val,
 					dataLabels: {
 						enabled: true,
 						formatter: function() {
@@ -676,10 +678,11 @@ function init_chart2(){
 				}
 			},
 			colors: color_val,
-			series: [{
-				// name: 'Population',
-				data: data_val
-			}]
+			// series: [{
+			// 	// name: 'Population',
+			// 	data: data_val
+			// }]
+			series: data_val
 		});
 	}
 
@@ -832,6 +835,9 @@ function init_chart2(){
 		color_chart = $(id_chart).attr('data-color'); 
 		var data_chart = $(id_chart).data("val");
 		var yAxis_chart = $(id_chart).data("yaxis");
+		var xAxis_chart = $(id_chart).data("xaxis");
+		var colorPoint_bool = $(id_chart).data("colorpoint");
+		var legend_bool = $(id_chart).data("legend");
 
 		selected_color = colorChart[color_chart];
 
@@ -841,7 +847,7 @@ function init_chart2(){
 		console.log(selected_color);
 		console.log(yAxis_chart);
 
-		bar_chart(id_chart, selected_color, yAxis_chart, data_chart);
+		bar_chart(id_chart, selected_color, colorPoint_bool, legend_bool, yAxis_chart, xAxis_chart, data_chart);
 
 	});
 
@@ -4692,7 +4698,7 @@ function init_leaflet(){
 	    info.update = function (props) {
 	        this._div.innerHTML = 
 	            (props ?
-	                '<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light right linkPopup">Go To ' + (props.na_en) +'</a>' + '</span>'
+	                '<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light z-depth-0 right linkPopup">Go To ' + (props.na_en) +'</a>' + '</span>'
 	                + '<div class="row">'
 
 	                + '<div style="display:none;" class="col s12 drought_checkbox_pop"><div id="chart_map_donut_drought_pop" class="ch-map-size" style="height:280px;"></div></div>'

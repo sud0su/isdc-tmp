@@ -77,8 +77,8 @@
                                     </a>
                                     <a href="{% url 'home' %}" class="brand-logo">
                                         <!-- <img src="http://afghanistanavalanches.org/img/iMMAP.png"> -->
-                                        <!-- <img src="{{ STATIC_URL }}isdc/img/partner/usaid.png" alt="usaid_logo"> -->
-                                        <img src="{{ STATIC_URL }}isdc/img/immap_logo/immap_full_color.png" alt="immap_logo">
+                                        <img src="{{ STATIC_URL }}isdc/img/partner/usaid.png" class="usaid_logo" alt="usaid_logo">
+                                        <img src="{{ STATIC_URL }}isdc/img/immap_logo/immap_full_color.png" class="immap_logo" alt="immap_logo">
                                         <!-- <span class="grey-text text-darken-2">Spatial Data Center</span> -->
                                         <!-- <img src="{{ STATIC_URL }}isdc/img/immap_white.png" alt="immap_logo"> -->
                                     </a>
@@ -145,13 +145,16 @@
             <ul class="sidenav sidenav-left sidenav-main-menu" id="mobile-demo">
                 <li class="sidenav-header red darken-2">
                     <div class="valign-wrapper" style="justify-content: center; height: 9rem; padding-top: 2rem;">
-                        <img src="https://gravatar.com/avatar/961997eb7fd5c22b3e12fb3c8ca14e11?s=80&d=https://codepen.io/assets/avatars/user-avatar-80x80-bdcd44a3bfb9a5fd01eb8b86f9e033fa1a9897c3a15b33adfc2649a002dab1b6.png"
-                            width="80px" height="80px" alt="" class="circle responsive-img">
+                        {% avatar user 32 %}
+                        <!-- <img src="https://gravatar.com/avatar/961997eb7fd5c22b3e12fb3c8ca14e11?s=80&d=https://codepen.io/assets/avatars/user-avatar-80x80-bdcd44a3bfb9a5fd01eb8b86f9e033fa1a9897c3a15b33adfc2649a002dab1b6.png"
+                            width="80px" height="80px" alt="" class="circle responsive-img"> -->
                     </div>
                     <div class="center-align" style="padding-bottom: 4rem">
-                        <a class="white-text" href="#" style="display: block; line-height: 24px; text-transform: uppercase;">Guest</a>
                         {% if user.is_authenticated %}
-                        <a href="#" class="white-text" style="display: block; line-height: 24px;">email@domain.com</a>
+                            <a class="white-text user-info" href="#">{{ user.username }}</a>
+                            <a href="#" class="white-text email-info">{{ user.email }}</a>
+                        {% else %}
+                            <a class="white-text user-info" href="#">Guest</a>
                         {% endif %}
                     </div>
                 </li>
@@ -542,7 +545,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
         <script src="https://unpkg.com/materialize-stepper@3.0.0-beta.1.1.1/dist/js/mstepper.min.js">
         
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
         <script src="{{ STATIC_URL }}isdc/js/usng.js"></script>
         <script src="{{ STATIC_URL }}isdc/js/_custom.js"></script>
         
@@ -583,7 +585,7 @@
                 }
             };
         </script>
-        <script type="text/javascript" src="{% url "lang" %}"></script>
+        <script type="text/javascript" src='{% url "lang" %}'></script>
 
         <div id="_resource_uploading" class="modal bottom-sheet" data-backdrop="static" data-keyboard="false" aria-hidden="true">
             <div class="modal-content">
@@ -647,5 +649,12 @@
             </script>
             {% include 'isdc_geopanel/panel.html' %}
         {% endif %}
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('.sidenav-main-menu .sidenav-header img').addClass('circle responsive-img');
+            });
+        </script>
+
     </body>
 </html>

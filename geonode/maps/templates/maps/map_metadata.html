@@ -1,0 +1,69 @@
+{% extends "metadata_base.html" %}
+{% load i18n %}
+{% load base_tags %}
+{% load guardian_tags %}
+{% load floppyforms %}
+
+{% block title %}{{ map.title }} — {{ block.super }}{% endblock %}
+
+{% block head %}
+    {% include "ol/maps/map_ol2.html" %}
+    {{ block.super }}
+{% endblock head %}
+
+{% block body_class %}data grey lighten-4{% endblock body_class %}
+
+{% block metadata_breadcrumb %} 
+    <a href="{% url 'maps_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="breadcrumb">{% trans "Interactive Maps" %}</a>
+    <a href="map_detail" class="breadcrumb">{{ resource.title }}</a>
+    <a href="#" class="breadcrumb">{% trans "Edit Metadata" %}</a>
+{% endblock metadata_breadcrumb %}
+
+{% block body_outer %}
+    {{ block.super }}
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">{% trans "Metadata" %}&nbsp;{% blocktrans with map.title as map_title %}for {{ map_title }}{% endblocktrans %}</span>
+                        <form id="metadata_update" class="" action="{{ map.get_absolute_url }}/metadata" method="POST">
+                            {% if map.metadata_uploaded %}
+                                <div class="card yellow" style="background-color: orange;">{% blocktrans %}Note: this map's orginal metadata was populated by importing a metadata XML file.
+                                GeoNode's metadata import supports a subset of ISO, FGDC, and Dublin Core metadata elements.
+                                Some of your original metadata may have been lost.{% endblocktrans %}</div>
+                            {% endif %}
+
+                            {% if map_form.errors or category_form.errors %}
+                                <p class="">{% blocktrans %}Error updating metadata.  Please check the following fields: {% endblocktrans %}</p>
+                                <div class="card-panel red lighten-3">
+                                    <ul class="">
+                                        {% for field in map_form %}
+                                            {% if field.errors %}
+                                                <li>{{ field.label }}</li>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        {% if category_form.errors %}
+                                            <li>{{ category_form.errors.as_ul }}</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+
+                            {% csrf_token %}
+                            <div id="mdeditor_form" class="">
+                                {% form map_form using "layouts/map_panels.html" %}
+                                {# map_form #}
+                            </div>
+
+                            <div class="right-align">
+                                <button id="btn_upd_md_dwn" class="btn red darken-3 waves-effect waves-light" type="submit">{% trans "Update" %}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock body_outer %}

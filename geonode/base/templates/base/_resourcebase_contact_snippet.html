@@ -4,7 +4,7 @@
 
 
 {% if resource.owner == resource.poc and resource.owner == resource.metadata_author %}
-    <ul class="collection">
+    <ul class="collection" style="margin: 0;">
         <li class="collection-item avatar">
             {% with resource.owner as profile %}
                 {% include "people/_profile_about_item.html" %}
