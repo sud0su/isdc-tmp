@@ -1579,11 +1579,11 @@ function init_leaflet(){
 		        	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light z-depth-0 linkPopup right">Go To ' + (props.na_en) +'</a>' + '</span>'
 		        	// + '<span>' + chosen_label + '</span>'
 		        	+ '<div class="row"><div class="col s12 m4 l3 xl3">'
-		        	+ '<div class="circle_container"><i class="icon-people_affected_population circle_info"></i><span class="circle_data">' + humanizeFormatter(props.Population) + '</span><span class="circle_title">' + overview_legend[0] + '</span></div>'
-		        	+ '<div class="circle_container"><i class="icon-infrastructure_building circle_info"></i><span class="circle_data">' + humanizeFormatter(props.Buildings) + '</span><span class="circle_title">' + overview_legend[2] + '</span></div>'
+		        	+ '<div class="circle_container"><i class="icon-Affected-population circle_info"></i><span class="circle_data">' + humanizeFormatter(props.Population) + '</span><span class="circle_title">' + overview_legend[0] + '</span></div>'
+		        	+ '<div class="circle_container"><i class="icon-Building circle_info"></i><span class="circle_data">' + humanizeFormatter(props.Buildings) + '</span><span class="circle_title">' + overview_legend[2] + '</span></div>'
 		        	+ '<div class="circle_container"><i class="fa fa-tree circle_info"></i><span class="circle_data">' + humanizeFormatter(props.Area) + '</span><span class="circle_title">' + overview_legend[1] + '</span></div>'
-		        	+ '<div class="circle_container"><i class="fa fa-hospital-o circle_info"></i><span class="circle_data">' + humanizeFormatter(props.hlt_total) + '</span><span class="circle_title">' + total_category[0] + '</span></div>'
-		        	+ '<div class="circle_container"><i class="fa fa-road circle_info"></i><span class="circle_data">' + humanizeFormatter(props.road_total) + '</span><span class="circle_title">' + total_category[1] + '</span></div>'
+		        	+ '<div class="circle_container"><i class="icon-Health-facility circle_info"></i><span class="circle_data">' + humanizeFormatter(props.hlt_total) + '</span><span class="circle_title">' + total_category[0] + '</span></div>'
+		        	+ '<div class="circle_container"><i class="icon-Road circle_info"></i><span class="circle_data">' + humanizeFormatter(props.road_total) + '</span><span class="circle_title">' + total_category[1] + '</span></div>'
 		        	+ '</div>'
 
 		        	+ '<div style="display:none;" class="col s12 m8 l5 xl9 Population"><div id="chart_map_pop" class="ch-map-size" style="height:280px;"></div></div>'
@@ -3479,9 +3479,9 @@ function init_leaflet(){
             	(props ?
 		        	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light z-depth-0 linkPopup right">Go To ' + (props.na_en) +'</a>' + '</span>'
 
-                	+ '<div class="row"><div class="col s12 l3"><div class="circle_container"><i class="icon-people_affected_population circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_risk_population) + '</span><span class="circle_title">' + map_category[0] + '</span></div>'
-                	+ '<div class="circle_container"><i class="icon-infrastructure_building circle_info"></i><span class="circle_data">' + humanizeFormatter(props.settlements_at_risk) + '</span><span class="circle_title">' + map_category[2] + '</span></div>'
-                	+ '<div class="circle_container"><i class="icon-socioeconomic_urban circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_risk_buildings) + '</span><span class="circle_title">' + map_category[1] + '</span></div>'
+                	+ '<div class="row"><div class="col s12 l3"><div class="circle_container"><i class="icon-Affected-population circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_risk_population) + '</span><span class="circle_title">' + map_category[0] + '</span></div>'
+                	+ '<div class="circle_container"><i class="icon-Building-facility-affected circle_info"></i><span class="circle_data">' + humanizeFormatter(props.settlements_at_risk) + '</span><span class="circle_title">' + map_category[2] + '</span></div>'
+                	+ '<div class="circle_container"><i class="icon-Rural-exodus circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_risk_buildings) + '</span><span class="circle_title">' + map_category[1] + '</span></div>'
                 	+ '<div class="circle_container"><i class="fa fa-tree circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_risk_area) + '</span><span class="circle_title">' + map_category[3] + '</span></div></div>'
 
                 	+ '<div style="display:none;" class="col s12 l4 xl9 total_risk_population"><div id="chart_map_frisk_pop" class="ch-map-size" style="height:280px;"></div></div>'
@@ -5093,7 +5093,7 @@ function init_leaflet(){
 		        	+ '<div style="display:none;" class="col s12 erthqk_checkbox_settl"><div id="chart_map_mercall_settl" class="ch-map-size" style="height:280px;"></div></div>'
 		        	+ '<div style="display:none;" class="col s12 erthqk_checkbox_build"><div id="chart_map_mercall_build" class="ch-map-size" style="height:280px;"></div></div>'
 
-                	+ '<div style="display:none;" class="col s12 erthqk_checkbox_pop"><table class="table table-bordered table-condensed"><thead><tr><th>Risk Level</th><th title="Population"><i class="icon-people_affected_population"></i></th></tr></thead><tbody>'
+                	+ '<div style="display:none;" class="col s12 erthqk_checkbox_pop"><table class="table table-bordered table-condensed"><thead><tr><th>Risk Level</th><th title="Population">Population</th></tr></thead><tbody>'
                 	+ '<tr><td class="weak">Weak</td><td class="weak">' + humanizeFormatter(props.pop_shake_weak)
                 	+ '</td></tr><tr><td class="mlight">Light</td><td class="mlight">' + humanizeFormatter(props.pop_shake_light)
                 	+ '</td></tr><tr><td class="modrt">Moderate</td><td class="modrt">' + humanizeFormatter(props.pop_shake_moderate)
@@ -5104,7 +5104,7 @@ function init_leaflet(){
                 	+ '</td></tr><tr><td class="extrme">Extreme</td><td class="extrme">' + humanizeFormatter(props.pop_shake_extreme)
                 	+ '</td></tr></tbody></table></div>'
 
-                	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 erthqk_checkbox_settl"><table class="table table-bordered table-condensed"><thead><tr><th>Risk Level</th><th title="Settlements"><i class="icon-socioeconomic_urban"></i></th></tr></thead><tbody>'
+                	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 erthqk_checkbox_settl"><table class="table table-bordered table-condensed"><thead><tr><th>Risk Level</th><th title="Settlements">Settlements</th></tr></thead><tbody>'
                 	+ '<tr><td class="weak">Weak</td><td class="weak">' + humanizeFormatter(props.settlement_shake_weak)
                 	+ '</td></tr><tr><td class="mlight">Light</td><td class="mlight">' + humanizeFormatter(props.settlement_shake_light)
                 	+ '</td></tr><tr><td class="modrt">Moderate</td><td class="modrt">' + humanizeFormatter(props.settlement_shake_moderate)
@@ -5115,7 +5115,7 @@ function init_leaflet(){
                 	+ '</td></tr><tr><td class="extrme">Extreme</td><td class="extrme">' + humanizeFormatter(props.settlement_shake_extreme)
                 	+ '</td></tr></tbody></table></div>'
 
-                	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 erthqk_checkbox_build"><table class="table table-bordered table-condensed"><thead><tr><th>Risk Level</th><th title="Buildings"><i class="icon-infrastructure_building"></i></th></tr></thead><tbody>'
+                	+ '<div style="display:none;" class="col-md-3 col-sm-12 col-xs-12 erthqk_checkbox_build"><table class="table table-bordered table-condensed"><thead><tr><th>Risk Level</th><th title="Buildings">Buildings</th></tr></thead><tbody>'
                 	+ '<tr><td class="weak">Weak</td><td class="weak">' + humanizeFormatter(props.buildings_shake_weak)
                 	+ '</td></tr><tr><td class="mlight">Light</td><td class="mlight">' + humanizeFormatter(props.buildings_shake_light)
                 	+ '</td></tr><tr><td class="modrt">Moderate</td><td class="modrt">' + humanizeFormatter(props.buildings_shake_moderate)
@@ -5398,10 +5398,10 @@ function init_leaflet(){
 	        this._div.innerHTML = 
 	            (props ?
 		        	'<span class="chosen_area card-title">' + props.na_en + '<a class="btn red darken-3 waves-effect waves-light z-depth-0 right linkPopup">Go To ' + (props.na_en) +'</a>' + '</span>'
-		        	+ '<div class="row"><div class="col-md-12 col-sm-12 col-xs-12"><div class="circle_container"><i class="icon-security_attack circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_incident) + '</span><span class="circle_title">' + map_category[0] + '</span></div>'
-		        	+ '<div class="circle_container"><i class="icon-security_murder circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_violent) + '</span><span class="circle_title">' + map_category[1] + '</span></div>'
-		        	+ '<div class="circle_container"><i class="icon-people_injured circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_injured) + '</span><span class="circle_title">' + map_category[2] + '</span></div>'
-		        	+ '<div class="circle_container"><i class="icon-people_dead circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_dead) + '</span><span class="circle_title">' + map_category[3] + '</span></div></div>'
+		        	+ '<div class="row"><div class="col-md-12 col-sm-12 col-xs-12"><div class="circle_container"><i class="icon-Attack circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_incident) + '</span><span class="circle_title">' + map_category[0] + '</span></div>'
+		        	+ '<div class="circle_container"><i class="icon-Murder circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_violent) + '</span><span class="circle_title">' + map_category[1] + '</span></div>'
+		        	+ '<div class="circle_container"><i class="icon-Injured circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_injured) + '</span><span class="circle_title">' + map_category[2] + '</span></div>'
+		        	+ '<div class="circle_container"><i class="icon-Dead circle_info"></i><span class="circle_data">' + humanizeFormatter(props.total_dead) + '</span><span class="circle_title">' + map_category[3] + '</span></div></div>'
 
 		        	+ '</div>'
 	            : '<span class="card-title">' + chosen_label + '</span>' + 'Click on an area to show information');

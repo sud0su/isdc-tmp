@@ -77,12 +77,16 @@
                                     </a>
                                     <a href="{% url 'home' %}" class="brand-logo">
                                         <!-- <img src="http://afghanistanavalanches.org/img/iMMAP.png"> -->
-                                        <img src="{{ STATIC_URL }}isdc/img/partner/usaid.png" class="usaid_logo" alt="usaid_logo">
+                                        <img src="{{ STATIC_URL }}isdc/img/partner/usaid.png" class="usaid_logo hide" alt="usaid_logo">
                                         <img src="{{ STATIC_URL }}isdc/img/immap_logo/immap_full_color.png" class="immap_logo" alt="immap_logo">
                                         <!-- <span class="grey-text text-darken-2">Spatial Data Center</span> -->
                                         <!-- <img src="{{ STATIC_URL }}isdc/img/immap_white.png" alt="immap_logo"> -->
                                     </a>
                                     <ul id="nav-mobile" class="right">
+                                        <li><a id="dropdown_dashboard_trigger" class="grey-text text-darken-2 dropdown-trigger" href="" data-target="dropdown_dashboard" >{% trans "Dashboard" %}<i class="material-icons right">expand_more</i></a></li>
+                                        <li><a class="grey-text text-darken-2" href="{% url 'layer_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Layers" %}</a></li>
+                                        <li><a class="grey-text text-darken-2" href="{% url 'document_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Static Maps" %}</a></li>
+                                        <li><a class="grey-text text-darken-2" href="{% url 'maps_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Interactive Maps" %}</a></li>
                                         <li>
                                             <form id="search" action="{% url 'search' %}" style="height:64px;">
                                                 <div class="input-field">
@@ -430,6 +434,14 @@
                     </div>
                 </li>
             </ul>
+
+            <ul id="dropdown_dashboard" class="dropdown-content">
+                {% for dash in dashboard_page_menu %}
+                <li>
+                    <a class="waves-effect" href="{% url 'dashboard_detail' %}dashboard/?page={{dash.name}}{{add_link}}">{{dash.title}}</a>
+                </li>
+                {% endfor %}
+            </ul>
         {% endblock header %}
         <!-- End of Navbar -->
 
@@ -653,6 +665,9 @@
         <script type="text/javascript">
             $(document).ready(function(){
                 $('.sidenav-main-menu .sidenav-header img').addClass('circle responsive-img');
+                $('#dropdown_dashboard_trigger').dropdown({
+                    coverTrigger: false
+                });
             });
         </script>
 

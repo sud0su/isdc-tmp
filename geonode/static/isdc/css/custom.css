@@ -1164,6 +1164,10 @@ i.dashboard.security:before{
     margin: 0;
 }
 
+[class^="icon-"]:before, [class*=" icon-"]:before{
+    color: #fff;
+}
+
 .card-dash {
     display: inline-block;
     position: relative;
@@ -1187,6 +1191,7 @@ i.dashboard.security:before{
     border-radius: 3px;
     padding: 15px;
     background-color: #9e9e9e;
+    width: 86px;
 }
 
 .card-stats .card-header i {
@@ -1219,7 +1224,8 @@ i.dashboard.security:before{
     }
 }
 
-.card-graph{
+.card-graph,
+.card-dashboard{
     margin: 25px 0;
     display: inline-block;
     width: 100%;
@@ -1233,6 +1239,21 @@ i.dashboard.security:before{
 
 .card-graph .card-title.right{
     font-weight: 500;
+}
+
+@media only screen and (min-width: 993px){
+    .card-dashboard .card-header{
+        width: 45%;
+    }
+}
+
+.card-dashboard .card-content{
+    padding: 10px 24px 24px;
+    
+}
+
+.card-dashboard .card-content p{
+    color: #666;
 }
 
 .affected-count{
@@ -1261,6 +1282,7 @@ i.dashboard.security:before{
     overflow-x: auto;
 }
 
+
 /* Dashboard Table Coloring */
 .boldRow{
     font-weight: bold;
@@ -1283,8 +1305,18 @@ i.dashboard.security:before{
 .dashboard table>thead>tr>td, 
 .dashboard table>thead>tr>th */
 {
-    border: 1px solid #ddd;
+    border: 1px solid #F0F0F0;
     padding: .3rem;
+    font-size: 13px;
+}
+
+.dashboard .card-dashboard table>tbody>tr>td{
+    text-align: right
+}
+
+.dashboard table>tbody>tr>td:nth-child(1),
+.dashboard .card-dashboard table.list_incident>tbody>tr>td{
+    text-align: left;
 }
 
 .dashboard table thead>tr>th>i{
@@ -1450,7 +1482,7 @@ table#ffforecast td,
 table#ggfforecast td,
 table#glfforecast td,
 table#gffforecast td,
-table.flood-likelihood-color td
+.dashboard .card-dashboard table.flood-likelihood-color td
 {
     /*width: 20%;*/
     text-align: center;
@@ -1723,6 +1755,11 @@ div.dt-buttons{
     line-height: calc(3rem + 9px);
 }
 
+div.dataTables_wrapper div.dataTables_info,
+div.dataTables_paginate li a{
+    font-size: 13px;
+}
+
 @media screen and (min-width: 768px){
     div.dataTables_wrapper div.dataTables_info{
         position: relative;
@@ -1736,6 +1773,12 @@ div.dt-buttons{
 .dashboard table>thead>tr>th {
     vertical-align: middle;
     text-align: center;
+    text-transform: uppercase;
+    border: 1px solid #F0F0F0;
+    font-weight: 500;
+    font-size: 11px;
+    background-color: #FAFAFA;
+    padding: 10px 5px;
 }
 
 .dashboard input[type=search]:not(.browser-default):focus:not([readonly]), input[type="search"]:focus{
@@ -2143,7 +2186,7 @@ button.active{
     line-height: 50px; /*Make it centered*/
     text-align: center;
     vertical-align: middle;
-    font-size: 2.5em;
+    font-size: 2em;
 }
 
 #mapInfo .circle_data{
