@@ -1466,6 +1466,13 @@ class dict_ext(dict):
     def within(self, *keys):
         return dict_ext({k:self[k] for k in keys if k in self})
 
+    '''
+    return self after update
+    '''
+    def updateget(self, updatedict):
+        self.update(updatedict)
+        return self
+
     def valueslistbykey(self, keys, addkeyasattr=False):
         response = []
         for k in keys:
@@ -1474,6 +1481,12 @@ class dict_ext(dict):
                     self[k]['key'] = k
                 response.append(self[k])
         return response
+
+    def containall(self, *keys):
+        return all(map(lambda key: key in self, keys))
+
+    def containany(self, *keys):
+        return any(map(lambda key: key in self, keys))
 
 class list_ext(list):
 

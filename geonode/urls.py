@@ -42,6 +42,7 @@ from geonode.utils import check_ogc_backend
 from autocomplete_light.registry import autodiscover
 from tastypie.api import Api
 import importlib
+import pkgutil
 
 # from flood.urls import api as api_flood
 
@@ -92,23 +93,22 @@ urlpatterns_isdc = [
 	
 	]
 
-# include optional module api and getOverviewMaps api
+# ISDC apps urls is imported using this loop
 getoverviewmaps_api = Api(api_name='getoverviewmaps')
 for app in settings.ISDC_BASE_APPS + settings.ISDC_ADDITIONAL_APPS + settings.DASHBOARD_PAGE_MODULES:
 
-	try:
+	# avoid using try-except ImportError to avoid catching untargeted ImportError
+	loader = pkgutil.find_loader(app+'.urls')
+	if loader:
 		urlpatterns_isdc.append(url(r'', include(app+'.urls')))
-	except Exception as identifier:
-		pass
-
-	# import GETOVERVIEWMAPS_APIOBJ from every app and 
-	# register using single Api object to make api root url scheme return complete api members
-	try:
+		
+		# import GETOVERVIEWMAPS_APIOBJ from every app and 
+		# register using single Api object 
+		# to make api root url scheme (http://localhost:8000/api/getoverviewmaps/) return complete api members
 		module = importlib.import_module(app+'.urls')
-		for apiobj in module.GETOVERVIEWMAPS_APIOBJ:
-			getoverviewmaps_api.register(apiobj)
-	except Exception as identifier:
-		pass
+		if hasattr(module, 'GETOVERVIEWMAPS_APIOBJ'):
+			for apiobj in module.GETOVERVIEWMAPS_APIOBJ:
+				getoverviewmaps_api.register(apiobj)
 
 urlpatterns_isdc += [url(r'^api/', include(getoverviewmaps_api.urls)),]
   
