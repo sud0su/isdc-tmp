@@ -68,7 +68,7 @@ var createMapThumbnail = function(obj_id) {
         beforeSend: function(){
              // Handle the beforeSend event
              try {
-                 $("#_thumbnail_processing").modal("open");
+                 $("#_thumbnail_processing").modal("show");
              } catch(err) {
                  console.log(err);
              }
@@ -76,7 +76,7 @@ var createMapThumbnail = function(obj_id) {
         complete: function(){
              // Handle the complete event
              try {
-                 $("#_thumbnail_processing").modal("close");
+                 $("#_thumbnail_processing").modal("hide");
              } catch(err) {
                  console.log(err);
              }
@@ -85,7 +85,7 @@ var createMapThumbnail = function(obj_id) {
             try {
                 $("#_thumbnail_feedbacks").find('.modal-title').text(status);
                 $("#_thumbnail_feedbacks").find('.modal-body').text(data);
-                $("#_thumbnail_feedbacks").modal("open");
+                $("#_thumbnail_feedbacks").modal("show");
             } catch(err) {
                 console.log(err);
             } finally {
@@ -98,11 +98,11 @@ var createMapThumbnail = function(obj_id) {
                 {
                     $("#_thumbnail_feedbacks").find('.modal-title').text('Timeout');
                     $("#_thumbnail_feedbacks").find('.modal-body').text('Failed from timeout: Could not create Thumbnail');
-                    $("#_thumbnail_feedbacks").modal("open");
+                    $("#_thumbnail_feedbacks").modal("show");
                 } else {
                     $("#_thumbnail_feedbacks").find('.modal-title').text('Error: ' + textStatus);
                     $("#_thumbnail_feedbacks").find('.modal-body').text('Could not create Thumbnail');
-                    $("#_thumbnail_feedbacks").modal("open");
+                    $("#_thumbnail_feedbacks").modal("show");
                 }
             } catch(err) {
                 console.log(err);

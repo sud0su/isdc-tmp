@@ -1,30 +1,53 @@
 {% extends "geonode_base.html" %}
 {% load i18n %}
 
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="#" class="breadcrumb">{% trans "401" %}</a>
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}
+
 {% block body %}
-    <div id="description">
-      <h3>
-        {% if error_title %}
-          {{ error_title }}
-        {% else %}
-          {% trans "Not Permitted" %}
-        {% endif %}
-      </h3>
-    </div>
-    <p>
-    {% if error_message %}
-      {{ error_message }}
-    {% else %}
-      {% blocktrans %}
-          You are not allowed to perform this operation.
-      {% endblocktrans %}
-    {% endif %}
-    </p>
-    <p>
-    {% if not request.user.is_anonymous %}
-    {% blocktrans %}Please verify that you are logged in as the correct user.{%endblocktrans%}
-    {% else %}
-    {% blocktrans %}Please login or register and retry.{% endblocktrans %}
-    {% endif %}
-    </p>
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12  m6 l4 offset-l4 offset-m3">
+                <div class="card center">
+                    <div class="card-content red no-padding" style="min-height: 200px;"> <img src="../img/404.png" class="responsive-img" alt="" height="200px"> </div>
+                    <div class="card-content">
+                        <h4 id="description" class="blue-text">
+                            {% if error_title %}
+                                {{ error_title }}
+                            {% else %}
+                                {% trans "Not Permitted" %}
+                            {% endif %}
+                        </h4>
+                        <h5>We are sorry, You are not allowed to perform this operation.</h5>
+                        <br>
+                        <p>
+                            {% if error_message %}
+                                {{ error_message }}
+                            {% else %}
+                                {% blocktrans %}
+                                    You are not allowed to perform this operation.
+                                {% endblocktrans %}
+                            {% endif %}
+                        </p>
+                        <p>
+                            {% if not request.user.is_anonymous %}
+                                {% blocktrans %}Please verify that you are logged in as the correct user.{%endblocktrans%}
+                            {% else %}
+                                {% blocktrans %}Please login or register and retry.{% endblocktrans %}
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="card-action center"> <a href="#" class="btn green">Go Back to Home</a> </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

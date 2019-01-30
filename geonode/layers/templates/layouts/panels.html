@@ -71,7 +71,7 @@
             <h4>Preview</h4>
             <!-- <iframe id="preview_encoder_iframe" height="100%" width="100%" style="width:0;height:0;border:0;border:none;" src="{% url 'layer_metadata_detail' resource.alternate %}"></iframe> -->
             {% if metadataxsl %}
-                <iframe id="preview_encoder_iframe" frameborder="0" scrolling="no" onload="if(this.contentWindow.document.body) {$('#preview').height(this.contentWindow.document.body.scrollHeight)}" src="/showmetadata/xsl/{{resource.id}}"></iframe>
+                <iframe id="preview_encoder_iframe" frameborder="0" scrolling="no" onload="if(this.contentWindow.document.body) {}" src="/showmetadata/xsl/{{resource.id}}"></iframe>
             {% else %}
                 <iframe id="preview_encoder_iframe" frameborder="0" scrolling="no" onload="if(this.contentWindow.document.body) {$('#preview').height(this.contentWindow.document.body.scrollHeight)}" src="/catalogue/csw_to_extra_format/{{resource.uuid}}/{{resource.title}}.html"></iframe>
             {% endif %}
@@ -87,7 +87,7 @@
             <div class="step-content">
                 <!-- Your step content goes here (like inputs or so) -->
                 <div id="basicDescriptiveInfo" class="row">
-                    <div class="col s12">
+                    <div class="input-field col s12 l4">
                         <span><label for="{{ layer_form.thumbnail_url|id }}">{% trans "Thumbnail" %}</label></span>
                         <div id="embedded_map" class="mrg-btm" style="height:250px;width: 250px;">
                             <div id="preview_map" style="height: 90%;width: 100%;">
@@ -95,32 +95,32 @@
                             <div id="preview_image" style="height: 90%;width: 100%;">
                                 <img id="preview_image_src" src="{{ layer_form.thumbnail_url.value }}" height="100%" width="100%"/>
                             </div>
-                            <div>
-                                <span class="btn-group btn-group-xs btn-group-justified">
-                                    <a class="btn btn-default" href="#" id="set_thumbnail">{% trans "Save" %}</a>
+                            <div class="right-align">
+                                <span class="">
+                                    <a class="btn waves-effect waves-light red darken-3" href="#" id="change_thumbnail">{% trans "Edit" %}</a>
+                                    <a class="waves-effect waves-light btn red darken-3" href="#" id="set_thumbnail">{% trans "Save" %}</a>
                                     <!-- span class="input-group-addon">
                                         <form id="form1" runat="server">
                                             <input type='file' id="imgInp" />
                                         </form>
                                     </span -->
-                                    <a class="btn btn-default" href="#" id="change_thumbnail">{% trans "Edit" %}</a>
                                 </span>
                             </div>
                         </div>
                     </div>
-                    <div class="input-field col s12">
+                    <div class="input-field col s12 xl8">
                         {{ layer_form.title |attr:"class:" }}
                         <label for="{{ layer_form.title|id }}">{{ layer_form.title.label }}</label>
                     </div>
-                    <div class="input-field col s12">
+                    <div class="input-field col s12 xl8">
                         {{ layer_form.abstract |attr:"class:materialize-textarea" }}
                         <label for="{{ layer_form.abstract|id }}">{{ layer_form.abstract.label }}</label>
                     </div>
-                    <div class="input-field col s12">
+                    <div class="input-field col s12 xl8">
                         <span class="helper-text">{{ layer_form.keywords.label }}</span>
                         {{ layer_form.keywords |attr:"class:" }}
                     </div>
-                    <div class="input-field col s12">
+                    <div class="input-field col s12 xl8">
                         {{ tkeywords_form }}
                     </div>
                     <div class="input-field col s12">
@@ -133,12 +133,9 @@
                     </div>
                     <div id="basicCategoryInfo" class="input-field col s12">
                         <select
-                            title="Choose one of the following..."
-                            data-live-search="true"
-                            data-size="5"
                             name="category_choice_field"
                             id="category_form"
-                            class="selectpicker form-control"
+                            class=""
                             >
                             <option {% if not category_form.initial %} selected="selected" {% endif %} value="">---</option>
                             {% for choice in category_form.category_choice_field.field.choices %}
@@ -149,27 +146,25 @@
                                 >{{ choice.2.gn_description }}</option>
                             {% endfor %}
                         </select>
+                        <label for="{{ category_form.category_choice_field|id }}">{% trans "Category" %}</label>
                     </div>
                     <div id="basicGroupInfo" class="input-field col s12">
                         <!-- <span><label for="id_resource-group" class="control-label required-field">{% trans "Group" %}</label></span> -->
                         <select
-                            title="Choose one of the following..."
-                            data-live-search="true"
-                            data-size="5"
                             name="resource-group"
                             id="id_resource-group"
-                            class="selectpicker form-control"
+                            class=""
                             >
                             <option {% if not group %} selected="selected" {% endif %} value="">---</option>
                             {% for group in metadata_author_groups %}
                                 <option
                                     value="{{ group.group.id }}"
                                     {% ifequal resource.group group.group %} selected="selected" {% endifequal %}
-                                    >
-                                    {{ group.title }}
+                                    >{{ group.title }}
                                 </option>
                             {% endfor %}
                         </select>
+                        <label for="id_resource-group" class="">{% trans "Group" %}</label>
                     </div>
                 </div>
                 <div class="step-actions hide">
@@ -301,5 +296,19 @@
 
     {% if GEONODE_SECURITY_ENABLED %}
     {% endif %}
+
+    <script>
+        $("#id_resource-owner").remove();
+        $("#id_resource-poc").remove();
+        $("#id_resource-metadata_author").remove();
+    </script>
     
 {% endblock %}
+
+{% block extra_script %}
+    <script>
+        $(document).ready(function() {
+            $("input").removeClass("has-popover")
+        });
+    </script>
+{% endblock extra_script %}

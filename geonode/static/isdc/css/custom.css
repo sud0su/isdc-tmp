@@ -225,7 +225,8 @@ nav .brand-logo img{
 
 /* Icon for Dashboard Menu */
 i.dashboard{
-    font-family: 'humanitarian_icons';
+    /* font-family: 'humanitarian_icons'; */
+    font-family: 'icomoon';
     speak: none;
     font-style: normal;
     font-weight: normal;
@@ -238,39 +239,48 @@ i.dashboard{
 }
 
 i.dashboard.main:before{
-    content: "\e603";
+    /* content: "\e603"; */
+    content: "\e904";
 }
 
 i.dashboard.baseline:before{
-    content: "\e612";
+    /* content: "\e612"; */
+    content: "\e90d";
 }
 
 i.dashboard.accessibility:before{
-    content: "\e615";
+    /* content: "\e615"; */
+    content: "\e94a";
 }
 
 i.dashboard.floodforecast:before{
-    content: "\e652";
+    /* content: "\e652"; */
+    content: "\e95d";
 }
 
 i.dashboard.avalancheforecast:before{
-    content: "\e653";
+    /* content: "\e653"; */
+    content: "\e9fa";
 }
 
 i.dashboard.landslide:before{
-    content: "\e656";
+    /* content: "\e656"; */
+    content: "\e98c";
 }
 
 i.dashboard.drought:before{
-    content: "\e650";
+    /* content: "\e650"; */
+    content: "\e94a";
 }
 
 i.dashboard.earthquake:before{
-    content: "\e64b";
+    /* content: "\e64b"; */
+    content: "\e94f";
 }
 
 i.dashboard.security:before{
-    content: "\e62c";
+    /* content: "\e62c"; */
+    content: "\e97e";
 }
 
 /* Home Page */
@@ -791,6 +801,42 @@ i.dashboard.security:before{
     font-weight: 500;
 }
 
+@media (max-width: 991px){
+    .row-flex{
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+
+    .row-flex .col{
+        -ms-flex-preferred-size: 0;
+        /* flex-basis: 0; */
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+    }
+    
+    .order1-s12{
+        -webkit-box-ordinal-group: 2;
+        -ms-flex-order: 1;
+        order: 1;
+    }
+
+    .order2-s12 {
+        -webkit-box-ordinal-group: 3;
+        -ms-flex-order: 2;
+        order: 2;
+    }
+
+    .order3-s12 {
+        -webkit-box-ordinal-group: 4;
+        -ms-flex-order: 3;
+        order: 3;
+    }
+}
+
 /* Metadata Keywords */
 .tokenfield .token-input{
     width: 100% !important;
@@ -1164,7 +1210,7 @@ i.dashboard.security:before{
     margin: 0;
 }
 
-[class^="icon-"]:before, [class*=" icon-"]:before{
+.dashboard [class^="icon-"]:before, [class*=" icon-"]:before{
     color: #fff;
 }
 
@@ -1232,7 +1278,7 @@ i.dashboard.security:before{
     border-radius: 3px;
 }
 
-.card-graph i{
+.baseline .card-graph i{
     font-size: 24px;
     line-height: 1.5;
 }

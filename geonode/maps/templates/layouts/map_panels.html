@@ -1,6 +1,7 @@
 {% extends "layouts/panels.html" %}
 {% load floppyforms %}
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% block body_outer %}
     <div id="settings" class="modal">
@@ -104,6 +105,19 @@
                             {% endfor %}
                         </select>
                     </div>
+
+                    <div class="input-field col s12">
+                        <select name="category_choice_field" id="category_form">
+                            <option {% if not category_form.initial %} selected="selected" {% endif %} value="">---</option>
+                            {% for choice in category_form.category_choice_field.field.choices %}
+                                <option
+                                    {% ifequal category_form.initial choice.0 %} selected="selected" {% endifequal %}
+                                    value="{{ choice.0 }}"
+                                >{{ choice.2.gn_description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
                     <div id="basicGroupInfo" class="input-field col s12">
                         <!-- <span><label for="id_resource-group" class="control-label required-field">{% trans "Group" %}</label></span> -->
                         <select

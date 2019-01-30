@@ -250,12 +250,13 @@
                         <p class="col s12">{% trans "Category" %}</p>
                         {% autoescape off %}
                             {% for choice in category_form.category_choice_field.field.choices %}
-                                <div class="input-field col s6 l4">
+                                <div class="input-field col s12 m6 xl4">
                                     <p>
                                         <label>
                                             <input type="radio" name="category_choice_field" value="{{ choice.0 }}" class="with-gap red darken-4"
                                             {% ifequal category_form.initial choice.0 %} checked="checked" {% endifequal %} />
-                                            <span>{{ choice.1 }}</span>
+                                            <!-- <span>{{ choice.1 }}</span> -->
+                                            <span>{{ choice.2 }}</span>
                                         </label>
                                     </p>
                                 </div>
@@ -338,7 +339,7 @@
         $("#id_resource-metadata_author").remove();
         
         $(document).ready(function() {
-
+            // M.updateTextFields();
             $("#id_resource-poc").addClass("browser-default");
         });
     </script>

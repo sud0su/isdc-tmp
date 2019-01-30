@@ -33,7 +33,7 @@
 
 {% block isi %}
     <div class="row">
-        <div class="col s12">
+        <div class="col s12 l4 hide-on-large-only">
             <div class="card">
                 <div class="card-content">
                     <span class="card-title card-title-detail">{{ resource.title|default:resource.alternate }}</span>
@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>
-        <div class="col l8">
+        <div class="col s12 l8 order2-s12">
 
             <div class="card">
                 <div id="embedded_map" class="mrg-btm">
@@ -243,8 +243,16 @@
                 </div>
             </div>
         </div>
-
-        <div class="col l4">
+        <div class="col s12 l4 order1-s12 hide-on-med-and-down">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title card-title-detail">{{ resource.title|default:resource.alternate }}</span>
+                    {% include "base/_resourcebase_contact_snippet.html" %}
+                    {% if storeType == 'remoteStore' %}<em><i class="fa fa-power-off {% if online %}text-success{% else %}text-danger{% endif %}"></i> {% trans "Service is" %} {% if online %}{% trans "online" %}{% else %}{% trans "offline" %}{% endif %} </em>{% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col s12 l4 order3-s12">
             <div class="card">
                 <div class="card-tabs">
                     <ul id="tabs_swipe_details_content" class="tabs red darken-3 tabs-fixed-width tabs-transparent">

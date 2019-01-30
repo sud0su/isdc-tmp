@@ -1,13 +1,40 @@
 {% extends "geonode_base.html" %}
 {% load i18n %}
 
-{% block body %}
-  <div id="description"><h3>{% trans "Page Not Found" %}</h3></div>
-  {% if message %}
-      {{ message }}
-  {% else %}
-      {% blocktrans %}
-          The page you requested does not exist.  Perhaps you are using an outdated bookmark?
-      {% endblocktrans %}
-  {% endif %}
+{% block middle %} 
+    <nav class="red darken-3 breadcrumb-universal">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <a href="#" class="breadcrumb">{% trans "404" %}</a>
+            </div>
+        </div>
+    </nav>
+    {{ block.super }}
+{% endblock middle %}
+
+{% block body_outer %}
+    <section style="min-height: 64vh;">
+        <div class="row">
+            <div class="col s12  m6 l4 offset-l4 offset-m3">
+                <div class="card center">
+                    <div class="card-content red no-padding" style="min-height: 200px;"> <img src="../img/404.png" class="responsive-img" alt="" height="200px"> </div>
+                    <div class="card-content">
+                        <h4 id="description" class="blue-text">{% trans "Page Not Found" %}</h4>
+                        <h5>We are sorry, the page you requested cannot be found.</h5>
+                        <br>
+                        <p>
+                            {% if message %}
+                                {{ message }}
+                            {% else %}
+                                {% blocktrans %}
+                                    The page you requested does not exist.  Perhaps you are using an outdated bookmark?
+                                {% endblocktrans %}
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="card-action center"> <a href="#" class="btn green">Go Back to Home</a> </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

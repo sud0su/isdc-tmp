@@ -38,8 +38,10 @@
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+            
             <!-- Humanitarian Font -->
             <link rel="stylesheet" href="{{ STATIC_URL }}isdc/lib/font-ocha/css/style.css">
+            <link rel="stylesheet" href="{{ STATIC_URL }}isdc/lib/font-ocha-v2/style.css">
             
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css" media="screen, projection">
             <link rel="stylesheet" href="{{ STATIC_URL }}isdc/css/select2-materialize.css">
@@ -83,10 +85,11 @@
                                         <!-- <img src="{{ STATIC_URL }}isdc/img/immap_white.png" alt="immap_logo"> -->
                                     </a>
                                     <ul id="nav-mobile" class="right">
-                                        <li><a id="dropdown_dashboard_trigger" class="grey-text text-darken-2 dropdown-trigger" href="" data-target="dropdown_dashboard" >{% trans "Dashboard" %}<i class="material-icons right">expand_more</i></a></li>
-                                        <li><a class="grey-text text-darken-2" href="{% url 'layer_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Layers" %}</a></li>
-                                        <li><a class="grey-text text-darken-2" href="{% url 'document_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Static Maps" %}</a></li>
-                                        <li><a class="grey-text text-darken-2" href="{% url 'maps_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Interactive Maps" %}</a></li>
+                                        <li class="hide-on-med-and-down"><a class="grey-text text-darken-2" href="{% url 'home' %}">{% trans "Home" %}</a></li>
+                                        <li class="hide-on-med-and-down"><a id="dropdown_dashboard_trigger" class="grey-text text-darken-2 dropdown-trigger" href="" data-target="dropdown_dashboard" >{% trans "Dashboard" %}<i class="material-icons right">expand_more</i></a></li>
+                                        <li class="hide-on-med-and-down"><a class="grey-text text-darken-2" href="{% url 'layer_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Layers" %}</a></li>
+                                        <li class="hide-on-med-and-down"><a class="grey-text text-darken-2" href="{% url 'document_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Static Maps" %}</a></li>
+                                        <li class="hide-on-med-and-down"><a class="grey-text text-darken-2" href="{% url 'maps_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Interactive Maps" %}</a></li>
                                         <li>
                                             <form id="search" action="{% url 'search' %}" style="height:64px;">
                                                 <div class="input-field">
@@ -149,9 +152,9 @@
             <ul class="sidenav sidenav-left sidenav-main-menu" id="mobile-demo">
                 <li class="sidenav-header red darken-2">
                     <div class="valign-wrapper" style="justify-content: center; height: 9rem; padding-top: 2rem;">
-                        {% avatar user 32 %}
-                        <!-- <img src="https://gravatar.com/avatar/961997eb7fd5c22b3e12fb3c8ca14e11?s=80&d=https://codepen.io/assets/avatars/user-avatar-80x80-bdcd44a3bfb9a5fd01eb8b86f9e033fa1a9897c3a15b33adfc2649a002dab1b6.png"
-                            width="80px" height="80px" alt="" class="circle responsive-img"> -->
+                        <!-- {% avatar user 32 %} -->
+                        <img src="{{ STATIC_URL }}avatar/img/default.jpg"
+                            width="80px" height="80px" alt="" class="circle responsive-img">
                     </div>
                     <div class="center-align" style="padding-bottom: 4rem">
                         {% if user.is_authenticated %}
@@ -177,7 +180,7 @@
                                     <ul>
                                         {% for dash in dashboard_page_menu %}
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'dashboard_detail' %}dashboard/?page={{dash.name}}{{add_link}}">
+                                            <a class="waves-effect waves-blue" href="{% url 'dashboard_detail' %}?page={{dash.name}}{{add_link}}">
                                                 <i class="dashboard {{dash.name}}"></i>{{dash.title}}</a>
                                         </li>
                                         {% endfor %}
@@ -438,7 +441,7 @@
             <ul id="dropdown_dashboard" class="dropdown-content">
                 {% for dash in dashboard_page_menu %}
                 <li>
-                    <a class="waves-effect" href="{% url 'dashboard_detail' %}dashboard/?page={{dash.name}}{{add_link}}">{{dash.title}}</a>
+                    <a class="waves-effect" href="{% url 'dashboard_detail' %}?page={{dash.name}}{{add_link}}">{{dash.title}}</a>
                 </li>
                 {% endfor %}
             </ul>
@@ -555,7 +558,7 @@
 
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
-        <script src="https://unpkg.com/materialize-stepper@3.0.0-beta.1.1.1/dist/js/mstepper.min.js">
+        <script src="https://unpkg.com/materialize-stepper@3.0.0-beta.1.1.1/dist/js/mstepper.min.js"></script>
         
         <script src="{{ STATIC_URL }}isdc/js/usng.js"></script>
         <script src="{{ STATIC_URL }}isdc/js/_custom.js"></script>
@@ -618,39 +621,25 @@
             </div>
         </div>
 
-        <div class="modal fade" style="width: 100%; height: 100%;" id="_thumbnail_processing" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1>Processing...</h1>
-                    </div>
-                    <div class="modal-body">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:100%">
-                            Updating Thumbnail...
-                        </div>
-                        </div>
-                    </div>
+        <div id="_thumbnail_processing" class="modal">
+            <div class="modal-content">
+                <h4>Processing...</h4>
+                <div class="progress">
+                    <div class="indeterminate"></div>
+                    Updating Thumbnail...
                 </div>
             </div>
         </div>
 
-        <div class="modal fade" id="_thumbnail_feedbacks" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="exampleModalLabel">Message box</h4>
-                    </div>
-                    <div class="modal-body">
-                        ...
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
-                    </div>
-                </div>
+        
+
+        <div id="_thumbnail_feedbacks" class="modal">
+            <div class="modal-content">
+                <h4 class="modal-title" id="exampleModalLabel">Message box</h4>
+                <p class="modal-body">...</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-light btn-flat">Close</a>
             </div>
         </div>
 
@@ -658,6 +647,8 @@
             <script language="javascript">
                 var STATIC_URL = "{{ STATIC_URL }}";
                 var PACKAGE = "{{IMMAP_PACKAGE}}";
+                var BASE_URL = "{{ SITEURL }}";
+                var SERVER_URL = "{{ GEOSERVER_BASE_URL }}";
             </script>
             {% include 'isdc_geopanel/panel.html' %}
         {% endif %}

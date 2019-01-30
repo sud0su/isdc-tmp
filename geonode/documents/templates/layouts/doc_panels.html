@@ -82,8 +82,6 @@
                     </div>
                     <div class="input-field col s12">
                         <select 
-                            data-live-search="true"
-                            data-size="5"
                             name="category_choice_field"
                             id="category_form"
                             class=""
@@ -101,9 +99,6 @@
                     </div>
                     <div class="input-field col s12">
                         <select
-                            title="Choose one of the following..."
-                            data-live-search="true"
-                            data-size="5"
                             name="resource-group"
                             id="id_resource-group"
                             class=""
@@ -113,9 +108,7 @@
                                 <option
                                     value="{{ group.group.id }}"
                                     {% ifequal resource.group group.group %} selected="selected" {% endifequal %}
-                                    >
-                                    {{ group.title }}
-                                </option>
+                                    >{{ group.title }}</option>
                             {% endfor %}
                         </select>
                         <label for="id_resource-group" class="">{% trans "Group" %}</label>
