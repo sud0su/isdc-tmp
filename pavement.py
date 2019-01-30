@@ -1120,8 +1120,11 @@ def build_dashboard_page_menu():
 			continue
 		else:
 			try:
-				for v in dashboard_meta.pathget('pages'):
-					menus.append({'title':v['menutitle'],'name':v['name']})
+				menuitem = {'title':_(dashboard_meta.get('menutitle','')),'name':modname,'child':[]}
+				for v in dashboard_meta.get('pages',[]):
+					menuitem['child'].append({'title':_(v['menutitle']),'name':v['name']})
+				menuitem = menuitem['child'][0] if len(menuitem['child']) == 1 else menuitem
+				menus.append(menuitem)
 			except Exception as e:
 				pass
 
