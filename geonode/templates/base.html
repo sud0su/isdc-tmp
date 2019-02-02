@@ -141,6 +141,11 @@
                                             </form>
                                         </li>
                                         {% endif %}
+                                        <!-- <li class="red darken-3 user-dropdown">
+                                            <a class='dropdown-trigger valign-wrapper' href='#' data-target='dropdown_user'>
+                                                {% avatar user 32 %}&nbsp;{{ user.username }}<i class="material-icons right">expand_more</i>
+                                            </a>
+                                        </li> -->
                                     </ul>
                                 </div>
                             </div>
@@ -152,9 +157,9 @@
             <ul class="sidenav sidenav-left sidenav-main-menu" id="mobile-demo">
                 <li class="sidenav-header red darken-2">
                     <div class="valign-wrapper" style="justify-content: center; height: 9rem; padding-top: 2rem;">
-                        <!-- {% avatar user 32 %} -->
-                        <img src="{{ STATIC_URL }}avatar/img/default.jpg"
-                            width="80px" height="80px" alt="" class="circle responsive-img">
+                        {% avatar user 32 %}
+                        <!-- <img src="{{ STATIC_URL }}avatar/img/default.jpg"
+                            width="80px" height="80px" alt="" class="circle responsive-img"> -->
                     </div>
                     <div class="center-align" style="padding-bottom: 4rem">
                         {% if user.is_authenticated %}
@@ -172,125 +177,93 @@
                                 <a href="{% url 'home' %}" class="waves-effect waves-blue"><i class="material-icons">home</i>{% trans "Home" %}</a>
                             </li>
                             <li>
-                                <a class="collapsible-header waves-effect waves-blue">
-                                    <i class="material-icons">timeline</i>Dashboard
+                                <a class="collapsible-header waves-effect waves-light">
+                                    <i class="material-icons">timeline</i>{% trans "Dashboard" %}
                                     <i class="material-icons right" style="margin-right:0;">expand_more</i>
                                 </a>
                                 <div class="collapsible-body">
-                                    <ul>
+                                    <ul class="collapsible">
                                         {% for dash in dashboard_page_menu %}
-                                        <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'dashboard_detail' %}?page={{dash.name}}{{add_link}}">
-                                                <i class="dashboard {{dash.name}}"></i>{{dash.title}}</a>
-                                        </li>
+                                            {% if dash.child %}
+                                                <li>
+                                                    <a class="collapsible-header">
+                                                        <i class="dashboard {{dash.name}}"></i>{{dash.title}}
+                                                        <i class="material-icons right" style="margin-right:0;">expand_more</i>
+                                                    </a>
+                                                    <div class="collapsible-body">
+                                                        <ul>
+                                                            {% for dash_sub in dash.child %}
+                                                                <li>
+                                                                    <a class="waves-effect waves-light" href="{% url 'dashboard_detail' %}?page={{dash_sub.name}}{{add_link}}">
+                                                                        <i class=""></i>{{dash_sub.title}}
+                                                                    </a>
+                                                                </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                            {% else %}
+                                                <li>
+                                                    <a class="waves-effect waves-light" href="{% url 'dashboard_detail' %}?page={{dash.name}}{{add_link}}">
+                                                        <i class="dashboard {{dash.name}}"></i>{{dash.title}}</a>
+                                                </li>
+                                            {% endif %}
                                         {% endfor %}
-                                        <!-- <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=main{{add_link}}">
-                                                <i class="material-icons">fullscreen</i>Quick Overview</a>
-                                        </li>
-                                        <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=baseline{{add_link}}">
-                                                <i class="material-icons">vpn_lock</i>Baseline</a>
-                                        </li>
-                                        <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=accessibility{{add_link}}">
-                                                <i class="material-icons">swap_horiz</i>Accessibilities</a>
-                                        </li>
-                                        <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=floodforecast{{add_link}}">
-                                                <i class="material-icons">swap_horiz</i>Flood Forecast</a>
-                                        </li>
-                                        <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=floodrisk{{add_link}}">
-                                                <i class="material-icons">swap_horiz</i>Flood Risk</a>
-                                        </li>
-                                        <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=avalcheforecast{{add_link}}">
-                                                <i class="material-icons">swap_horiz</i>Avalanche Forecast</a>
-                                        </li>
-                                        <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=avalancherisk{{add_link}}">
-                                                <i class="material-icons">swap_horiz</i>Avalanche Risk</a>
-                                        </li>
-                                        <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=landslide{{add_link}}">
-                                                <i class="material-icons">swap_horiz</i>Landslide</a>
-                                        </li>
-                                        <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=drought{{add_link}}">
-                                                <i class="material-icons">swap_horiz</i>Drought</a>
-                                        </li>
-                                        <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=earthquake{{add_link}}">
-                                                <i class="material-icons">swap_horiz</i>Earthquake</a>
-                                        </li>
-                                        <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=security{{add_link}}">
-                                                <i class="material-icons">swap_horiz</i>Humanitarian Access</a>
-                                        </li>
-                                        <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=naturaldisaster{{add_link}}">
-                                                <i class="material-icons">swap_horiz</i>Weather</a>
-                                        </li>
-                                        <li>
-                                            <a class="waves-effect waves-blue" href="{% url "dashboard_detail" %}?page=weather{{add_link}}">
-                                                <i class="material-icons">swap_horiz</i>Natural Disaster</a>
-                                        </li> -->
                                     </ul>
                                 </div>
                             </li>
                             <li>
-                                <a href="{% url 'layer_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="waves-effect waves-blue">
+                                <a href="{% url 'layer_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="waves-effect waves-light">
                                     <i class="material-icons">layers</i>{% trans "Layers" %}</a>
                             </li>
                             <li>
-                                <a href="{% url 'document_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="waves-effect waves-blue">
+                                <a href="{% url 'document_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="waves-effect waves-light">
                                     <i class="material-icons">insert_drive_file</i>{% trans "Static Map" %}</a>
                             </li>
                             <li>
-                                <a href="{% url 'maps_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="waves-effect waves-blue">
+                                <a href="{% url 'maps_browse' %}?limit={{ CLIENT_RESULTS_LIMIT }}" class="waves-effect waves-light">
                                     <i class="material-icons">map</i>{% trans "Interactive Map" %}</a>
                             </li>
                             <li>
-                                <a class="collapsible-header waves-effect waves-blue">
+                                <a class="collapsible-header waves-effect waves-light">
                                     <i class="material-icons">folder_open</i>Documentation
                                     <i class="material-icons right" style="margin-right:0;">expand_more</i>
                                 </a>
                                 <div class="collapsible-body">
                                     <ul>
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'documentation' %}">
+                                            <a class="waves-effect waves-light" href="{% url 'documentation' %}">
                                                 <i class="material-icons">video_library</i>Documentation &amp; Videos</a>
                                         </li>
                                         <li>
-                                            <a href="http://afghanistanavalanches.org/" target="_blank" class="waves-effect waves-blue">
+                                            <a href="http://afghanistanavalanches.org/" target="_blank" class="waves-effect waves-light">
                                                 <i class="material-icons">open_in_new</i>{% trans "Avalanches Docs" %}</a>
                                         </li>
                                         <li>
-                                            <a href="http://www.afghanistanearthquakes.org/" target="_blank" class="waves-effect waves-blue">
+                                            <a href="http://www.afghanistanearthquakes.org/" target="_blank" class="waves-effect waves-light">
                                                 <i class="material-icons">open_in_new</i>{% trans "Earthquake Docs" %}</a>
                                         </li>
                                         <li>
-                                            <a href="http://www.afghanistanflooding.org/" target="_blank" class="waves-effect waves-blue">
+                                            <a href="http://www.afghanistanflooding.org/" target="_blank" class="waves-effect waves-light">
                                                 <i class="material-icons">open_in_new</i>{% trans "Flood Docs" %}</a>
                                         </li>
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'training' %}">
+                                            <a class="waves-effect waves-light" href="{% url 'training' %}">
                                                 <i class="icon-activity_training"></i>Training</a>
                                         </li>
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'partners' %}">
+                                            <a class="waves-effect waves-light" href="{% url 'partners' %}">
                                                 <i class="icon-activity_partnership"></i>Partner</a>
                                         </li>
                                         <li>
                                             <div class="divider"></div>
                                         </li>
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'about' %}">
+                                            <a class="waves-effect waves-light" href="{% url 'about' %}">
                                                 <i class="material-icons">new_releases</i>About</a>
                                         </li>
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'disclaimer' %}">
+                                            <a class="waves-effect waves-light" href="{% url 'disclaimer' %}">
                                                 <i class="material-icons">warning</i>Disclaimer</a>
                                         </li>
                                     </ul>
@@ -301,76 +274,76 @@
                                 <div class="divider"></div>
                             </li>
                             <li>
-                                <a href="{% url 'layer_upload' %}" class="waves-effect waves-blue">
+                                <a href="{% url 'layer_upload' %}" class="waves-effect waves-light">
                                     <i class="material-icons">layers</i>{% trans "Upload Layer" %}</a>
                             </li>
                             <li>
-                                <a class="collapsible-header waves-effect waves-blue">
+                                <a class="collapsible-header waves-effect waves-light">
                                     <i class="material-icons">supervisor_account</i>User
                                     <i class="material-icons right" style="margin-right:0;">expand_more</i>
                                 </a>
                                 <div class="collapsible-body">
                                     <ul>
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'profile_browse' %}">
+                                            <a class="waves-effect waves-light" href="{% url 'profile_browse' %}">
                                                 <i class="material-icons">person</i>{% trans "Profile" %}</a>
                                         </li>
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'messages_inbox' %}">
+                                            <a class="waves-effect waves-light" href="{% url 'messages_inbox' %}">
                                                 <i class="material-icons">chat</i>{% trans "Inbox" %}</a>
                                         </li>
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'recent-activity' %}">
+                                            <a class="waves-effect waves-light" href="{% url 'recent-activity' %}">
                                                 <i class="material-icons">access_time</i>{% trans "Recent Activity" %}</a>
                                         </li>
                                         {% if 'geonode.geoserver' in INSTALLED_APPS %}
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'proxy' %}?url={{ GEOSERVER_LOCAL_URL }}web">
+                                            <a class="waves-effect waves-light" href="{% url 'proxy' %}?url={{ GEOSERVER_LOCAL_URL }}web">
                                                 <i class="material-icons">apps</i>{% trans "Geoserver" %}</a>
                                         </li>
                                         {% endif %}
                                         {% if user.is_staff %}
                                         <li>
-                                            <a class="waves-effect waves-blue" href="#">
+                                            <a class="waves-effect waves-light" href="#">
                                                 <i class="material-icons">bar_chart</i>{% trans "User Statistic" %}</a>
                                         </li>
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'admin:index' %}">
+                                            <a class="waves-effect waves-light" href="{% url 'admin:index' %}">
                                                 <i class="material-icons">how_to_reg</i>{% trans "Admin" %}</a>
                                         </li>
                                         {% endif %}
                                         {% if perms.announcements.can_manage %}
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'announcements_list' %}">
+                                            <a class="waves-effect waves-light" href="{% url 'announcements_list' %}">
                                                 <i class="material-icons">announcement</i>{% trans "Anouncements" %}</a>
                                         </li>
                                         {% endif %}
                                         {% if user.is_superuser %}
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'services' %}?limit={{ CLIENT_RESULTS_LIMIT }}">
+                                            <a class="waves-effect waves-light" href="{% url 'services' %}?limit={{ CLIENT_RESULTS_LIMIT }}">
                                                 <i class="material-icons">vpn_lock</i>{% trans "Remote Service" %}</a>
                                         </li>
                                         {% endif %}
                                         <li>
-                                            <a class="waves-effect waves-blue" href="{% url 'geonode.invitations:geonode-send-invite' %}">
+                                            <a class="waves-effect waves-light" href="{% url 'geonode.invitations:geonode-send-invite' %}">
                                                 <i class="material-icons">person_add</i>{% trans "Invite User" %}</a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li>
-                                <a class="collapsible-header waves-effect waves-blue">
+                                <a class="collapsible-header waves-effect waves-light">
                                     <i class="material-icons">notifications</i>Push Notification
                                     <i class="material-icons right" style="margin-right:0;">expand_more</i>
                                 </a>
                                 <div class="collapsible-body">
                                     <ul>
                                         <li>
-                                            <a class="waves-effect waves-blue" href="#">
+                                            <a class="waves-effect waves-light" href="#">
                                                 <i class="material-icons">settings_applications</i>Settings</a>
                                         </li>
                                         <li>
-                                            <a class="waves-effect waves-blue" href="#">
+                                            <a class="waves-effect waves-light" href="#">
                                                 <i class="material-icons">pageview</i>Report</a>
                                         </li>
                                     </ul>
@@ -444,6 +417,20 @@
                     <a class="waves-effect" href="{% url 'dashboard_detail' %}?page={{dash.name}}{{add_link}}">{{dash.title}}</a>
                 </li>
                 {% endfor %}
+            </ul>
+
+            <!-- Dropdown Structure -->
+            <ul id='dropdown_user' class='dropdown-content'>
+                <li><a href="#!">one</a></li>
+                <li><a href="#!">two</a></li>
+                <li class="divider" tabindex="-1"></li>
+                <li><a href="#!">three</a></li>
+                <li><a href="#!"><i class="material-icons">view_module</i>four</a></li>
+                <li><a href="#!"><i class="material-icons">cloud</i>five</a></li>
+            </ul>
+
+            <ul id='dropdown_breadcrumb_trim' class='dropdown-content'>
+                <li><a href="#!">text</a></li>
             </ul>
         {% endblock header %}
         <!-- End of Navbar -->
@@ -655,7 +642,8 @@
 
         <script type="text/javascript">
             $(document).ready(function(){
-                $('.sidenav-main-menu .sidenav-header img').addClass('circle responsive-img');
+                $('.sidenav-main-menu .sidenav-header img').addClass('avatar-size circle responsive-img');
+                $('#nav-mobile li a img').addClass('avatar-size circle responsive-img');
                 $('#dropdown_dashboard_trigger').dropdown({
                     coverTrigger: false
                 });

@@ -223,6 +223,16 @@ nav .brand-logo img{
     font-size: 1.6rem;
 }
 
+.sidenav-left img.avatar-size{
+    height: 80px;
+}
+
+#nav-mobile img.avatar-size{
+    max-height: 40px;
+    width: auto;
+    max-width: 100%;
+}
+
 /* Icon for Dashboard Menu */
 i.dashboard{
     /* font-family: 'humanitarian_icons'; */
@@ -250,15 +260,15 @@ i.dashboard.baseline:before{
 
 i.dashboard.accessibility:before{
     /* content: "\e615"; */
-    content: "\e94a";
+    content: "\e90b";
 }
 
-i.dashboard.floodforecast:before{
+i.dashboard.flood:before{
     /* content: "\e652"; */
     content: "\e95d";
 }
 
-i.dashboard.avalancheforecast:before{
+i.dashboard.avalanche:before{
     /* content: "\e653"; */
     content: "\e9fa";
 }
@@ -483,6 +493,10 @@ i.dashboard.security:before{
 
 .doc .card-hover:hover .card-circle-icon-container{
     background-color: #fff !important;
+    color: #C62828 !important;
+}
+
+.doc .card-hover:hover .card-circle-icon-container i::before{
     color: #C62828 !important;
 }
 
@@ -1210,7 +1224,8 @@ i.dashboard.security:before{
     margin: 0;
 }
 
-.dashboard [class^="icon-"]:before, [class*=" icon-"]:before{
+.dashboard [class^="icon-"]:before, .dashboard [class*=" icon-"]:before,
+.home .doc [class^="icon-"]:before, .home .doc [class*=" icon-"]:before{
     color: #fff;
 }
 
