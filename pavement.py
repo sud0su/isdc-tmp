@@ -1110,7 +1110,9 @@ def build_dashboard_page_menu():
 	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "geonode.settings")
 	django.setup()
 
-	# build dashboard menu data
+	# build dashboard menu data and 
+	# dashboard page to app name mapping
+	dashboard_to_app = {}
 	menus = [{'title':_('Quick Overview'),'name':'main'},{'title':_('Baseline'),'name':'baseline'}]
 	for modname in DASHBOARD_PAGE_MODULES:
 		module = importlib.import_module('%s.views'%(modname))
@@ -1123,12 +1125,13 @@ def build_dashboard_page_menu():
 				menuitem = {'title':_(dashboard_meta.get('menutitle','')),'name':modname,'child':[]}
 				for v in dashboard_meta.get('pages',[]):
 					menuitem['child'].append({'title':_(v['menutitle']),'name':v['name']})
+					dashboard_to_app[v['name']] = modname
 				menuitem = menuitem['child'][0] if len(menuitem['child']) == 1 else menuitem
 				menus.append(menuitem)
 			except Exception as e:
 				pass
 
-	with open(os.path.join(STATICFILES_DIRS[0],'dashboard_page_menu.json'), 'w') as f:
-		f.write(json.dumps(menus))
+	with open(os.path.join(STATICFILES_DIRS[0],'dashboard_meta.json'), 'w') as f:
+		f.write(json.dumps({'DASHBOARD_PAGE_MENU':menus,'DASHBOARD_TO_APP':dashboard_to_app}))
 
 	return 

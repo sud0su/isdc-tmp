@@ -31,8 +31,6 @@ import json
 def resource_urls(request):
 	"""Global values to pass to templates"""
 	site = Site.objects.get_current()
-	with open(os.path.join(settings.STATICFILES_DIRS[0],'dashboard_page_menu.json'), 'r') as f:
-		DASHBOARD_PAGE_MENU = json.loads(f.read())
 	defaults = dict(
 		STATIC_URL=settings.STATIC_URL,
 		CATALOGUE_BASE_URL=default_catalogue_backend()['URL'],
@@ -177,6 +175,6 @@ def resource_urls(request):
 			"IMMAP_PACKAGE",
 			False
 		),
-		dashboard_page_menu=DASHBOARD_PAGE_MENU,
+		dashboard_page_menu=settings.DASHBOARD_PAGE_MENU,
 	)
 	return defaults

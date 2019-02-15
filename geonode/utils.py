@@ -1494,7 +1494,9 @@ class list_ext(list):
     similar to 'get' method in dictionary
     '''
     def get(self, idx, defaultval=None):
-        return self[idx] if idx < len(self) else defaultval
+        if not self:
+            return defaultval
+        return self[idx] if abs(idx) < len(self) else defaultval
 
     '''
     return copy of self with values removed
