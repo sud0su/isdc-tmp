@@ -182,7 +182,7 @@ pycsw==2.0.3
 pyelasticsearch==0.6.1
 pyflakes==1.6.0
 pygal==2.3.0
-Pygments==2.2.0
+Pygments==2.7.4
 PyHamcrest==1.9.0
 pylint==1.9.3
 pymongo==3.7.1
